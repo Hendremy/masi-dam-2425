@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1034691530744",
+    "project_id": "hepl-masi5-flutter",
+    "storage_bucket": "hepl-masi5-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034691530744:android:a91e81258e2e7cbacd100d",
+        "android_client_info": {
+          "package_name": "hepl.masi.flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkQeN-IAJgYCRyTjjVM4F68ysnBXDbMrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
