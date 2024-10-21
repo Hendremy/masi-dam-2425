@@ -2,7 +2,6 @@
 // ignore_for_file: type=lint
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:masi_dam_2425/env/env.dart';
-import 'firebase_options.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
@@ -49,7 +48,7 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions web = FirebaseOptions(
-    apiKey: Env.firebase_web_api_key,
+    apiKey: Env.firebasewebapikey,
     appId: '1:1034691530744:web:bff51c8f2aa58db0cd100d',
     messagingSenderId: '1034691530744',
     projectId: 'hepl-masi5-flutter',
@@ -58,7 +57,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: Env.firebase_android_api_key,
+    apiKey: Env.firebaseandroidapikey,
     appId: '1:1034691530744:android:a91e81258e2e7cbacd100d',
     messagingSenderId: '1034691530744',
     projectId: 'hepl-masi5-flutter',
@@ -66,7 +65,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions windows = FirebaseOptions(
-    apiKey: Env.firebase_win_api_key,
+    apiKey: Env.firebasewinapikey,
     appId: '1:1034691530744:web:9dfc0f1b9a8bbf4ccd100d',
     messagingSenderId: '1034691530744',
     projectId: 'hepl-masi5-flutter',

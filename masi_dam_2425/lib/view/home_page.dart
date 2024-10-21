@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:masi_dam_2425/model/auth.dart';
 
 class HomePage extends StatelessWidget {
 
-  HomePage({Key? key}) : super(key: key);
+  HomePage({super.key});
 
   final User? user = Auth().currentUser;
   

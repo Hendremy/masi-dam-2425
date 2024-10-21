@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/auth.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -64,10 +64,6 @@ class _LoginPageState extends State<LoginPage> {
         labelText: title,
       ),
     );
-  }
-
-  Widget _errorMessage() {
-    return Text(errorMessage == '' ? '' : '$errorMessage');
   }
 
   Widget _submitButton() {

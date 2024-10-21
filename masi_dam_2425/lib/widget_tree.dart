@@ -6,7 +6,7 @@ import 'package:masi_dam_2425/view/login_register_page.dart';
 
 class WidgetTree extends StatefulWidget {
 
-  const WidgetTree({Key? key}) : super(key: key);
+  const WidgetTree({super.key});
 
   @override
   State<WidgetTree> createState() => _WidgetTreeState();
