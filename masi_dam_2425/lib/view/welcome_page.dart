@@ -4,7 +4,12 @@ class WelcomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Center(child: Text('Greenmon')),
+        ),
       body: Container(
+        alignment: Alignment.center,
         child: Column(
           children: [
             _userRow(context),
@@ -18,28 +23,34 @@ class WelcomePage extends StatelessWidget{
 
   Widget _userRow(context){
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text("Avatar"),
-        TextButton(onPressed: (){
+        TextButton.icon(onPressed: (){
           Navigator.pushNamed(context, '/settings');
-        }, child: const Text('Options'))
+        },
+        icon: Icon(Icons.settings), 
+        label: const Text('Options'))
       ],
     );
   }
 
   Widget _shopRow(context){
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(
+        TextButton.icon(
           onPressed: (){
             Navigator.pushNamed(context, '/shop');
-          }, 
-          child: const Text("Shop")),
-        TextButton(
+          },
+          icon: Icon(Icons.currency_exchange),
+          label: const Text("1500")),
+        TextButton.icon(
           onPressed: (){
             Navigator.pushNamed(context, '/inventory');
           }, 
-          child: const Text("Inventory")),
+          icon: Icon(Icons.backpack),
+          label: const Text("Inventory")),
       ],
     );
   }
@@ -47,14 +58,19 @@ class WelcomePage extends StatelessWidget{
   Widget _plantsColumn(context){
     return Column(
       children: [
-        TextButton(onPressed: (){
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          TextButton(onPressed: (){
           Navigator.pushNamed(context, '/plants');
           }, 
           child: Text('Plants')),
-        TextButton(onPressed: (){
+        IconButton(
+          onPressed: (){
           Navigator.pushNamed(context, '/calendar');
           }, 
-          child: Text('Watering Calendar')),
+          icon: Icon(Icons.calendar_month))
+        ],),
         ListTile(),
         ListTile(),
         ListTile(),
