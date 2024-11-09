@@ -1,0 +1,4 @@
+enum DatabaseSource {
+  sqlite,
+  firebase
+}

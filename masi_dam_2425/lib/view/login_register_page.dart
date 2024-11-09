@@ -10,7 +10,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   String? errorMessage = '';
   bool isLogin = true;
 
@@ -20,9 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signInWithEmailPassword() async {
     try {
       await Auth().signInWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text
-        );
+          email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -43,9 +40,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> createUserWithEmailAndPassword() async {
     try {
       await Auth().createUserWithEmailAndPassword(
-         email: _controllerEmail.text,
-        password: _controllerPassword.text
-      );
+          email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -68,9 +63,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _submitButton() {
     return ElevatedButton(
-      onPressed: isLogin ? signInWithEmailPassword : createUserWithEmailAndPassword,
-      child: Text(isLogin ? 'Login': 'Register'),
-      );
+      onPressed:
+          isLogin ? signInWithEmailPassword : createUserWithEmailAndPassword,
+      child: Text(isLogin ? 'Login' : 'Register'),
+    );
   }
 
   Widget _loginOrRegisterButton() {
@@ -80,39 +76,37 @@ class _LoginPageState extends State<LoginPage> {
           isLogin = !isLogin;
         });
       },
-      child: Text(isLogin ? 'Register instead': 'Login instead'),
-      );
+      child: Text(isLogin ? 'Register instead' : 'Login instead'),
+    );
   }
 
   Widget _loginAnonymously() {
-      return ElevatedButton(
+    return ElevatedButton(
       onPressed: signIngAnonymously,
-      child: Text(isLogin ? 'Login Anonymously': 'Login Anonymously instead'),
-      );
-    }
+      child: Text(isLogin ? 'Login Anonymously' : 'Login Anonymously instead'),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _title(),
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _entryField('email', _controllerEmail),
-            _entryField('password', _controllerPassword),
-            _submitButton(),
-            _loginOrRegisterButton(),
-            _loginAnonymously(),
-          ],
-        )
-      )
-    );
+        appBar: AppBar(
+          title: _title(),
+        ),
+        body: Container(
+            height: double.infinity,
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _entryField('email', _controllerEmail),
+                _entryField('password', _controllerPassword),
+                _submitButton(),
+                _loginOrRegisterButton(),
+                _loginAnonymously(),
+              ],
+            )));
   }
 }

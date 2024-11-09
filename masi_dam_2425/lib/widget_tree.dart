@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:masi_dam_2425/main.dart';
 import 'package:masi_dam_2425/model/auth.dart';
 import 'package:masi_dam_2425/view/home_page.dart';
 import 'package:masi_dam_2425/view/login_register_page.dart';
