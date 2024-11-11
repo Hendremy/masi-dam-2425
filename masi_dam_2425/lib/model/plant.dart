@@ -1,23 +1,37 @@
+import 'dart:io';
+
 class Plant {
-  final String name;
-  final double xp;
-  final double hp;
-  final int level;
-  late final PlantMood mood;
+  late String name;
+  late double xp;
+  late double hp;
+  late int level;
+  late String species;
 
   Plant({
     required this.name,
+    required this.species,
     required this.level, 
     required this.xp,
-    required this.hp}){
-      if(hp >= 70){
-        mood = PlantMood.happy;
+    required this.hp});
+
+  PlantMood get mood {
+    PlantMood plantMood;
+    if(hp >= 70){
+        plantMood = PlantMood.happy;
       }else if(hp >= 30){
-        mood = PlantMood.sad;
+        plantMood = PlantMood.sad;
       }else{
-        mood = PlantMood.dead;
+        plantMood = PlantMood.dead;
       }
-    }
+    return plantMood;
+  }
+
+  Plant.fromMap(Map<String, dynamic> map){
+    name = map['name'];
+    level = map['level'];
+    xp = map['xp'];
+    hp = map['hp'];
+  }
 }
 
 enum PlantMood{
