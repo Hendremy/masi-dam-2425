@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class ExperienceBar extends StatelessWidget {
   final double currentXp;
   final double maxXp;
+  final Color color;
 
   const ExperienceBar({
-    Key? key,
+    super.key,
     required this.currentXp,
     required this.maxXp,
-  }) : super(key: key);
+    required this.color
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +23,12 @@ class ExperienceBar extends StatelessWidget {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(20.0),
     ),
-    height: 20.0,
-    width: double.infinity,
+    height: 10,
+    width: 100,
           child: LinearProgressIndicator(
             //Here you pass the percentage
             value: experiencePercentage,
-            color: Colors.blue.withAlpha(100),
+            color: color,
             backgroundColor: Colors.blue.withAlpha(50),
             minHeight: 2,
           ),

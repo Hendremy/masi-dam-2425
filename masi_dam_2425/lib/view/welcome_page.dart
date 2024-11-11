@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/view/components/experience_bar.dart';
+import 'package:masi_dam_2425/view/components/plant_tile.dart';
 
 class WelcomePage extends StatelessWidget{
   @override
@@ -53,7 +55,7 @@ class WelcomePage extends StatelessWidget{
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Lvl 50'),
-        Expanded(child: ExperienceBar(currentXp: 50, maxXp: 100))
+        Expanded(child: ExperienceBar(currentXp: 50, maxXp: 100, color: Colors.blue,))
       ],
     );
   }
@@ -94,9 +96,9 @@ class WelcomePage extends StatelessWidget{
           }, 
           icon: Icon(Icons.calendar_month))
         ],),
-        ListTile(),
-        ListTile(),
-        ListTile(),
+        PlantTile(Plant(name: 'Belzebulbe', xp: 50, hp: 75)),
+        PlantTile(Plant(name: 'Gère le fou', xp: 30, hp: 50)),
+        PlantTile(Plant(name: 'Raf', xp: 20, hp: 5)),
       ],
     );
   }
