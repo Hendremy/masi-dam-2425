@@ -16,7 +16,6 @@ class WelcomePage extends StatelessWidget{
         child: Column(
           children: [
             _userRow(context),
-            _levelRow(context),
             _shopRow(context),
             _plantsColumn(context)
           ],
@@ -29,7 +28,7 @@ class WelcomePage extends StatelessWidget{
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/warrior.jpg', height: 150,),
+        Image.asset('assets/warrior.jpg', height: 100,),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -43,7 +42,7 @@ class WelcomePage extends StatelessWidget{
               ],
             ),
             Text('Guardian of the Plants'),
-            //ExperienceBar(currentXp: 50, maxXp: 100)
+            _levelRow(context)
           ],
         )
       ],
@@ -51,11 +50,11 @@ class WelcomePage extends StatelessWidget{
   }
 
   Widget _levelRow(context){
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Lvl 50'),
-        Expanded(child: ExperienceBar(currentXp: 50, maxXp: 100, color: Colors.blue,))
+        ExperienceBar(currentXp: 50, maxXp: 100, color: Colors.blue,)
       ],
     );
   }
@@ -68,13 +67,13 @@ class WelcomePage extends StatelessWidget{
           onPressed: (){
             Navigator.pushNamed(context, '/shop');
           },
-          icon: Icon(Icons.currency_exchange),
+          icon: const Icon(Icons.currency_exchange),
           label: const Text("1500")),
         TextButton.icon(
           onPressed: (){
             Navigator.pushNamed(context, '/inventory');
           }, 
-          icon: Icon(Icons.backpack),
+          icon: const Icon(Icons.backpack),
           label: const Text("Inventory")),
       ],
     );
@@ -82,23 +81,25 @@ class WelcomePage extends StatelessWidget{
 
   Widget _plantsColumn(context){
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          TextButton(onPressed: (){
-          Navigator.pushNamed(context, '/plants');
-          }, 
+          TextButton(
+          onPressed: (){
+            Navigator.pushNamed(context, '/plants');
+            },
           child: Text('Plants')),
         IconButton(
           onPressed: (){
           Navigator.pushNamed(context, '/calendar');
           }, 
-          icon: Icon(Icons.calendar_month))
+          icon: const Icon(Icons.calendar_month))
         ],),
-        PlantTile(Plant(name: 'Belzebulbe', xp: 50, hp: 75)),
-        PlantTile(Plant(name: 'Gère le fou', xp: 30, hp: 50)),
-        PlantTile(Plant(name: 'Raf', xp: 20, hp: 5)),
+        PlantTile(Plant(name: 'Raf', xp: 20, level: 1, hp: 5)),
+        PlantTile(Plant(name: 'Gère le fou', xp: 30, level: 50, hp: 50)),
+        PlantTile(Plant(name: 'Belzebulbe', xp: 50, level: 99, hp: 75)),
       ],
     );
   }

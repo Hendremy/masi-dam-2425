@@ -2,11 +2,13 @@ class Plant {
   final String name;
   final double xp;
   final double hp;
+  final int level;
   late final PlantMood mood;
 
   Plant({
-    required this.name, 
-    required this.xp, 
+    required this.name,
+    required this.level, 
+    required this.xp,
     required this.hp}){
       if(hp >= 70){
         mood = PlantMood.happy;

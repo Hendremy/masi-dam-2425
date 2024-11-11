@@ -22,11 +22,12 @@ class PlantTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(imgPath, height: 75,),
         Column(
           children: [
-            Text(plant.name),
+            Text('${plant.name} Lvl ${plant.level}'),
             Row(
               children: [
                 const Text('HP'),
