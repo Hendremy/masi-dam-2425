@@ -21,17 +21,17 @@ class WelcomePage extends StatelessWidget {
             children: [
               BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
-                  return _profileRow(context, state);
+                  return state.isLoading ? const CircularProgressIndicator() : _profileRow(context, state);
                 },
               ),
               BlocBuilder<InventoryBloc, InventoryState>(
                 builder: (context, state) {
-                  return _shopRow(context, state);
+                  return state.isLoading ? const CircularProgressIndicator() : _shopRow(context, state);
                 },
               ),
               BlocBuilder<PlantsBloc, PlantsState>(
                 builder: (context, state) {
-                  return _plantsColumn(context, state);
+                  return state.isLoading ? const CircularProgressIndicator() : _plantsColumn(context, state);
                 },
               )
             ],
@@ -60,7 +60,7 @@ class WelcomePage extends StatelessWidget {
                     icon: const Icon(Icons.settings))
               ],
             ),
-            Text(state.profile != null ? state.profile.title : 'User'),
+            Text(state.profile != null ? state.profile.title : 'Nobody'),
             _levelRow(context, state)
           ],
         )

@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 
 class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
-  
-  final String _PH_ID = '07n8hjEJ9P1xyv9sS7DA';
+  final PlantsApi api;
 
-  PlantsBloc() : super(PlantsState(plants: [], isLoading: false)) {
+  PlantsBloc({required this.api}) : super(PlantsState(plants: [], isLoading: false)) {
     on<PlantsLoaded>((event, emit) {
       emit(PlantsState(plants: event.plants, isLoading: false));
     });
@@ -17,6 +17,14 @@ class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
     on<PlantsLoading>((event, emit){
       emit(PlantsState(plants: [], isLoading: true));
     });
+
+    _loadPlants();
+  }
+
+  Future<void> _loadPlants() async {
+    emit(PlantsState(plants: [], isLoading: true));
+    List<Plant> plants = await api.getPlants();
+    emit(PlantsState(plants: plants, isLoading: false));
   }
 }
 

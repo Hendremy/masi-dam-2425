@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/model/profile.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  
-  final String _PH_ID = '07n8hjEJ9P1xyv9sS7DA';
+  final ProfileApi api;
 
-  ProfileBloc() : super(ProfileState(profile: null, isLoading: false)) {
+  ProfileBloc({required this.api}) : super(ProfileState(profile: null, isLoading: false)) {
     on<ProfileLoaded>((event, emit) {
       emit(ProfileState(profile: event.profile, isLoading: false));
     });
@@ -17,6 +17,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileLoading>((event, emit){
       emit(ProfileState(profile: null, isLoading: true));
     });
+
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    emit(ProfileState(profile: null, isLoading: true));
+    Profile? profile = await api.getProfile();
+    emit(ProfileState(profile: profile, isLoading: false));
   }
 }
 
