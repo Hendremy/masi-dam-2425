@@ -3,8 +3,8 @@ import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/view/components/experience_bar.dart';
 
 class PlantTile extends StatelessWidget {
-  Plant plant;
-  late String imgPath;
+  late final Plant plant;
+  late final String imgPath;
 
   PlantTile(this.plant, {super.key}){
     switch(plant.mood){

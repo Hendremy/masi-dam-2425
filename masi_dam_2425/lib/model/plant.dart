@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class Plant {
   late String name;
   late double xp;

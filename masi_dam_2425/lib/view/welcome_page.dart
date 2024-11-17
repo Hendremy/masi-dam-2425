@@ -1,39 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/bloc/inventory_bloc.dart';
+import 'package:masi_dam_2425/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/model/profile.dart';
 import 'package:masi_dam_2425/view/components/experience_bar.dart';
 import 'package:masi_dam_2425/view/components/plant_tile.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileBloc(),
-      child: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, state) {
-          return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.green,
-                title: Center(child: Text('Greenmon')),
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Center(child: Text('Greenmon')),
+        ),
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  return _profileRow(context, state);
+                },
               ),
-              body: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    _userRow(context, context.read<ProfileBloc>().state),
-                    _shopRow(context),
-                    _plantsColumn(context)
-                  ],
-                ),
-              ));
-        },
-      ),
-    );
+              BlocBuilder<InventoryBloc, InventoryState>(
+                builder: (context, state) {
+                  return _shopRow(context, state);
+                },
+              ),
+              BlocBuilder<PlantsBloc, PlantsState>(
+                builder: (context, state) {
+                  return _plantsColumn(context, state);
+                },
+              )
+            ],
+          ),
+        ));
   }
 
-  Widget _userRow(context, ProfileState state) {
+  Widget _profileRow(context, state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -46,29 +52,29 @@ class WelcomePage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('SuperUser'),
+                Text(state.profile != null ? state.profile.name : 'User'),
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/settings');
                     },
-                    icon: Icon(Icons.settings))
+                    icon: const Icon(Icons.settings))
               ],
             ),
-            Text('Guardian of the Plants'),
-            _levelRow(context)
+            Text(state.profile != null ? state.profile.title : 'User'),
+            _levelRow(context, state)
           ],
         )
       ],
     );
   }
 
-  Widget _levelRow(context) {
-    return const Row(
+  Widget _levelRow(context, ProfileState state) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Lvl 50'),
+        Text('Lvl ${state.profile != null ? state.profile!.level : 1}'),
         ExperienceBar(
-          currentXp: 50,
+          currentXp: state.profile != null ? state.profile!.xp : 0,
           maxXp: 100,
           color: Colors.blue,
         )
@@ -76,7 +82,7 @@ class WelcomePage extends StatelessWidget {
     );
   }
 
-  Widget _shopRow(context) {
+  Widget _shopRow(context, InventoryState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -85,7 +91,7 @@ class WelcomePage extends StatelessWidget {
               Navigator.pushNamed(context, '/shop');
             },
             icon: const Icon(Icons.currency_exchange),
-            label: const Text("1500")),
+            label: Text('${state.inventory != null ? state.inventory!.coins : 0}')),
         TextButton.icon(
             onPressed: () {
               Navigator.pushNamed(context, '/inventory');
@@ -96,7 +102,7 @@ class WelcomePage extends StatelessWidget {
     );
   }
 
-  Widget _plantsColumn(context) {
+  Widget _plantsColumn(context, PlantsState state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -107,7 +113,7 @@ class WelcomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/plants');
                 },
-                child: Text('Plants')),
+                child: const Text('Plants')),
             IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/calendar');
@@ -115,11 +121,7 @@ class WelcomePage extends StatelessWidget {
                 icon: const Icon(Icons.calendar_month))
           ],
         ),
-        PlantTile(Plant(name: 'Raf', species: 'Fern', xp: 20, level: 1, hp: 5)),
-        PlantTile(Plant(
-            name: 'Gère le fou', species: 'Fern', xp: 30, level: 50, hp: 50)),
-        PlantTile(Plant(
-            name: 'Belzebulbe', species: 'Fern', xp: 50, level: 99, hp: 75)),
+        ...state.plants.map((Plant plant) => PlantTile(plant))
       ],
     );
   }

@@ -1,24 +1,22 @@
-import 'package:masi_dam_2425/model/plant.dart';
-
 class Profile {
   late String name;
+  late String title;
   late int level;
   late double xp;
-  late List<Plant> plants;
 
   Profile(
     {
       required this.name,
-      required this.level, 
-      required this.xp,
-      required this.plants
+      required this.title,
+      required this.level,
+      required this.xp
     } 
   );
 
   Profile.fromMap(Map<String, dynamic> map){
     name = map['name'];
+    title = map['title'];
     level = map['level'];
     xp = map['xp'];
-    plants = map['plants'].map((plant) => Plant.fromMap(plant));
   }
 }
