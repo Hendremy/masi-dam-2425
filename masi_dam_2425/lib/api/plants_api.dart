@@ -4,20 +4,30 @@ import 'package:masi_dam_2425/model/plant.dart';
 
 
 class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
-  PlantsFirestoreApi({required super.db, required super.userId});
+  PlantsFirestoreApi({required super.db});
 
   @override
   Future<List<Plant>> getPlants() async{
-    //var document = db.collection('plants').doc(userId);
-    //return document.get().then((value) {
-    //    List<Plant> plants = [];
-    //    final data = value.data() as Map<String, dynamic>;
-    //    dynamic plantMaps = data["plants"];
-    //    for(var plantMap in plantMaps){
-    //      plants.add(Plant.fromMap(plantMap));
-    //    }
-    //    return plants;
-    //},).catchError((err) => List<Plant>.empty());
-    return [];
-  }
+    try{
+      final document = db.collection('plants').doc(userId);
+      final snapshot = await document.get();
+      List<Plant> plants;
+
+      if (!snapshot.exists){
+        plants = List<Plant>.empty();
+        await document.set({'plants': plants});
+      }else{
+          final data = snapshot.data() as Map<String, dynamic>;
+          plants = [];
+          dynamic plantMaps = data["plants"];
+
+          for(var plantMap in plantMaps){
+            plants.add(Plant.fromMap(plantMap));
+          }
+      }
+        return plants;
+      }catch(e){
+      print(e);
+      return List<Plant>.empty();
+    }}
 }

@@ -27,8 +27,26 @@ class Plant {
   Plant.fromMap(Map<String, dynamic> map){
     name = map['name'];
     level = map['level'];
-    xp = map['xp'];
-    hp = map['hp'];
+    xp = (map['xp'] as num).toDouble();
+    hp = (map['hp'] as num).toDouble();
+  }
+
+  Plant.empty(){
+    name = 'New Plant';
+    level = 1;
+    xp = 0;
+    hp = 100;
+    species = 'unknown';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'level': level,
+      'xp': xp,
+      'hp': hp,
+      'species': species,
+    };
   }
 }
 

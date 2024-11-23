@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
@@ -27,7 +26,7 @@ class _WidgetTreeState extends State<WidgetTree> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Provider<UserApiServices>(
-            create: (BuildContext context) => UserApiServices(userId: '07n8hjEJ9P1xyv9sS7DA', firestoreDb: FirebaseFirestore.instance),
+            create: (BuildContext context) => UserApiServices(firestoreDb: FirebaseFirestore.instance),
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<ProfileBloc>(

@@ -16,7 +16,23 @@ class Profile {
   Profile.fromMap(Map<String, dynamic> map){
     name = map['name'];
     title = map['title'];
-    level = map['level'];
-    xp = map['xp'];
+    level = (map['level'] as num).toInt();
+    xp = (map['xp'] as num).toDouble();
+  }
+
+  Profile.empty(){
+    name = 'New User';
+    title = 'Nobody';
+    level = 1;
+    xp = 0;
+  }
+
+  Map<String, dynamic> toMap(){
+    return {
+      'name': name,
+      'title': title,
+      'level': level,
+      'xp': xp,
+    };
   }
 }
