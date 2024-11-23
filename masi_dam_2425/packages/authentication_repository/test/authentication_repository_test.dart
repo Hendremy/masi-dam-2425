@@ -6,7 +6,6 @@ import 'package:firebase_auth_platform_interface/firebase_auth_platform_interfac
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -22,13 +21,6 @@ class MockFirebaseCore extends Mock
     implements FirebasePlatform {}
 
 class MockFirebaseUser extends Mock implements firebase_auth.User {}
-
-class MockGoogleSignIn extends Mock implements GoogleSignIn {}
-
-class MockGoogleSignInAccount extends Mock implements GoogleSignInAccount {}
-
-class MockGoogleSignInAuthentication extends Mock
-    implements GoogleSignInAuthentication {}
 
 class MockUserCredential extends Mock implements firebase_auth.UserCredential {}
 

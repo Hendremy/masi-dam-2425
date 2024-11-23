@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:masi_dam_2425/login/login.dart';
 import 'package:masi_dam_2425/sign_up/sign_up.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -29,7 +28,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/bloc_logo_small.png',
+                'assets/greenmon-logo.png',
                 height: 120,
               ),
               const SizedBox(height: 16),
