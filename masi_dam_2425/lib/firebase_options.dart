@@ -3,7 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:masi_dam_2425/env/env.dart';
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show defaultTargetPlatform, TargetPlatform;
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -17,27 +17,12 @@ import 'package:flutter/foundation.dart'
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    if (kIsWeb) {
-      return web;
-    }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.windows:
-        return windows;
-      case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
@@ -47,30 +32,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static FirebaseOptions web = FirebaseOptions(
-    apiKey: Env.firebasewebapikey,
-    appId: '1:1034691530744:web:bff51c8f2aa58db0cd100d',
-    messagingSenderId: '1034691530744',
-    projectId: 'hepl-masi5-flutter',
-    authDomain: 'hepl-masi5-flutter.firebaseapp.com',
-    storageBucket: 'hepl-masi5-flutter.appspot.com',
-  );
-
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: Env.firebaseandroidapikey,
+    apiKey: Env.firebaseAndroidApiKey.value,
     appId: '1:1034691530744:android:a91e81258e2e7cbacd100d',
     messagingSenderId: '1034691530744',
     projectId: 'hepl-masi5-flutter',
     storageBucket: 'hepl-masi5-flutter.appspot.com',
   );
-
-  static FirebaseOptions windows = FirebaseOptions(
-    apiKey: Env.firebasewinapikey,
-    appId: '1:1034691530744:web:9dfc0f1b9a8bbf4ccd100d',
-    messagingSenderId: '1034691530744',
-    projectId: 'hepl-masi5-flutter',
-    authDomain: 'hepl-masi5-flutter.firebaseapp.com',
-    storageBucket: 'hepl-masi5-flutter.appspot.com',
-  );
-  
 }

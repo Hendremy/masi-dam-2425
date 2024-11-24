@@ -1,28 +1,21 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:masi_dam_2425/firebase_options.dart';
-import 'package:masi_dam_2425/widget_tree.dart';
+import 'package:flutter/widgets.dart';
+import 'package:masi_dam_2425/app/app.dart';
+
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = const AppBlocObserver();
+
   await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
-}
+  
+  final authenticationRepository = AuthenticationRepository();
+  await authenticationRepository.user.first;
 
-class MyApp extends StatelessWidget {
-
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GreenMon',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const WidgetTree(),
-    );
-  }
+  runApp(App(authenticationRepository: authenticationRepository));
 }
