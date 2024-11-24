@@ -15,9 +15,9 @@ class WelcomePage extends StatelessWidget {
           backgroundColor: Colors.green,
           title: const Center(child: Text('Greenmon')),
         ),
-        body: Container(
-          alignment: Alignment.center,
+        body: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
@@ -91,7 +91,7 @@ class WelcomePage extends StatelessWidget {
               Navigator.pushNamed(context, '/shop');
             },
             icon: const Icon(Icons.currency_exchange),
-            label: Text('${state.inventory != null ? state.inventory!.coins : 0}')),
+            label: Text('${state.inventory != null ? state.inventory!.coins : 0} Coins')),
         TextButton.icon(
             onPressed: () {
               Navigator.pushNamed(context, '/inventory');
