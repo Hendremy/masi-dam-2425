@@ -17,6 +17,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   final AuthenticationRepository _authenticationRepository;
 
+  /// Subscribes to the [AuthenticationRepository.user] stream and emits a new [AppState] when the user changes.
   Future<void> _onUserSubscriptionRequested(
     AppUserSubscriptionRequested event,
     Emitter<AppState> emit,
