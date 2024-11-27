@@ -30,7 +30,6 @@ class App extends StatelessWidget {
                 authenticationRepository: _authenticationRepository,
               )..add(const AppUserSubscriptionRequested()),
             ),
-          
           ],
           child: const AppView()
         ));

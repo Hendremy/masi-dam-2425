@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/view/components/experience_bar.dart';
+import 'package:masi_dam_2425/plants/widgets/experience_bar.dart';
 
 class PlantTile extends StatelessWidget {
   late final Plant plant;

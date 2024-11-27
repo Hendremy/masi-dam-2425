@@ -1,42 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masi_dam_2425/bloc/inventory_bloc.dart';
-import 'package:masi_dam_2425/bloc/plants_bloc.dart';
-import 'package:masi_dam_2425/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/api/api_services.dart';
+import 'package:masi_dam_2425/home/bloc/inventory_bloc.dart';
+import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
+import 'package:masi_dam_2425/home/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/view/components/experience_bar.dart';
-import 'package:masi_dam_2425/view/components/plant_tile.dart';
+import 'package:masi_dam_2425/plants/widgets/experience_bar.dart';
+import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
+
+  static Page<void> page() => const MaterialPage<void>(child: WelcomePage());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green,
-          title: const Center(child: Text('Greenmon')),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, state) {
-                  return state.isLoading ? const CircularProgressIndicator() : _profileRow(context, state);
-                },
-              ),
-              BlocBuilder<InventoryBloc, InventoryState>(
-                builder: (context, state) {
-                  return state.isLoading ? const CircularProgressIndicator() : _shopRow(context, state);
-                },
-              ),
-              BlocBuilder<PlantsBloc, PlantsState>(
-                builder: (context, state) {
-                  return state.isLoading ? const CircularProgressIndicator() : _plantsColumn(context, state);
-                },
-              )
+    return Provider<UserApiServices>(
+      create: (BuildContext context) => UserApiServices(firestoreDb: FirebaseFirestore.instance),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<ProfileBloc>(
+            create: (BuildContext context) => ProfileBloc(api: context.read<UserApiServices>().profileApi),),
+          BlocProvider<InventoryBloc>(
+            create: (BuildContext context) => InventoryBloc(api: context.read<UserApiServices>().inventoryApi)),
+          BlocProvider<PlantsBloc>(
+            create: (BuildContext context) => PlantsBloc(api: context.read<UserApiServices>().plantsApi))
             ],
-          ),
-        ));
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.green,
+              title: const Center(child: Text('Greenmon')),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, state) {
+                      return state.isLoading ? const CircularProgressIndicator() : _profileRow(context, state);
+                    },
+                  ),
+                  BlocBuilder<InventoryBloc, InventoryState>(
+                    builder: (context, state) {
+                      return state.isLoading ? const CircularProgressIndicator() : _shopRow(context, state);
+                    },
+                  ),
+                  BlocBuilder<PlantsBloc, PlantsState>(
+                    builder: (context, state) {
+                      return state.isLoading ? const CircularProgressIndicator() : _plantsColumn(context, state);
+                    },
+                  )
+                ],
+              ),
+            )),
+      ),
+    );
   }
 
   Widget _profileRow(context, state) {
@@ -55,7 +75,7 @@ class WelcomePage extends StatelessWidget {
                 Text(state.profile != null ? state.profile.name : 'User'),
                 IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/settings');
+                      context.read<AppBloc>()
                     },
                     icon: const Icon(Icons.settings))
               ],
