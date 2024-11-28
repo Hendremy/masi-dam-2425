@@ -3,7 +3,12 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/app/app.dart';
+import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
+import 'package:masi_dam_2425/inventory/view/shop_page.dart';
 import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
+import 'package:masi_dam_2425/plants/view/calendar_page.dart';
+import 'package:masi_dam_2425/plants/view/plants_page.dart';
+import 'package:masi_dam_2425/profile/view/profile_page.dart';
 import 'package:masi_dam_2425/theme.dart';
 
 class App extends StatelessWidget {
@@ -30,7 +35,6 @@ class App extends StatelessWidget {
                 authenticationRepository: _authenticationRepository,
               )..add(const AppUserSubscriptionRequested()),
             ),
-          
           ],
           child: const AppView()
         ));
