@@ -41,3 +41,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+masi_dam_2425/pubspec.lock
+masi_dam_2425/linux/
+masi_dam_2425/macos/
