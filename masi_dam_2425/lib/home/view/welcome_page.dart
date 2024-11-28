@@ -9,6 +9,7 @@ import 'package:masi_dam_2425/home/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
 import 'package:masi_dam_2425/inventory/view/shop_page.dart';
 import 'package:masi_dam_2425/model/plant.dart';
+import 'package:masi_dam_2425/plant_id/plant_id_view.dart';
 import 'package:masi_dam_2425/plants/view/calendar_page.dart';
 import 'package:masi_dam_2425/plants/view/plants_page.dart';
 import 'package:masi_dam_2425/plants/widgets/experience_bar.dart';
@@ -47,6 +48,16 @@ class WelcomePage extends StatelessWidget {
               ),
             ],
           ),
+          floatingActionButton: FloatingActionButton(
+              key: const Key('homePage_increment_floatingActionButton'),
+              onPressed: () {
+                //open the plant_id_view page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CameraApp()));
+              },
+          child: const Icon(Icons.add),
+      ),
             body: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
