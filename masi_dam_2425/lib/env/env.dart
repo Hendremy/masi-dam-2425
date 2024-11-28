@@ -2,7 +2,7 @@ import 'package:envied/envied.dart';
 
 part 'env.g.dart';
 
-@Envied(path: '.env')
+@Envied()
 final class Env {
   @EnviedField(varName: 'FIREBASE_WEB_API_KEY', obfuscate: true)
   static String firebasewebapikey = _Env.firebasewebapikey;
