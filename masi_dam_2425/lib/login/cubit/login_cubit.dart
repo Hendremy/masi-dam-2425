@@ -47,6 +47,8 @@ class LoginCubit extends Cubit<LoginState> {
           status: FormzSubmissionStatus.failure,
         ),
       );
+      // Throw FormzSubmissionStatus.initial to reset the form state
+      emit(state.copyWith(status: FormzSubmissionStatus.initial));
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
