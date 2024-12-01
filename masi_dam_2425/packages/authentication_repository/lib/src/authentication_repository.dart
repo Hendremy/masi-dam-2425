@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:authentication_repository/src/models/user.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -129,12 +129,15 @@ class AuthenticationRepository {
   /// Creates a new user with the provided [email] and [password].
   ///
   /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
-  Future<void> signUp({required String email, required String password}) async {
+  Future<void> signUp({required String email, required String name, required String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      final user = result.user;
+      await user?.sendEmailVerification();
+      user?.updateProfile(displayName: name);
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {

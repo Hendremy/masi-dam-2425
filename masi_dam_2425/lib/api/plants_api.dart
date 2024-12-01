@@ -9,7 +9,7 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
   @override
   Future<List<Plant>> getPlants() async{
     try{
-      final document = db.collection('plants').doc(userId);
+      final document = db.collection('plants').doc(user.uid);
       final snapshot = await document.get();
       List<Plant> plants;
 

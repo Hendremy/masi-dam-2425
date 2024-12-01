@@ -11,17 +11,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(AppState(user: authenticationRepository.currentUser)) {
-    on<AppUserSubscriptionRequested>(_onUserSubscriptionRequested);
+    on<AppUserLoginRequested>(_onUserLoginRequested);
     on<AppLogoutPressed>(_onLogoutPressed);
   }
 
   final AuthenticationRepository _authenticationRepository;
 
   /// Subscribes to the [AuthenticationRepository.user] stream and emits a new [AppState] when the user changes.
-  Future<void> _onUserSubscriptionRequested(
-    AppUserSubscriptionRequested event,
-    Emitter<AppState> emit,
-  ) {
+  Future<void> _onUserLoginRequested(
+      AppUserLoginRequested event,
+      Emitter<AppState> emit,
+      ) {
     return emit.onEach(
       _authenticationRepository.user,
       onData: (user) => emit(AppState(user: user)),

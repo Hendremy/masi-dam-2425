@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NoNetworkPage extends StatelessWidget {
   const NoNetworkPage({super.key});

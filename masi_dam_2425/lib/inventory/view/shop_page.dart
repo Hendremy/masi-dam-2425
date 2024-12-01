@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ShopPage extends StatelessWidget{
   const ShopPage({Key? key}) : super(key: key);

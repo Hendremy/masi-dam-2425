@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:masi_dam_2425/sign_up/sign_up.dart';
+import 'package:masi_dam_2425/sign_up/cubit/sign_up_cubit.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({super.key});
@@ -25,6 +25,8 @@ class SignUpForm extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            _NameInput(),
+            const SizedBox(height: 8),
             _EmailInput(),
             const SizedBox(height: 8),
             _PasswordInput(),
@@ -32,6 +34,21 @@ class SignUpForm extends StatelessWidget {
             _SignUpButton(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _NameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      key: const Key('signUpForm_nameInput_textField'),
+      onChanged: (name) => context.read<SignUpCubit>().nameChanged(name),
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(
+        labelText: 'name',
+        helperText: 'Your game name'
       ),
     );
   }
