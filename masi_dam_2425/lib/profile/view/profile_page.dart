@@ -31,22 +31,88 @@ class ProfilePage extends StatelessWidget {
 
               final nameController = TextEditingController(text: avatar?.name);
               final emailController = TextEditingController(text: user?.email);
-
+              final passwordController = TextEditingController();
 
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     AvatarWidget(avatar: avatar!),
+                    const SizedBox(height: 30),
+                    UserWidget(
+                        user: user!,
+                        nameController: nameController,
+                        emailController: emailController),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<ProfileCubit>().updateProfileDetails(
+                              displayName: nameController.text,
+                              email: emailController.text,
+                            );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        backgroundColor: Colors.white,
+                      ),
+                      child: Text("Update Profile"),
+                    ),
                     const SizedBox(height: 16),
-                    UserWidget(user: user!, nameController: nameController, emailController: emailController),
-                    const SizedBox(height: 16),
-                    ElevatedButton(onPressed: () {
-                          context.read<ProfileCubit>().updateProfileDetails(
-                                displayName: nameController.text,
-                                email: emailController.text,
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Delete your Account?'),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text('If you select Delete we will delete your account on our server.'),
+                                    const SizedBox(height: 16),
+                                    ProfileInputField(
+                                      controller: passwordController,
+                                      labelText: 'Password',
+                                      hintText: 'Enter your password',
+                                      obscureText: true,
+                                      icon: Icons.lock,
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      
+                                    },
+                                  ),
+                                ],
                               );
-                    }, child: const Text('Save')),
+                            });
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white),
+                      child: Text("Delete Profile"),
+                    ),
                   ],
                 ),
               );
@@ -71,74 +137,92 @@ class UserWidget extends StatelessWidget {
   final User user;
   final nameController, emailController;
 
-  UserWidget({Key? key, required this.user, required this.nameController,  required this.emailController}) : super(key: key);
+  UserWidget(
+      {Key? key,
+      required this.user,
+      required this.nameController,
+      required this.emailController})
+      : super(key: key);
 
   @override
   Widget build(Object context) {
-  
     return Column(
       children: [
-        ProfileInputField(
-          controller: nameController,
-          labelText: 'Name',
-          hintText: 'Enter your name',
-          active: true,
-        ),
-        const SizedBox(height: 16),
-        ProfileInputField(
-          controller: emailController,
-          labelText: 'Email',
-          hintText: 'Enter your email',
-          active: user.emailVerified!,
-        ),
         Card(
+            elevation: 2,
+            color: Colors.white,
             child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Last login',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Icon(Icons.login, color: Colors.orange, size: 24),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Last login: ${user.formattedAccountLastLoginDate}",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    user.lastSignInDate.toString(),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Create Date',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    user.creationDate.toString(),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Account verified',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_today,
+                          color: Colors.purple, size: 24),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Account Creation Date: ${user.formattedAccountCreationDate}",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    user.emailVerified.toString(),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.verified,
+                        color: (user.emailVerified ?? false)
+                            ? Colors.green
+                            : Colors.red,
+                        size: 24,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Account verified: ${user.emailVerified! ? 'Yes' : 'No'}",
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        ),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 30),
+                  ProfileInputField(
+                    controller: nameController,
+                    labelText: 'Name',
+                    hintText: 'Enter your name',
+                    active: true,
+                    icon: Icons.person,
+                  ),
+                  const SizedBox(height: 16),
+                  ProfileInputField(
+                      controller: emailController,
+                      labelText: 'Email',
+                      hintText: 'Enter your email',
+                      active: user.emailVerified!,
+                      icon: Icons.email),
+                  SizedBox(height: 16),
                 ],
               ),
-            ],
-          ),
-        )),
+            )),
         const SizedBox(height: 16),
       ],
     );
@@ -150,12 +234,16 @@ class ProfileInputField extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool active;
+  final IconData? icon;
+  final bool obscureText;
 
   const ProfileInputField({
     required this.controller,
     required this.labelText,
     required this.hintText,
-    required this.active,
+    this.active = true,
+    required this.icon,
+    this.obscureText = false,
     Key? key,
   }) : super(key: key);
 
@@ -163,10 +251,24 @@ class ProfileInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
-        border: const OutlineInputBorder(),
+        prefixIcon: Icon(this.icon, color: Colors.blue),
+        filled: true,
+        fillColor: Colors.grey[200],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: Colors.blue,
+            width: 2,
+          ),
+        ),
       ),
       enabled: active,
     );

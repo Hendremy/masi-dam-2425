@@ -6,7 +6,6 @@ import 'package:masi_dam_2425/inventory/view/shop_page.dart';
 import 'package:masi_dam_2425/login/view/login_page.dart';
 import 'package:masi_dam_2425/plants/view/calendar_page.dart';
 import 'package:masi_dam_2425/plants/view/plants_page.dart';
-import 'package:masi_dam_2425/profile/view/profile_page.dart';
 
 List<Page<dynamic>> onGenerateAppViewPages(
   AppStatus state,

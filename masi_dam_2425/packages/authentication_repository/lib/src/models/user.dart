@@ -17,6 +17,17 @@ class User extends Equatable {
     this.lastSignInDate
   });
 
+  String? get formattedAccountCreationDate {
+    if (creationDate == null) return null;
+    return '${creationDate!.day.toString().padLeft(2, '0')}/${creationDate!.month.toString().padLeft(2, '0')}/${creationDate!.year}';
+  }
+
+  String? get formattedAccountLastLoginDate {
+    if (lastSignInDate == null) return null;
+    return '${lastSignInDate!.day.toString().padLeft(2, '0')}/${lastSignInDate!.month.toString().padLeft(2, '0')}/${lastSignInDate!.year}';
+  }
+
+
   final DateTime? creationDate;
   final DateTime? lastSignInDate;
 

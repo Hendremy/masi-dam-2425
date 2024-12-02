@@ -1,9 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
-import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/inventory_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
@@ -53,6 +51,8 @@ class WelcomePage extends StatelessWidget {
           ],
         ),
         body: SingleChildScrollView(
+        padding: EdgeInsets.all(10.0),
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
@@ -77,39 +77,36 @@ class AvatarSection extends StatelessWidget {
         if (state.isLoading) {
           return const CircularProgressIndicator();
         } else if (state.avatar != null) {
-          return Card(
-            clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              splashColor: Theme.of(context).primaryColor.withAlpha(30),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider<AvatarCubit>.value(
-                          value: context.read<AvatarCubit>(),
-                        ),
-                        BlocProvider<ProfileCubit>(
-                          create: (context) => ProfileCubit(
-                            context.read<AvatarCubit>(),
-                            context.read<AuthenticationRepository>(),
-                          ),
-                        ),
-                      ],
-                      child: ProfilePage(),
-                    ),
-                  ),
-                );
-              },
-              child: AvatarSummary(profile: state.avatar!),
-            ),
+          return AvatarSummary(
+            profile: state.avatar!,
+            action: () => _goToProfilePage(context),
           );
         } else {
           return const Text('Failed to load profile.');
         }
       },
     );
+  }
+
+  _goToProfilePage(context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<AvatarCubit>.value(
+                value: context.read<AvatarCubit>(),
+              ),
+              BlocProvider<ProfileCubit>(
+                create: (context) => ProfileCubit(
+                  context.read<AvatarCubit>(),
+                  context.read<AuthenticationRepository>(),
+                ),
+              ),
+            ],
+            child: ProfilePage(),
+          ),
+        ));
   }
 }
 

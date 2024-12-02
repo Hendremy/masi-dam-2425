@@ -6,53 +6,69 @@ import 'avatar_icon.dart';
 
 class AvatarSummary extends StatelessWidget {
   final Avatar profile;
+  final Function? action;
 
-  const AvatarSummary({Key? key, required this.profile}) : super(key: key);
+  const AvatarSummary({
+    Key? key,
+    required this.profile,
+    this.action
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      color: Colors.white,
+      clipBehavior: Clip.hardEdge,
+    child: InkWell(
+      splashColor: Theme.of(context).primaryColor.withAlpha(30),
+      onTap: () {
+        if (action != null) {
+          action!();
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
+        child: Column(
           children: [
-            AvatarIcon(photo: ''),
-            const SizedBox(width: 16), 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        profile.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                AvatarIcon(photo: ''),
+                const SizedBox(width: 16),
+                Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            profile.name,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.settings,
+                                color: Colors.blueGrey),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        onPressed: () {
-                        },
-                        icon: const Icon(Icons.settings, color: Colors.blueGrey),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    profile.title,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  _levelRow(context),
-                ],
-              ),
+                      Row(
+                        children: [
+                          Text(profile.title,
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.grey))
+                        ],
+                      )
+                    ]))
+              ],
             ),
+            const SizedBox(height: 16),
+            _levelRow(context),
           ],
         ),
-      ),
-    );
+    )));
   }
 
   Widget _levelRow(BuildContext context) {
@@ -61,8 +77,8 @@ class AvatarSummary extends StatelessWidget {
         // Level Text
         Text(
           'Lvl ${profile.level}',
-          style: const TextStyle(fontWeight: FontWeight.bold,
-                color: Colors.black87),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         const SizedBox(width: 8),
         // Experience Bar
