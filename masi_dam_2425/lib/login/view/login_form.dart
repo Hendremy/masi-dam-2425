@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:masi_dam_2425/login/login.dart';
-import 'package:masi_dam_2425/sign_up/sign_up.dart';
+import 'package:masi_dam_2425/login/cubit/login_cubit.dart';
+import 'package:masi_dam_2425/sign_up/view/sign_up_page.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});

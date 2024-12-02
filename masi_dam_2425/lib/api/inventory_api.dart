@@ -8,7 +8,7 @@ class InventoryFirestoreApi extends FirestoreApi implements InventoryApi{
   @override
   Future<Inventory?> getInventory() async{
     try{
-      final document = db.collection('inventory').doc(userId);
+      final document = db.collection('inventory').doc(user.uid);
       final snapshot = await document.get();
       Inventory inventory;
 

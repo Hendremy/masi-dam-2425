@@ -12,7 +12,24 @@ class User extends Equatable {
     this.email,
     this.name,
     this.photo,
+    this.emailVerified,
+    this.creationDate,
+    this.lastSignInDate
   });
+
+  String? get formattedAccountCreationDate {
+    if (creationDate == null) return null;
+    return '${creationDate!.day.toString().padLeft(2, '0')}/${creationDate!.month.toString().padLeft(2, '0')}/${creationDate!.year}';
+  }
+
+  String? get formattedAccountLastLoginDate {
+    if (lastSignInDate == null) return null;
+    return '${lastSignInDate!.day.toString().padLeft(2, '0')}/${lastSignInDate!.month.toString().padLeft(2, '0')}/${lastSignInDate!.year}';
+  }
+
+
+  final DateTime? creationDate;
+  final DateTime? lastSignInDate;
 
   /// The current user's email address.
   final String? email;
@@ -26,9 +43,11 @@ class User extends Equatable {
   /// Url for the current user's photo.
   final String? photo;
 
+  final bool? emailVerified;
+
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
 
   @override
-  List<Object?> get props => [email, id, name, photo];
+  List<Object?> get props => [email, id, name, photo, emailVerified, creationDate, lastSignInDate];
 }

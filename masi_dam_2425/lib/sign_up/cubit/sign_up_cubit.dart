@@ -7,7 +7,8 @@ import 'package:formz/formz.dart';
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  SignUpCubit(this._authenticationRepository) : super(const SignUpState());
+  SignUpCubit(this._authenticationRepository)
+      : super(const SignUpState());
 
   final AuthenticationRepository _authenticationRepository;
 
@@ -16,10 +17,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(
       state.copyWith(
         email: email,
-        isValid: Formz.validate([
-          email,
-          state.password
-        ]),
+        isValid: Formz.validate([email, state.password]),
       ),
     );
   }
@@ -29,14 +27,10 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(
       state.copyWith(
         password: password,
-        isValid: Formz.validate([
-          state.email,
-          password
-        ]),
+        isValid: Formz.validate([state.email, password]),
       ),
     );
   }
-
 
   Future<void> signUpFormSubmitted() async {
     if (!state.isValid) return;
@@ -45,6 +39,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       await _authenticationRepository.signUp(
         email: state.email.value,
         password: state.password.value,
+        name: state.name
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } on SignUpWithEmailAndPasswordFailure catch (e) {
@@ -59,5 +54,13 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
       emit(state.copyWith(status: FormzSubmissionStatus.initial));
     }
+  }
+
+  void nameChanged(String value) {
+    emit(
+      state.copyWith(
+         name: value,
+      ),
+    );
   }
 }
