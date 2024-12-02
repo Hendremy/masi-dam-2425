@@ -28,8 +28,8 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi{
   }
 
   // Update Firestore profile
-  Future<void> updateFirestoreProfile(String userId, Map<String, dynamic> updates) async {
-    await db.collection('profiles').doc(userId).update(updates);
+  Future<void> updateFirestoreProfile(Map<String, dynamic> updates) async {
+    await db.collection('profiles').doc(auth.currentUser?.uid).update(updates);
   }
 
   // Update FirebaseAuth and Firestore
@@ -42,15 +42,15 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi{
     if (user == null) throw Exception('No authenticated user');
 
     // Update FirebaseAuth profile
-    if (displayName != null) {
+    if (displayName != null && displayName != user.displayName) {
       await user.updateProfile(displayName: displayName);
     }
-    if (email != null) {
+    
+    if (email != null && email != user.email && user.emailVerified) {
       await user.verifyBeforeUpdateEmail(email);
     }
 
     await user.reload();
-    final updatedUser = auth.currentUser;
 
     // Update Firestore profile
     final updates = <String, dynamic>{
@@ -59,7 +59,7 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi{
       if (additionalData != null) ...additionalData,
     };
 
-    await updateFirestoreProfile(updatedUser!.uid, updates);
+    await updateFirestoreProfile(updates);
   }
 }
 

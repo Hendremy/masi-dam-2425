@@ -56,10 +56,10 @@ class SignUpCubit extends Cubit<SignUpState> {
     }
   }
 
-  nameChanged(String name) {
+  void nameChanged(String value) {
     emit(
       state.copyWith(
-         name: name,
+         name: value,
       ),
     );
   }

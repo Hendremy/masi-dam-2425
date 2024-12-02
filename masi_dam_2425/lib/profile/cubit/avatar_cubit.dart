@@ -1,3 +1,4 @@
+// AvatarCubit to manage the avatar state
 import 'package:bloc/bloc.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
@@ -42,22 +43,12 @@ class AvatarCubit extends Cubit<AvatarState> {
     }
   }
 
-  // Update the user's profile details
-  Future<void> updateAvatar({
-    String? displayName,
-    String? email,
-    Map<String, dynamic>? additionalData,
-  }) async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      await api.updateProfileDetails(
-        displayName: displayName,
-        email: email,
-        additionalData: additionalData,
-      );
-      await loadAvatar(); // Reload the updated avatar
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+  updateAvatar(String? displayName) {
+    final avatar = state.avatar;
+    if (avatar != null) {
+      final updatedAvatar = avatar.copyWith(displayName: displayName);
+      emit(state.copyWith(avatar: updatedAvatar));
     }
   }
+
 }

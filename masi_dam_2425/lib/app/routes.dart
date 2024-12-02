@@ -19,8 +19,6 @@ List<Page<dynamic>> onGenerateAppViewPages(
       return [LoginPage.page()];
     case AppStatus.calendar:
       return [CalendarPage.page()];
-    case AppStatus.profile:
-      return [ProfilePage.page()];
     case AppStatus.plants:
       return [PlantsPage.page()];
     case AppStatus.inventory:

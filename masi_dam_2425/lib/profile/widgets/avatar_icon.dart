@@ -9,13 +9,28 @@ class AvatarIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photo = this.photo;
-    return CircleAvatar(
-      radius: _avatarSize,
-      backgroundColor: Colors.black12,
-      child: photo == null
-            ? Image.asset('assets/warrior.jpg', width: _avatarSize, height: _avatarSize)
-          : null,
+    final placeholderImage = 'assets/warrior.jpg';
+    final hasPhoto = photo != null && photo!.isNotEmpty;
+
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        border: Border.all(
+          color: Colors.blueGrey, // You can change the border color if needed
+          width: 2.0, // Border width
+        ),
+      ),
+      child: CircleAvatar(
+        radius: _avatarSize,
+        backgroundColor: Colors.black12,
+        backgroundImage: hasPhoto ? NetworkImage(photo!) : null, // Use network image if available
+        child: !hasPhoto
+            ? Image.asset(
+                placeholderImage, // Ensure it fills the circle
+                fit: BoxFit.contain, // Make sure the image covers the entire area
+              )
+            : null,
+      ),
     );
   }
 }

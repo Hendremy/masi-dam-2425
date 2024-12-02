@@ -27,8 +27,7 @@ abstract class PlantsApi {
 
 abstract class AvatarApi {
   Future<Avatar?> getAvatar();
-  Future<void> updateFirestoreProfile(
-      String userId, Map<String, dynamic> updates);
+  Future<void> updateFirestoreProfile(Map<String, dynamic> updates);
   Future<void> updateProfileDetails({
     String? displayName,
     String? email,

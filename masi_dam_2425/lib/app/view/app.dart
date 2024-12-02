@@ -20,7 +20,6 @@ class App extends StatelessWidget {
 
   final AuthenticationRepository _authenticationRepository;
 
- 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -50,8 +49,7 @@ class App extends StatelessWidget {
           BlocProvider<AvatarCubit>(
             create: (context) => AvatarCubit(
               context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
-            ),
-          ),
+            ))
         ],
         child: const AppView(),
       ),

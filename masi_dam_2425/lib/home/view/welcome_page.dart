@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flow_builder/flow_builder.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
@@ -15,6 +14,7 @@ import 'package:masi_dam_2425/plants/view/calendar_page.dart';
 import 'package:masi_dam_2425/plants/view/plants_page.dart';
 import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
 import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
+import 'package:masi_dam_2425/profile/cubit/profile_cubit.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
 import 'package:masi_dam_2425/profile/widgets/avatar_summary.dart';
 
@@ -25,51 +25,41 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<UserApiServices>(
-      create: (context) => UserApiServices(
-        firestoreDb: FirebaseFirestore.instance,
-        auth: FirebaseAuth.instance,
-      ),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<AvatarCubit>(
-            create: (context) => AvatarCubit(
-              context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
-            )..loadAvatar(),
+    context.read<AvatarCubit>().loadAvatar();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<InventoryBloc>(
+          create: (context) => InventoryBloc(
+            api: context.read<UserApiServices>().inventoryApi,
           ),
-          BlocProvider<InventoryBloc>(
-            create: (context) => InventoryBloc(
-              api: context.read<UserApiServices>().inventoryApi,
+        ),
+        BlocProvider<PlantsBloc>(
+          create: (context) => PlantsBloc(
+            api: context.read<UserApiServices>().plantsApi,
+          ),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Home'),
+          actions: [
+            IconButton(
+              key: const Key('homePage_logout_iconButton'),
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () {
+                context.read<AppBloc>().add(const AppLogoutPressed());
+              },
             ),
-          ),
-          BlocProvider<PlantsBloc>(
-            create: (context) => PlantsBloc(
-              api: context.read<UserApiServices>().plantsApi,
-            ),
-          ),
-        ],
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Home'),
-            actions: [
-              IconButton(
-                key: const Key('homePage_logout_iconButton'),
-                icon: const Icon(Icons.exit_to_app),
-                onPressed: () {
-                  context.read<AppBloc>().add(const AppLogoutPressed());
-                },
-              ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              AvatarSection(),
+              InventorySection(),
+              PlantsSection(),
             ],
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                AvatarSection(),
-                InventorySection(),
-                PlantsSection(),
-              ],
-            ),
           ),
         ),
       ),
@@ -82,7 +72,6 @@ class AvatarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AvatarCubit>()..loadAvatar();
     return BlocBuilder<AvatarCubit, AvatarState>(
       builder: (context, state) {
         if (state.isLoading) {
@@ -93,10 +82,25 @@ class AvatarSection extends StatelessWidget {
             child: InkWell(
               splashColor: Theme.of(context).primaryColor.withAlpha(30),
               onTap: () {
-                context
-                    .read<AppBloc>()
-                    .state
-                    .copyWith(status: AppStatus.profile);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<AvatarCubit>.value(
+                          value: context.read<AvatarCubit>(),
+                        ),
+                        BlocProvider<ProfileCubit>(
+                          create: (context) => ProfileCubit(
+                            context.read<AvatarCubit>(),
+                            context.read<AuthenticationRepository>(),
+                          ),
+                        ),
+                      ],
+                      child: ProfilePage(),
+                    ),
+                  ),
+                );
               },
               child: AvatarSummary(profile: state.avatar!),
             ),
