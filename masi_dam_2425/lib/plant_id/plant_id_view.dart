@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/plant_id/plant_id_bloc.dart';
 
 class CameraApp extends StatefulWidget {
-  late CameraDescription camera;
-
   CameraApp({Key? key}) : super(key: key) {}
 
   @override
@@ -20,15 +18,6 @@ class _CameraAppState extends State<CameraApp> {
   @override
   void initState() {
     super.initState();
-
-    // Create a CameraController
-    _controller = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
-
-    // Initialize the controller
-    _initializeControllerFuture = _controller.initialize();
   }
 
   @override
@@ -47,12 +36,20 @@ class _CameraAppState extends State<CameraApp> {
         child: BlocBuilder<PlantIdBloc, PlantIdState>(
           builder: (context, state) {
             if (state is PlantIdReadyState) {
-              widget.camera = state.camera;
               return FutureBuilder<void>(
                 future: _initializeControllerFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     // If the Future is complete, display the preview
+                      // Create a CameraController
+                    _controller = CameraController(
+                      state.camera,
+                      ResolutionPreset.medium,
+                    );
+
+                    // Initialize the controller
+                    _initializeControllerFuture = _controller.initialize();
+                  
                     return CameraPreview(_controller);
                   } else {
                     // Otherwise, display a loading indicator
@@ -60,10 +57,10 @@ class _CameraAppState extends State<CameraApp> {
                   }
                 },
               );
-            }else{
+            }else if(state is PlantIdNotReadyState){
               context.read<PlantIdBloc>().add(LoadCameraEvent());
-              return const Center(child: CircularProgressIndicator());
             }
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
