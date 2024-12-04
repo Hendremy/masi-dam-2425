@@ -1,10 +1,38 @@
-# Mon Application
+# Greenmon
 
 > Vous vous adressez potentiellement à un futur employeur et donc une personne qui n'aura pas nécessairement l'occasion de compiler votre projet. Votre `README.md` contiendra donc au moins :
 
 ## 📁 Présentation des Principaux Dossiers
 
 > Une présentation des principaux dossiers de votre dépôt. Quelles sont les différentes ressources qu'il contient à la racine ? Par exemple, les maquettes, vos inspirations, etc. Si vous avez fait des efforts quant à l'organisation de vos fichiers dans le dossier `lib`, expliquez-les ici.
+
+À la racine du repository, nous trouvons le dossier masi_dam_2425 contenant le projet Flutter, dont voici la découpe :
+- android / : contient les fichier nécessaire à l'exécution de l'application Flutter sur un appareil Android, cela inclut notamment le manifeste android qui définit l'application android et les permissions nécessaires
+- assets / : contient les images utilisées dans notre application, cela inclut principalement les icones des items et des personnages.
+- lib / : contient le code source Dart qui constitue l'application
+    
+    Chaque répertoire représente une fonctionnalité principale de notre application et contient donc les classes nécessaires à son fonctionnement. Dans chacun, nous retrouverons principalement 3 types de sous-dossiers:
+    - view : pages principales
+    - widgets : modules réutilisables de vue
+    - bloc : contient les classes d'état, d'évènements et de blocs/cubits faisant partie de l'architecture de gestion d'états BLoC
+
+    On retrouve ici plusieurs répertoires ne représentant pas des fonctionnalités mais dont les fonctionnalités dépendent :
+    - api : contient les classes d'accès aux serveurs de Firebase et aux APIs externes telles que Plant .NET
+    - env : accès aux variables d'environnement telles que les clés pour les services mentionnés ci-haut
+    - model : structures de données principales (plantes, profil, ...)
+    - helper : classes utilitaires
+
+    Voici les répertoires de fonctionnalités que vous pourrez retrouver :
+    - app : représente le point de départ de l'application
+    - home : l'écran d'accueil d'un utilisateur authentifié
+    - inventory : affiche l'équipement acquis par l'utilisateur
+    - login : page d'authentification pour accéder au reste de l'application
+    - network : vérifie l'état de la connexion internet et affiche un message d'erreur quand la connexion aux services est perdue
+    - plants : catalogue des plantes enregistrées par l'utilisateur
+    - profile : page de profil de l'utilisateur où il peut consulter et modifier ses informations
+    - sign-up : page d'inscription où l'utilisateur peut se créer un nouveau compte
+    
+- packages / : code source d'utilité générale pouvant être aisément réutilisé dans d'autres applications que celle-ci, comme pour l'authentification ou la mise en cache 
 
 ## 🚀 Présentation de l'Application
 
