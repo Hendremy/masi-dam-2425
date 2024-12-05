@@ -1,52 +1,71 @@
+import 'package:masi_dam_2425/model/inventory.dart';
+import 'package:masi_dam_2425/model/stats.dart';
+
 class Avatar {
   late String name;
   late String title;
-  late int level;
-  late double xp;
+  late Stats stats;
+  late Inventory inventory;
 
   Avatar({
     required this.name,
     required this.title,
-    required this.level,
-    required this.xp,
+    required this.stats,
+    required this.inventory,
   });
 
   Avatar.fromMap(Map<String, dynamic> map) {
-    name = map['name'] ?? 'User';
-    title = map['title'] ?? 'Nobody';
-    level = (map['level'] as num).toInt();
-    xp = (map['xp'] as num).toDouble();
+    name = map['name'];
+    title = map['title'];
+    stats = Stats.fromMap(map['stats']);
+    inventory = Inventory.fromMap(map['inventory']);
   }
 
   Avatar.starter(String? name, String? email) {
     this.name = name ?? 'Player';
     title = 'Baby warrior';
-    level = 1;
-    xp = 0.0;
+    stats = Stats.starter();
+    inventory = Inventory.empty();
   }
 
   Avatar.empty() {
     name = 'User';
     title = 'Nobody';
-    level = 1;
-    xp = 0.0;
+    stats = Stats.starter();
+    inventory = Inventory.empty();
   }
+
+  get level => stats.level;
+
+  get xp => stats.xp;
+
+  get coins => inventory.coins;
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'title': title,
-      'level': level,
-      'xp': xp,
-    };
+      'stats': stats.toMap(),
+      'inventory': inventory.toMap(),
+    };  
   }
 
-  copyWith({String? displayName}) {
+  copyWith({
+    String? name,
+    String? title,
+    Stats? stats,
+    Inventory? inventory,
+  }) {
     return Avatar(
-      name: displayName ?? this.name,
-      title: this.title,
-      level: this.level,
-      xp: this.xp,
+      name: name ?? this.name,
+      title: title ?? this.title,
+      stats: stats ?? this.stats,
+      inventory: inventory ?? this.inventory,
     );
   }
+
+  void buy(Item item) {
+    inventory.coins -= item.cost;
+    inventory.add(item);
+  } 
 }

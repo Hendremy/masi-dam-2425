@@ -46,7 +46,7 @@ class AvatarCubit extends Cubit<AvatarState> {
   updateAvatar(String? displayName) {
     final avatar = state.avatar;
     if (avatar != null) {
-      final updatedAvatar = avatar.copyWith(displayName: displayName);
+      final updatedAvatar = avatar.copyWith(name: displayName);
       emit(state.copyWith(avatar: updatedAvatar));
     }
   }

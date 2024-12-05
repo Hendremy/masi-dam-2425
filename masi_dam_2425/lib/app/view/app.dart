@@ -46,10 +46,11 @@ class App extends StatelessWidget {
               authenticationRepository: _authenticationRepository,
             )..add(const AppUserLoginRequested()),
           ),
-          BlocProvider<AvatarCubit>(
+           BlocProvider<AvatarCubit>(
             create: (context) => AvatarCubit(
-              context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
-            ))
+                  context.read<UserApiServices>().avatarApi
+                      as AvatarFirestoreApi,
+                ))
         ],
         child: const AppView(),
       ),

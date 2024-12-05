@@ -1,6 +1,7 @@
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/inventory_api.dart';
 import 'package:masi_dam_2425/api/plants_api.dart';
+import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/model/inventory.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
@@ -9,11 +10,13 @@ class UserApiServices {
   late InventoryApi inventoryApi;
   late PlantsApi plantsApi;
   late AvatarApi avatarApi;
+  late ShopApi shopApi;
 
   UserApiServices({firestoreDb, auth}) {
     inventoryApi = InventoryFirestoreApi(db: firestoreDb);
     plantsApi = PlantsFirestoreApi(db: firestoreDb);
-    avatarApi = AvatarFirestoreApi(db: firestoreDb, auth: auth); 
+    avatarApi = AvatarFirestoreApi(db: firestoreDb, auth: auth);
+    shopApi = ShopFirestoreApi(db: firestoreDb);
   }
 }
 
@@ -23,6 +26,10 @@ abstract class InventoryApi {
 
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
+}
+
+abstract class ShopApi {
+  Future<List<Item>?> getItems();
 }
 
 abstract class AvatarApi {
