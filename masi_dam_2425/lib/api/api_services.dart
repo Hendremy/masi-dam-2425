@@ -5,6 +5,7 @@ import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/model/inventory.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
+import 'package:masi_dam_2425/model/shop_item.dart';
 
 class UserApiServices {
   late InventoryApi inventoryApi;
@@ -29,7 +30,7 @@ abstract class PlantsApi {
 }
 
 abstract class ShopApi {
-  Future<List<Item>?> getItems();
+  Future<List<ShopItem>?> getItems();
 }
 
 abstract class AvatarApi {

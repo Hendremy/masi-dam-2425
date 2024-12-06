@@ -1,4 +1,5 @@
 import 'package:masi_dam_2425/model/inventory.dart';
+import 'package:masi_dam_2425/model/shop_item.dart';
 import 'package:masi_dam_2425/model/stats.dart';
 
 class Avatar {
@@ -47,7 +48,7 @@ class Avatar {
       'title': title,
       'stats': stats.toMap(),
       'inventory': inventory.toMap(),
-    };  
+    };
   }
 
   copyWith({
@@ -64,8 +65,12 @@ class Avatar {
     );
   }
 
-  void buy(Item item) {
+  void buy(ShopItem item) {
     inventory.coins -= item.cost;
     inventory.add(item);
-  } 
+  }
+
+  canBuy(ShopItem? shopItem) {
+    return shopItem != null && shopItem.cost <= coins;
+  }
 }

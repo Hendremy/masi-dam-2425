@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:masi_dam_2425/model/inventory.dart';
+import 'package:masi_dam_2425/model/shop_item.dart';
 
-class ItemWidget extends StatelessWidget {
-  final Item item;
+class ShopItemWidget extends StatelessWidget {
+  final ShopItem item;
 
-  const ItemWidget({Key? key, required this.item}) : super(key: key);
+  const ShopItemWidget({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +20,11 @@ class ItemWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'ID: ${item.id}',
-            ),
-            const SizedBox(height: 8),
-            Text(
               'Type: ${item.type.toString().split('.').last}',
             ),
             const SizedBox(height: 8),
             Text(
               'Description: ${item.description}',
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Equipped: ${item.isEquipped ? 'Yes' : 'No'}',
             ),
             const SizedBox(height: 8),
             Text(

@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
-import 'package:masi_dam_2425/model/inventory.dart';
+import 'package:masi_dam_2425/model/shop_item.dart';
 
 
 class ShopState {
-  final List<Item>? shop;
+  final List<ShopItem>? shop;
   final bool isLoading;
   final String? errorMessage;
 
@@ -16,7 +16,7 @@ class ShopState {
   });
 
   ShopState copyWith({
-    List<Item>? shop,
+    List<ShopItem>? shop,
     bool? isLoading,
     String? errorMessage,
   }) {
@@ -45,7 +45,7 @@ class ShopCubit extends Cubit<ShopState> {
   } 
 
   // Function to buy an item
-  void buyItem(Item item, Avatar player) {
+  void buyItem(ShopItem item, Avatar player) {
     if (player.coins >= item.cost) {
       player.buy(item);
     } else {
