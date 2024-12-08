@@ -1,13 +1,18 @@
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
+import 'package:masi_dam_2425/model/assembler/avatar_assembler.dart';
+import 'package:masi_dam_2425/model/assembler/inventory_assembler.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:masi_dam_2425/model/inventory.dart';
 
 class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
   final FirebaseAuth auth;
+  final InventoryApi inventoryApi;
 
-  AvatarFirestoreApi({required this.auth, required super.db});
+  AvatarFirestoreApi(
+      {required this.auth, required super.db, required this.inventoryApi});
 
   Future<Avatar?> getAvatar() async {
     final user = auth.currentUser;
@@ -17,10 +22,13 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     final snapshot = await doc.get();
 
     if (snapshot.exists) {
-      return Avatar.fromMap(snapshot.data()!);
+      final inventory = await inventoryApi.getInventory();
+      final json = snapshot.data()!;
+      json['inventory'] = inventory;
+      return AvatarAssembler.fromJson(json);
     } else {
       final avatar = Avatar.starter(user.displayName, user.email);
-      await doc.set(avatar.toMap());
+      await doc.set(AvatarAssembler.toJson(avatar));
       return avatar;
     }
   }
@@ -64,17 +72,19 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
       if (user != null) {
         AuthCredential credential = EmailAuthProvider.credential(
           email: user.email!,
-          password: password, 
+          password: password,
         );
         await user.reauthenticateWithCredential(credential);
         await user.delete();
         db.collection('profiles').doc(user.uid).delete();
-      }
-      else {
+      } else {
         throw Exception('No authenticated user');
-      } 
+      }
     } on FirebaseAuthException {
-    } catch (e) {
-    }
+    } catch (e) {}
+  }
+
+  Future<void> updateInventory(Inventory inventory) async {
+    await db.collection('inventory').doc(auth.currentUser?.uid).update(InventoryAssembler.toJson(inventory));
   }
 }

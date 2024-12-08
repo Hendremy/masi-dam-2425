@@ -17,29 +17,8 @@ class ShopItem {
     required this.cost,
   });
 
-  ShopItem.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    name = map['name'];
-    description = map['description'];
-    type = convertType(map['type']);
-    buffValue = map['buffValue'];
-    image = map['image'];
-    cost = map['cost'];
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'type': type,
-      'buffValue': buffValue,
-      'image': image,
-      'cost': cost,
-    };
-  }
-
-  ShopItemType convertType(String type) {
+  
+  static ShopItemType convertType(String type) {
     switch (type) {
       case 'potion':
         return ShopItemType.potion;
@@ -51,6 +30,7 @@ class ShopItem {
         return ShopItemType.unknown;
     }
   }
+
 }
 
 enum ShopItemType { potion, tools, knowledge, unknown }

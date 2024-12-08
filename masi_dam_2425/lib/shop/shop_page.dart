@@ -229,7 +229,7 @@ class ItemCardWidget extends StatelessWidget {
                   ? () {
                       context
                           .read<ShopCubit>()
-                          .buyItem(item!, player!);
+                          .buyItem(item!);
                     }
                   : null,
               color:

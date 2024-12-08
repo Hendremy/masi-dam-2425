@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
-import 'package:masi_dam_2425/home/bloc/inventory_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
 import 'package:masi_dam_2425/profile/cubit/profile_cubit.dart';
@@ -23,11 +22,6 @@ class WelcomePage extends StatelessWidget {
     context.read<AvatarCubit>().loadAvatar();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<InventoryBloc>(
-          create: (context) => InventoryBloc(
-            api: context.read<UserApiServices>().inventoryApi,
-          ),
-        ),
         BlocProvider<PlantsBloc>(
           create: (context) => PlantsBloc(
             api: context.read<UserApiServices>().plantsApi,
@@ -143,6 +137,7 @@ class WelcomePage extends StatelessWidget {
             BlocProvider<ShopCubit>(
               create: (context) => ShopCubit(
                 context.read<UserApiServices>().shopApi as ShopFirestoreApi,
+                context.read<AvatarCubit>(),
               )..loadShop(),
             )
           ],

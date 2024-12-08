@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
-import 'package:masi_dam_2425/model/avatar.dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
+import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
 
 
 class ShopState {
@@ -30,9 +30,10 @@ class ShopState {
 
 class ShopCubit extends Cubit<ShopState> {
 
-   final ShopFirestoreApi api;
+  final AvatarCubit avatarCubit; // AvatarCubit for managing the avatar state
+  final ShopFirestoreApi api;
 
-  ShopCubit(this.api) : super(ShopState());
+  ShopCubit(this.api, this.avatarCubit) : super(ShopState());
 
   void loadShop() async {
     emit(state.copyWith(isLoading: true));
@@ -45,12 +46,24 @@ class ShopCubit extends Cubit<ShopState> {
   } 
 
   // Function to buy an item
-  void buyItem(ShopItem item, Avatar player) {
-    if (player.coins >= item.cost) {
-      player.buy(item);
+  void buyItem(ShopItem item) async {
+    emit(state.copyWith(isLoading: true));
+    if (avatarCubit.state.avatar?.coins >= item.cost) {
+
+      try {
+        // Local update
+        avatarCubit.state.avatar?.inventory.add(item);
+        avatarCubit.state.avatar?.buy(item);
+        // Remote update
+        avatarCubit.api.updateInventory(avatarCubit.state.avatar!.inventory);
+        emit(state.copyWith(isLoading: false));
+      } catch (e) {
+        emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      }
+      
     } else {
       // Handle insufficient funds (can be done in UI with a message)
-      print("Not enough coins to buy ${item.name}");
+      emit(state.copyWith(isLoading: false, errorMessage: "Insufficient funds"));
     }
   }
 }

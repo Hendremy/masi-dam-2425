@@ -11,22 +11,6 @@ class Stats {
     this.growthMultiplier = 1.0,
   });
 
-  Stats.fromMap(Map<String, dynamic> map) {
-    level = (map['level'] as num).toInt();
-    xp = (map['xp'] as num).toDouble();
-    healthBoost = (map['healthBoost'] as num).toInt();
-    growthMultiplier = (map['growthMultiplier'] as num).toDouble();
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'level': level,
-      'xp': xp,
-      'healthBoost': healthBoost,
-      'growthMultiplier': growthMultiplier,
-    };
-  }
-
   Stats.starter() {
     level = 1;
     xp = 0;

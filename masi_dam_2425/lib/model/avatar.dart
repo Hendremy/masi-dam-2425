@@ -15,13 +15,6 @@ class Avatar {
     required this.inventory,
   });
 
-  Avatar.fromMap(Map<String, dynamic> map) {
-    name = map['name'];
-    title = map['title'];
-    stats = Stats.fromMap(map['stats']);
-    inventory = Inventory.fromMap(map['inventory']);
-  }
-
   Avatar.starter(String? name, String? email) {
     this.name = name ?? 'Player';
     title = 'Baby warrior';
@@ -41,15 +34,6 @@ class Avatar {
   get xp => stats.xp;
 
   get coins => inventory.coins;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'title': title,
-      'stats': stats.toMap(),
-      'inventory': inventory.toMap(),
-    };
-  }
 
   copyWith({
     String? name,

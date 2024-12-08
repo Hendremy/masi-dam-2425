@@ -2,6 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
+import 'package:masi_dam_2425/model/shop_item.dart';
 
 class AvatarState {
   final Avatar? avatar;
@@ -48,6 +49,24 @@ class AvatarCubit extends Cubit<AvatarState> {
     if (avatar != null) {
       final updatedAvatar = avatar.copyWith(name: displayName);
       emit(state.copyWith(avatar: updatedAvatar));
+    }
+  }
+
+  Future<void> addItem(ShopItem item) async {
+    if (state.avatar == null) return;
+    final avatar = state.avatar;
+    try {
+      final updatedInventory = avatar!.inventory;
+      updatedInventory.add(item);
+
+      // Update state locally
+      final updatedAvatar = avatar.copyWith(inventory: updatedInventory);
+      emit(state.copyWith(avatar: updatedAvatar));
+
+      // Update Firestore
+      await api.updateProfileDetails(additionalData: {'inventory': updatedInventory});
+    } catch (e) {
+      emit(state.copyWith(errorMessage: e.toString()));
     }
   }
 
