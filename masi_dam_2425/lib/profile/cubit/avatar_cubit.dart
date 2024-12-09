@@ -1,4 +1,6 @@
 // AvatarCubit to manage the avatar state
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
@@ -30,21 +32,35 @@ class AvatarState {
 
 class AvatarCubit extends Cubit<AvatarState> {
   final AvatarFirestoreApi api;
+  late final StreamSubscription<Avatar> _subscription;
 
-  AvatarCubit(this.api) : super(AvatarState());
+  AvatarCubit(this.api) : super(AvatarState()) {
+    _initialize();
+  }
 
-  // Load the avatar from Firestore
-  Future<void> loadAvatar() async {
+  void _initialize() {
+    emit(state.copyWith(isLoading: true));
+    _subscription = api.avatarStream().listen(
+      (avatar) => emit(state.copyWith(avatar: avatar, isLoading: false)),
+      onError: (error) => emit(state.copyWith(errorMessage: error.toString(), isLoading: false)),
+    );
+  }
+
+  Future<void> addItem(ShopItem item) async {
     emit(state.copyWith(isLoading: true));
     try {
-      final avatar = await api.getAvatar();
-      emit(state.copyWith(avatar: avatar, isLoading: false, errorMessage: null));
+      final avatar = state.avatar?.addItemToInventory(item);
+      if (avatar == null) throw Exception('No avatar found to update');
+      emit(state.copyWith(avatar: avatar));
+      await api.updateInventory(avatar.inventory);
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(errorMessage: e.toString()));
+    } finally {
+      emit(state.copyWith(isLoading: false));
     }
   }
 
-  updateAvatar(String? displayName) {
+  void updateAvatar(String? displayName) {
     final avatar = state.avatar;
     if (avatar != null) {
       final updatedAvatar = avatar.copyWith(name: displayName);
@@ -52,22 +68,13 @@ class AvatarCubit extends Cubit<AvatarState> {
     }
   }
 
-  Future<void> addItem(ShopItem item) async {
-    if (state.avatar == null) return;
-    final avatar = state.avatar;
-    try {
-      final updatedInventory = avatar!.inventory;
-      updatedInventory.add(item);
-
-      // Update state locally
-      final updatedAvatar = avatar.copyWith(inventory: updatedInventory);
-      emit(state.copyWith(avatar: updatedAvatar));
-
-      // Update Firestore
-      await api.updateProfileDetails(additionalData: {'inventory': updatedInventory});
-    } catch (e) {
-      emit(state.copyWith(errorMessage: e.toString()));
-    }
+  void clearError() {
+    emit(state.copyWith(errorMessage: null));
   }
 
+  @override
+  Future<void> close() {
+    _subscription.cancel();
+    return super.close();
+  }
 }

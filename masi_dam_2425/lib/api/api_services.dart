@@ -16,7 +16,8 @@ class UserApiServices {
     shopApi = ShopFirestoreApi(db: firestoreDb);
     inventoryApi = InventoryFirestoreApi(db: firestoreDb, shopApi: shopApi);
     plantsApi = PlantsFirestoreApi(db: firestoreDb);
-    avatarApi = AvatarFirestoreApi(db: firestoreDb, auth: auth, inventoryApi: inventoryApi);
+    avatarApi = AvatarFirestoreApi(
+        db: firestoreDb, auth: auth, inventoryApi: inventoryApi);
   }
 }
 
@@ -34,7 +35,7 @@ abstract class ShopApi {
 }
 
 abstract class AvatarApi {
-  Future<Avatar?> getAvatar();
+  Stream<Avatar> avatarStream();
   Future<void> updateFirestoreProfile(Map<String, dynamic> updates);
   Future<void> updateProfileDetails({
     String? displayName,

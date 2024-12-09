@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:masi_dam_2425/api/avatar_api.dart';
+import 'package:masi_dam_2425/model/avatar.dart';
 import 'package:masi_dam_2425/model/profile.dart';
-import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
 
 class ProfileState {
   final Profile? profile;
@@ -32,29 +35,35 @@ class ProfileState {
 }
 
 class ProfileCubit extends Cubit<ProfileState> {
-  final AvatarCubit avatarCubit; // AvatarCubit for managing the avatar state
-  final AuthenticationRepository
-      authRepo; // AuthenticationRepository for the current user
+  final AvatarFirestoreApi avatarApi;
+  final AuthenticationRepository authRepo;
 
-  ProfileCubit(this.avatarCubit, this.authRepo) : super(ProfileState());
+  late final StreamSubscription<Avatar> _avatarSubscription;
 
-  Future<void> loadProfile() async {
-    emit(state.copyWith(isLoading: true)); 
-    try {
-      final avatar = avatarCubit.state.avatar; 
-      final user = authRepo
-          .currentUser; 
-      emit(state.copyWith(
-          profile: Profile(avatar: avatar!, user: user),
-          isLoading: false)); 
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-    }
+  ProfileCubit(this.avatarApi, this.authRepo) : super(ProfileState()) {
+    _initialize();
   }
+
+  void _initialize() {
+    emit(state.copyWith(isLoading: true));
+    _avatarSubscription = avatarApi.avatarStream().listen(
+      (avatar) => emit(state.copyWith(profile: Profile(avatar: avatar, user: authRepo.currentUser), isLoading: false)),
+      onError: (error) => emit(state.copyWith(errorMessage: error.toString(), isLoading: false)),
+    );
+  }
+
+
+  @override
+  Future<void> close() {
+    _avatarSubscription.cancel();
+    return super.close();
+  }
+
 
   Future<void> deleteAccount(String password) async {
     // Delete the user account
-    await avatarCubit.api.deleteAvatar(password);
+    await avatarApi.deleteAvatar(password);
+    // await authRepo.deleteAccount(password);
   }
 
   // Update profile details
@@ -65,16 +74,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(state.copyWith(isLoading: true));
     try {
-      await avatarCubit.updateAvatar(displayName);
-      await avatarCubit.api.updateProfileDetails(
+      await avatarApi.updateProfileDetails(
         displayName: displayName,
         email: email,
         additionalData: additionalData,
-      );
-      final avatar = await avatarCubit.api.getAvatar();
-      final user = authRepo.currentUser;
-      emit(state.copyWith(
-          profile: Profile(avatar: avatar!, user: user), isLoading: false));
+      );      
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }

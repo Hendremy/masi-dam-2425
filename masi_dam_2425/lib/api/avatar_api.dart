@@ -8,29 +8,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masi_dam_2425/model/inventory.dart';
 
 class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
-  final FirebaseAuth auth;
-  final InventoryApi inventoryApi;
+  late FirebaseAuth auth;
+  late InventoryApi inventoryApi;
 
   AvatarFirestoreApi(
       {required this.auth, required super.db, required this.inventoryApi});
 
-  Future<Avatar?> getAvatar() async {
+  Stream<Avatar> avatarStream() {
     final user = auth.currentUser;
-    if (user == null) throw Exception('No authenticated user');
-
-    final doc = db.collection('profiles').doc(user.uid);
-    final snapshot = await doc.get();
-
-    if (snapshot.exists) {
-      final inventory = await inventoryApi.getInventory();
-      final json = snapshot.data()!;
-      json['inventory'] = inventory;
-      return AvatarAssembler.fromJson(json);
-    } else {
-      final avatar = Avatar.starter(user.displayName, user.email);
-      await doc.set(AvatarAssembler.toJson(avatar));
-      return avatar;
+    if (user == null) {
+      throw Exception('No authenticated user');
     }
+
+    return db.collection('profiles').doc(user.uid).snapshots().asyncMap((snapshot) async {
+      if (snapshot.exists) {
+        final inventory = await inventoryApi.getInventory();
+        final json = snapshot.data()!;
+        json['inventory'] = inventory;
+        return AvatarAssembler.fromJson(json);
+      } else {
+        return Avatar.starter(user.displayName, user.email);
+      }
+    });
   }
 
   Future<void> updateFirestoreProfile(Map<String, dynamic> updates) async {
@@ -43,25 +42,27 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     Map<String, dynamic>? additionalData,
   }) async {
     final user = auth.currentUser;
-    if (user == null) throw Exception('No authenticated user');
-
-    if (displayName != null && displayName != user.displayName) {
-      await user.updateProfile(displayName: displayName);
-    }
-
-    if (email != null && email != user.email && user.emailVerified) {
-      await user.verifyBeforeUpdateEmail(email);
-    }
-
-    await user.reload();
-
+    await updateFirebaseUser(user, displayName, email);
     final updates = <String, dynamic>{
       if (displayName != null) 'name': displayName,
-      if (email != null) 'email': email,
       if (additionalData != null) ...additionalData,
     };
 
     await updateFirestoreProfile(updates);
+  }
+
+  Future<void> updateFirebaseUser(User? user, String? displayName, String? email) async {
+    if (user == null) throw Exception('No authenticated user');
+    
+    if (displayName != null && displayName != user.displayName) {
+      await user.updateProfile(displayName: displayName);
+    }
+    
+    if (email != null && email != user.email && user.emailVerified) {
+      await user.verifyBeforeUpdateEmail(email);
+    }
+    
+    await user.reload();
   }
 
   deleteAvatar(String password) async {

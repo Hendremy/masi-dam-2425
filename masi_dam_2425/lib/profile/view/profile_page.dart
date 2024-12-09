@@ -10,7 +10,6 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ProfileCubit>().loadProfile();
     return Scaffold(
         appBar: AppBar(title: const Text('Profile')),
         body: SingleChildScrollView(

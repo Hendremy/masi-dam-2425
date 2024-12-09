@@ -49,11 +49,11 @@ class ShopCubit extends Cubit<ShopState> {
   void buyItem(ShopItem item) async {
     emit(state.copyWith(isLoading: true));
     if (avatarCubit.state.avatar?.coins >= item.cost) {
-
       try {
         // Local update
         avatarCubit.state.avatar?.inventory.add(item);
         avatarCubit.state.avatar?.buy(item);
+        avatarCubit.emit(avatarCubit.state.copyWith(avatar: avatarCubit.state.avatar));
         // Remote update
         avatarCubit.api.updateInventory(avatarCubit.state.avatar!.inventory);
         emit(state.copyWith(isLoading: false));

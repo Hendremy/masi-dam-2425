@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
+import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
@@ -19,7 +20,6 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AvatarCubit>().loadAvatar();
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlantsBloc>(
@@ -176,12 +176,9 @@ class AvatarSection extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
-            BlocProvider<AvatarCubit>.value(
-              value: avatarCubit,
-            ),
             BlocProvider<ProfileCubit>(
               create: (context) => ProfileCubit(
-                avatarCubit,
+                context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
                 context.read<AuthenticationRepository>(),
               ),
             ),

@@ -54,6 +54,11 @@ class Avatar {
     inventory.add(item);
   }
 
+  Avatar addItemToInventory(ShopItem item) {
+    inventory.add(item);
+    return this;
+  }
+
   canBuy(ShopItem? shopItem) {
     return shopItem != null && shopItem.cost <= coins;
   }
