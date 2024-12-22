@@ -1,9 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masi_dam_2425/model/avatar.dart';
-import 'package:masi_dam_2425/profile/cubit/profile_cubit.dart';
-import 'package:masi_dam_2425/profile/widgets/avatar_summary.dart';
+import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
+import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
+
+import '../../model/avatar.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -15,109 +17,132 @@ class ProfilePage extends StatelessWidget {
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(8),
-          child: BlocBuilder<ProfileCubit, ProfileState>(
+          child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
-              if (state.isLoading) {
+              if (state is ProfileLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (state.errorMessage != null) {
-                return Center(child: Text('Error: ${state.errorMessage}'));
+              if (state is ProfileUpdating) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Profile is updating',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                );
+
               }
 
-              final user = state.profile?.user;
-              final avatar = state.profile?.avatar;
+              if (state is ProfileError) {
+                return Center(child: Text('Error: ${state.message}'));
+              }
 
-              final nameController = TextEditingController(text: avatar?.name);
-              final emailController = TextEditingController(text: user?.email);
-              final passwordController = TextEditingController();
+              if (state is ProfileLoaded) {
+                final profile = state.profile;
 
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    AvatarWidget(avatar: avatar!),
-                    const SizedBox(height: 30),
-                    UserWidget(
-                        user: user!,
-                        nameController: nameController,
-                        emailController: emailController),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<ProfileCubit>().updateProfileDetails(
-                              displayName: nameController.text,
-                              email: emailController.text,
-                            );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        backgroundColor: Colors.white,
-                      ),
-                      child: Text("Update Profile"),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Delete your Account?'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text('If you select Delete we will delete your account on our server.'),
-                                    const SizedBox(height: 16),
-                                    ProfileInputField(
-                                      controller: passwordController,
-                                      labelText: 'Password',
-                                      hintText: 'Enter your password',
-                                      obscureText: true,
-                                      icon: Icons.lock,
-                                    ),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('Cancel'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text(
-                                      'Delete',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    onPressed: () {
-                                      
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                      style: ElevatedButton.styleFrom(
+                final nameController = TextEditingController(text: profile.name);
+                final emailController = TextEditingController(text: profile.connectionData.email);
+                final passwordController = TextEditingController();
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      AvatarWidget(avatar: profile),
+                      const SizedBox(height: 30),
+                      UserWidget(
+                          user: profile,
+                          nameController: nameController,
+                          emailController: emailController),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<ProfileBloc>().add(UpdateProfile(
+                              profile.copyWith(
+                                  name: nameController.text,
+                                  connectionData: profile.connectionData.copyWith(
+                                      email: emailController.text))
+                          ));
+                        },
+                        style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white),
-                      child: Text("Delete Profile"),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        )));
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          backgroundColor: Colors.white,
+                        ),
+                        child: state is ProfileUpdating
+    ? const CircularProgressIndicator()
+        : const Text('Update Profile'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Delete your Account?'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('If you select Delete we will delete your account on our server.'),
+                                      const SizedBox(height: 16),
+                                      ProfileInputField(
+                                        controller: passwordController,
+                                        labelText: 'Password',
+                                        hintText: 'Enter your password',
+                                        obscureText: true,
+                                        icon: Icons.lock,
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text(
+                                        'Delete',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () {
+
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white),
+                        child: Text("Delete Profile"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+
+            }
+            ))));
   }
 }
 
@@ -128,12 +153,13 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AvatarSummary(profile: avatar);
+    return ProfileSummaryWidget(profile: avatar);
   }
 }
 
+
 class UserWidget extends StatelessWidget {
-  final User user;
+  final Avatar user;
   final nameController, emailController;
 
   UserWidget(
@@ -161,7 +187,7 @@ class UserWidget extends StatelessWidget {
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "Last login: ${user.formattedAccountLastLoginDate}",
+                          "Last login: ${user.connectionData.lastLoginFormatted()}",
                           style:
                               TextStyle(fontSize: 16, color: Colors.grey[700]),
                         ),
@@ -176,7 +202,7 @@ class UserWidget extends StatelessWidget {
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "Account Creation Date: ${user.formattedAccountCreationDate}",
+                          "Account Creation Date: ${user.connectionData.firstLoginFormatted()}",
                           style:
                               TextStyle(fontSize: 16, color: Colors.grey[700]),
                         ),
@@ -188,7 +214,7 @@ class UserWidget extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.verified,
-                        color: (user.emailVerified ?? false)
+                        color: (user.connectionData.isVerified ?? false)
                             ? Colors.green
                             : Colors.red,
                         size: 24,
@@ -196,7 +222,7 @@ class UserWidget extends StatelessWidget {
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "Account verified: ${user.emailVerified! ? 'Yes' : 'No'}",
+                          "Account verified: ${user.connectionData.isVerified ? 'Yes' : 'No'}",
                           style:
                               TextStyle(fontSize: 16, color: Colors.grey[700]),
                         ),
@@ -216,7 +242,7 @@ class UserWidget extends StatelessWidget {
                       controller: emailController,
                       labelText: 'Email',
                       hintText: 'Enter your email',
-                      active: user.emailVerified!,
+                      active: user.connectionData.isVerified,
                       icon: Icons.email),
                   SizedBox(height: 16),
                 ],

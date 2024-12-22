@@ -31,6 +31,22 @@ class ShopItem {
     }
   }
 
+  factory ShopItem.fromJson(Map<String, dynamic> json) {
+    return ShopItem(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      type: convertType(json['type']),
+      buffValue: json['buffValue'],
+      cost: json['cost'],
+      image: json['image'],
+    );
+  }
+
+  static String toJson(ShopItem item) {
+    return item.id;
+  }
+
 }
 
 enum ShopItemType { potion, tools, knowledge, unknown }

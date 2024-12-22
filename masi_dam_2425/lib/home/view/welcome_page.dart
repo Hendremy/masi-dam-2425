@@ -1,17 +1,16 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
-import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
-import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
-import 'package:masi_dam_2425/profile/cubit/profile_cubit.dart';
-import 'package:masi_dam_2425/profile/view/profile_page.dart';
-import 'package:masi_dam_2425/profile/widgets/avatar_summary.dart';
+import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
+import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
-import 'package:masi_dam_2425/shop/shop_page.dart';
+import 'package:masi_dam_2425/shop/views/shop_page.dart';
+
+import '../../profile/view/profile_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -20,6 +19,8 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ProfileBloc>().add(LoadProfile());
+    context.read<InventoryCubit>().loadInventory();
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlantsBloc>(
@@ -27,7 +28,6 @@ class WelcomePage extends StatelessWidget {
             api: context.read<UserApiServices>().plantsApi,
           ),
         ),
-        
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -131,14 +131,16 @@ class WelcomePage extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
-            BlocProvider<AvatarCubit>.value(
-              value: context.read<AvatarCubit>(),
+            BlocProvider<ProfileBloc>.value(
+              value: context.read<ProfileBloc>(),
+            ),
+            BlocProvider<InventoryCubit>.value(
+              value: context.read<InventoryCubit>(),
             ),
             BlocProvider<ShopCubit>(
               create: (context) => ShopCubit(
-                context.read<UserApiServices>().shopApi as ShopFirestoreApi,
-                context.read<AvatarCubit>(),
-              )..loadShop(),
+                context.read<UserApiServices>().shopApi as ShopFirestoreApi
+              ),
             )
           ],
           child: ShopPage(),
@@ -153,38 +155,31 @@ class AvatarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AvatarCubit, AvatarState>(
+    return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state is ProfileLoading) {
           return const CircularProgressIndicator();
-        } else if (state.avatar != null) {
-          return AvatarSummary(
-            profile: state.avatar!,
-            action: () =>
-                _goToProfilePage(context, context.read<AvatarCubit>()),
-          );
-        } else {
-          return const Text('Failed to load profile.');
         }
+
+        if (state is ProfileLoaded) {
+          return ProfileSummaryWidget(
+            profile: state.profile,
+            action: () => {
+              _goToProfilePage(context),
+            }
+          );
+        }
+
+        return const Text('Failed to load profile.');
       },
     );
   }
 
-  _goToProfilePage(context, AvatarCubit avatarCubit) {
+  _goToProfilePage(context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
-          providers: [
-            BlocProvider<ProfileCubit>(
-              create: (context) => ProfileCubit(
-                context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
-                context.read<AuthenticationRepository>(),
-              ),
-            ),
-          ],
-          child: ProfilePage(),
-        ),
+        builder: (context) => ProfilePage(),
       ),
     );
   }

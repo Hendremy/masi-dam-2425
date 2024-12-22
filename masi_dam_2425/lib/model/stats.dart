@@ -17,4 +17,22 @@ class Stats {
     healthBoost = 0;
     growthMultiplier = 1.0;
   }
+
+  factory Stats.fromJson(Map<String, dynamic> json) {
+    return Stats(
+      level: json['level'],
+      xp: json['xp'],
+      healthBoost: json['healthBoost'],
+      growthMultiplier: json['growthMultiplier'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'level': level,
+      'xp': xp,
+      'healthBoost': healthBoost,
+      'growthMultiplier': growthMultiplier,
+    };
+  }
 }

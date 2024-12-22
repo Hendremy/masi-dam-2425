@@ -1,65 +1,70 @@
-import 'package:masi_dam_2425/model/inventory.dart';
-import 'package:masi_dam_2425/model/shop_item.dart';
+import 'package:masi_dam_2425/model/account_data.dart';
 import 'package:masi_dam_2425/model/stats.dart';
 
 class Avatar {
   late String name;
   late String title;
+  late ConnectionData connectionData;
   late Stats stats;
-  late Inventory inventory;
 
   Avatar({
     required this.name,
+    required this.connectionData,
     required this.title,
-    required this.stats,
-    required this.inventory,
+    required this.stats
   });
 
-  Avatar.starter(String? name, String? email) {
+  Avatar.starter(String? name, Map<String, dynamic> accountData) {
     this.name = name ?? 'Player';
     title = 'Baby warrior';
     stats = Stats.starter();
-    inventory = Inventory.empty();
+    connectionData = ConnectionData.fromJson(accountData);
   }
 
   Avatar.empty() {
     name = 'User';
     title = 'Nobody';
     stats = Stats.starter();
-    inventory = Inventory.empty();
   }
 
   get level => stats.level;
 
   get xp => stats.xp;
 
-  get coins => inventory.coins;
-
   copyWith({
     String? name,
     String? title,
     Stats? stats,
-    Inventory? inventory,
-  }) {
+    String? email, required connectionData,}) {
     return Avatar(
       name: name ?? this.name,
       title: title ?? this.title,
       stats: stats ?? this.stats,
-      inventory: inventory ?? this.inventory,
+      connectionData: ConnectionData(
+        email: email ?? connectionData.email,
+        lastLogin: connectionData.lastLogin,
+        firstLogin: connectionData.firstLogin,
+        isVerified: connectionData.isVerified,
+      ),
     );
   }
 
-  void buy(ShopItem item) {
-    inventory.coins -= item.cost;
-    inventory.add(item);
+  factory Avatar.fromJson(Map<String, dynamic> json) {
+    return Avatar(
+      name: json['name'],
+      connectionData: ConnectionData.fromJson(json['connectionData']),
+      title: json['title'],
+      stats: Stats.fromJson(json['stats']),
+    );
   }
 
-  Avatar addItemToInventory(ShopItem item) {
-    inventory.add(item);
-    return this;
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': connectionData.email,
+      'title': title,
+      'stats': stats.toJson(),
+    };
   }
 
-  canBuy(ShopItem? shopItem) {
-    return shopItem != null && shopItem.cost <= coins;
-  }
 }

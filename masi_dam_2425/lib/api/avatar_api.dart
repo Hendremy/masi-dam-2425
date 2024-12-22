@@ -1,35 +1,75 @@
+import 'dart:async';
+
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
-import 'package:masi_dam_2425/model/assembler/avatar_assembler.dart';
-import 'package:masi_dam_2425/model/assembler/inventory_assembler.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:masi_dam_2425/model/inventory.dart';
 
 class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
   late FirebaseAuth auth;
   late InventoryApi inventoryApi;
 
+  final _profileController = StreamController<Avatar>.broadcast();
+  Stream<Avatar> get avatarStream => _profileController.stream;
+
   AvatarFirestoreApi(
       {required this.auth, required super.db, required this.inventoryApi});
 
-  Stream<Avatar> avatarStream() {
-    final user = auth.currentUser;
-    if (user == null) {
-      throw Exception('No authenticated user');
-    }
-
-    return db.collection('profiles').doc(user.uid).snapshots().asyncMap((snapshot) async {
-      if (snapshot.exists) {
-        final inventory = await inventoryApi.getInventory();
-        final json = snapshot.data()!;
-        json['inventory'] = inventory;
-        return AvatarAssembler.fromJson(json);
-      } else {
-        return Avatar.starter(user.displayName, user.email);
+  Future<void> loadProfile() async {
+    try {
+      final user = auth.currentUser;
+      if (user == null) {
+        throw Exception('No authenticated user');
       }
-    });
+
+      final document = db.collection('profiles').doc(user.uid);
+      final snapshot = await document.get();
+
+      if (snapshot.exists) {
+          var json = {
+            ...snapshot.data()!,
+            'connectionData': {
+              'email': user.email,
+              'lastLogin': user.metadata.lastSignInTime,
+              'firstLogin': user.metadata.creationTime,
+              'isVerified': user.emailVerified,
+            }
+          };
+          _profileController.add(Avatar.fromJson(json));
+      } else {
+        var accountData = {
+          'email': user.email,
+          'lastLogin': user.metadata.lastSignInTime,
+          'firstLogin': user.metadata.creationTime,
+          'isVerified': user.emailVerified,
+        };
+        _profileController.add(Avatar.starter(user.displayName, accountData));
+      }
+
+
+    } catch (e) {
+      _profileController.addError(e);
+    }
+  }
+
+  Future<void> updateProfile(Avatar profile) async {
+    try {
+      final user = auth.currentUser;
+      await updateFirebaseUser(user, profile.name, profile.connectionData.email);
+      final updates = <String, dynamic>{
+        'name': profile.name,
+      };
+      await updateFirestoreProfile(updates);
+      _profileController.add(profile);
+    } catch (e) {
+      _profileController.addError(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    _profileController.close();
   }
 
   Future<void> updateFirestoreProfile(Map<String, dynamic> updates) async {
@@ -53,15 +93,15 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
 
   Future<void> updateFirebaseUser(User? user, String? displayName, String? email) async {
     if (user == null) throw Exception('No authenticated user');
-    
+
     if (displayName != null && displayName != user.displayName) {
       await user.updateProfile(displayName: displayName);
     }
-    
+
     if (email != null && email != user.email && user.emailVerified) {
       await user.verifyBeforeUpdateEmail(email);
     }
-    
+
     await user.reload();
   }
 
@@ -85,7 +125,4 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     } catch (e) {}
   }
 
-  Future<void> updateInventory(Inventory inventory) async {
-    await db.collection('inventory').doc(auth.currentUser?.uid).update(InventoryAssembler.toJson(inventory));
-  }
 }
