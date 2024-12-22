@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
@@ -5,24 +7,69 @@ import 'package:masi_dam_2425/model/avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
-  final FirebaseAuth auth;
+  late FirebaseAuth auth;
+  late InventoryApi inventoryApi;
 
-  AvatarFirestoreApi({required this.auth, required super.db});
+  final _profileController = StreamController<Avatar>.broadcast();
+  Stream<Avatar> get avatarStream => _profileController.stream;
 
-  Future<Avatar?> getAvatar() async {
-    final user = auth.currentUser;
-    if (user == null) throw Exception('No authenticated user');
+  AvatarFirestoreApi(
+      {required this.auth, required super.db, required this.inventoryApi});
 
-    final doc = db.collection('profiles').doc(user.uid);
-    final snapshot = await doc.get();
+  Future<void> loadProfile() async {
+    try {
+      final user = auth.currentUser;
+      if (user == null) {
+        throw Exception('No authenticated user');
+      }
 
-    if (snapshot.exists) {
-      return Avatar.fromMap(snapshot.data()!);
-    } else {
-      final avatar = Avatar.starter(user.displayName, user.email);
-      await doc.set(avatar.toMap());
-      return avatar;
+      final document = db.collection('profiles').doc(user.uid);
+      final snapshot = await document.get();
+
+      if (snapshot.exists) {
+          var json = {
+            ...snapshot.data()!,
+            'connectionData': {
+              'email': user.email,
+              'lastLogin': user.metadata.lastSignInTime,
+              'firstLogin': user.metadata.creationTime,
+              'isVerified': user.emailVerified,
+            }
+          };
+          _profileController.add(Avatar.fromJson(json));
+      } else {
+        var accountData = {
+          'email': user.email,
+          'lastLogin': user.metadata.lastSignInTime,
+          'firstLogin': user.metadata.creationTime,
+          'isVerified': user.emailVerified,
+        };
+        _profileController.add(Avatar.starter(user.displayName, accountData));
+      }
+
+
+    } catch (e) {
+      _profileController.addError(e);
     }
+  }
+
+  Future<void> updateProfile(Avatar profile) async {
+    try {
+      final user = auth.currentUser;
+      await updateFirebaseUser(user, profile.name, profile.connectionData.email);
+      final updates = <String, dynamic>{
+        'name': profile.name,
+      };
+      await updateFirestoreProfile(updates);
+      _profileController.add(profile);
+    } catch (e) {
+      _profileController.addError(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    _profileController.close();
   }
 
   Future<void> updateFirestoreProfile(Map<String, dynamic> updates) async {
@@ -35,6 +82,16 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     Map<String, dynamic>? additionalData,
   }) async {
     final user = auth.currentUser;
+    await updateFirebaseUser(user, displayName, email);
+    final updates = <String, dynamic>{
+      if (displayName != null) 'name': displayName,
+      if (additionalData != null) ...additionalData,
+    };
+
+    await updateFirestoreProfile(updates);
+  }
+
+  Future<void> updateFirebaseUser(User? user, String? displayName, String? email) async {
     if (user == null) throw Exception('No authenticated user');
 
     if (displayName != null && displayName != user.displayName) {
@@ -46,14 +103,6 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     }
 
     await user.reload();
-
-    final updates = <String, dynamic>{
-      if (displayName != null) 'name': displayName,
-      if (email != null) 'email': email,
-      if (additionalData != null) ...additionalData,
-    };
-
-    await updateFirestoreProfile(updates);
   }
 
   deleteAvatar(String password) async {
@@ -64,17 +113,16 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
       if (user != null) {
         AuthCredential credential = EmailAuthProvider.credential(
           email: user.email!,
-          password: password, 
+          password: password,
         );
         await user.reauthenticateWithCredential(credential);
         await user.delete();
         db.collection('profiles').doc(user.uid).delete();
-      }
-      else {
+      } else {
         throw Exception('No authenticated user');
-      } 
+      }
     } on FirebaseAuthException {
-    } catch (e) {
-    }
+    } catch (e) {}
   }
+
 }

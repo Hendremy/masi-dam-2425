@@ -9,8 +9,10 @@ import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/app/routes.dart';
 import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
-import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
+import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/theme.dart';
+
+import '../../inventory/cubit/inventory_cubit.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -46,10 +48,16 @@ class App extends StatelessWidget {
               authenticationRepository: _authenticationRepository,
             )..add(const AppUserLoginRequested()),
           ),
-          BlocProvider<AvatarCubit>(
-            create: (context) => AvatarCubit(
-              context.read<UserApiServices>().avatarApi as AvatarFirestoreApi,
-            ))
+           BlocProvider<ProfileBloc>(
+            create: (context) => ProfileBloc(
+                  repository: context.read<UserApiServices>().avatarApi
+                      as AvatarFirestoreApi,
+                )),
+          BlocProvider<InventoryCubit>(
+            create: (context) => InventoryCubit(
+              context.read<UserApiServices>().inventoryApi,
+            ),
+          ),
         ],
         child: const AppView(),
       ),
