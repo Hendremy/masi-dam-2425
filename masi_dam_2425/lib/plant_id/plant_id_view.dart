@@ -44,7 +44,7 @@ class _PlantIdViewState extends State<PlantIdView> {
                       // Create a CameraController
                     _controller = CameraController(
                       state.camera,
-                      ResolutionPreset.medium,
+                      ResolutionPreset.veryHigh,
                     );
 
                     // Initialize the controller

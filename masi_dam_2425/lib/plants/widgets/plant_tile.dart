@@ -31,13 +31,13 @@ class PlantTile extends StatelessWidget {
             Row(
               children: [
                 const Text('HP'),
-                ExperienceBar(currentXp: plant.xp, maxXp: 100, color: Colors.green),
+                //ExperienceBar(currentXp: plant.xp, maxXp: 100, color: Colors.green),
               ],
             ),
             Row(
               children: [
                 const Text('XP'),
-                ExperienceBar(currentXp: plant.hp, maxXp: 100, color: Colors.blue),
+                // ExperienceBar(currentXp: plant.hp, maxXp: 100, color: Colors.blue),
               ],
             )
           ],
