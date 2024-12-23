@@ -31,6 +31,7 @@ dependencies:
     path: packages/form_inputs
   formz: ^0.7.0
   google_fonts: ^6.2.1
+  camera: ^0.11.0+2
   
 
 dev_dependencies:
