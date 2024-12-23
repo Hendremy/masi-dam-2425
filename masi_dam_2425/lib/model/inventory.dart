@@ -1,5 +1,4 @@
 import 'package:masi_dam_2425/model/shop_item.dart';
-import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
 class Inventory {
   late int coins;
@@ -19,7 +18,6 @@ class Inventory {
 
   factory Inventory.fromJson(Map<String, dynamic> json) {
     Map<ShopItem, bool> itemsObject = {};
-    final items = json['items'];
     json['items']?.forEach((key, value) {
       itemsObject[ShopItem.fromJson(key)] = value;
     });
@@ -38,6 +36,10 @@ class Inventory {
       'coins': coins,
       'items': itemsObject
     };
+  }
+
+  toggleItem(ShopItem item) {
+    items[item] = !items[item]!;
   }
 
 }

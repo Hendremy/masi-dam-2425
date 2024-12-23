@@ -28,17 +28,21 @@ class InventoryFirestoreApi extends FirestoreApi implements InventoryApi {
       if (snapshot.exists) {
         final data = snapshot.data()!;
         final ids = [];
+        final equippedItems = Set<String>();
         Map items = data['items'];
         if (!items.isEmpty) {
 
           items.keys.forEach((key) {
             ids.add(key as String);
+            if (items[key] == true) {
+              equippedItems.add(key);
+            }
           });
           final shopItems = await shopApi.getItemsByIds(ids.cast<String>());
           data['items'] = Map.fromIterable(
             shopItems,
             key: (item) => item,
-            value: (item) => true, // true need to replaced by item equipped or not
+            value: (item) => equippedItems.contains(item['id']),
           );
         }
         _inventoryController.add(Inventory.fromJson(data));

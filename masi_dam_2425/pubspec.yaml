@@ -53,6 +53,7 @@ flutter:
      - assets/plant_dead.jpg
      - assets/potions/
      - assets/protections/
+     - assets/weapons/
      - assets/compost/
   #   - images/a_dot_ham.jpeg
 

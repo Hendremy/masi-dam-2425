@@ -49,4 +49,22 @@ class ShopItem {
 
 }
 
-enum ShopItemType { potion, tools, knowledge, unknown }
+enum ShopItemType {
+  potion, tools, knowledge, unknown;
+
+  String getImageAsset() {
+    switch (this) {
+      case ShopItemType.potion:
+        return 'assets/potions/tile060.png';
+      case ShopItemType.tools:
+        return 'assets/weapons/tile090.png';
+      case ShopItemType.knowledge:
+        return 'assets/protections/tile130.png';
+      case ShopItemType.unknown:
+        return 'assets/weapons/tile091.png';
+      default:
+        return '';  // Default image in case something goes wrong
+    }
+  }
+
+}
