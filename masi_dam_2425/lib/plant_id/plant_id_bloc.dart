@@ -6,8 +6,18 @@ class PlantIdBloc extends Bloc<PlantIdEvent, PlantIdState> {
 
     on<LoadCameraEvent>((event, emit) async {
       emit(PlantIdLoadingState());
-      final cameras = await availableCameras();
-      emit(PlantIdReadyState(cameras.first));
+      try{
+        final cameras = await availableCameras();
+        final camera = cameras.first;
+        final controller = CameraController(
+          camera,
+          ResolutionPreset.veryHigh,
+        );
+        await controller.initialize();
+        emit(PlantIdReadyState(controller));
+      }catch(e){
+        emit(PlantIdErrorState(e.toString()));
+      }
     });
   }
 }
@@ -25,7 +35,13 @@ class PlantIdNotReadyState extends PlantIdState {}
 class PlantIdLoadingState extends PlantIdState {}
 
 class PlantIdReadyState extends PlantIdState {
-  final CameraDescription camera;
+  final CameraController controller;
 
-  PlantIdReadyState(this.camera);
+  PlantIdReadyState(this.controller);
+}
+
+class PlantIdErrorState extends PlantIdState {
+  final String message;
+
+  PlantIdErrorState(this.message);
 }

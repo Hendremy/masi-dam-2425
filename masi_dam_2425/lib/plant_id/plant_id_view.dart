@@ -13,7 +13,6 @@ class PlantIdView extends StatefulWidget {
 
 class _PlantIdViewState extends State<PlantIdView> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture = Future.value();
 
   @override
   void initState() {
@@ -36,31 +35,15 @@ class _PlantIdViewState extends State<PlantIdView> {
         child: BlocBuilder<PlantIdBloc, PlantIdState>(
           builder: (context, state) {
             if (state is PlantIdReadyState) {
-              return FutureBuilder<void>(
-                future: _initializeControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    // If the Future is complete, display the preview
-                      // Create a CameraController
-                    _controller = CameraController(
-                      state.camera,
-                      ResolutionPreset.veryHigh,
-                    );
-
-                    // Initialize the controller
-                    _initializeControllerFuture = _controller.initialize();
-                  
-                    return CameraPreview(_controller);
-                  } else {
-                    // Otherwise, display a loading indicator
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              );
+              _controller = state.controller;
+                return CameraPreview(state.controller);
             }else if(state is PlantIdNotReadyState){
               context.read<PlantIdBloc>().add(LoadCameraEvent());
+            }else if(state is PlantIdErrorState){
+              return Center(child: Text(state.message));
+            }else{
+              return const Center(child: CircularProgressIndicator());
             }
-            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
@@ -68,10 +51,6 @@ class _PlantIdViewState extends State<PlantIdView> {
         child: const Icon(Icons.camera_alt),
         onPressed: () async {
           try {
-            // Ensure that the camera is initialized
-            await _initializeControllerFuture;
-
-            // Attempt to take a picture
             final image = await _controller.takePicture();
 
             // If picture is taken successfully, navigate to a preview screen
