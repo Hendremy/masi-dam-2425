@@ -5,20 +5,23 @@ import 'package:masi_dam_2425/shop/views/items_gird.dart';
 
 import '../../inventory/cubit/inventory_cubit.dart';
 import '../shop_cubit.dart';
-import 'filter_bar.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
 
   @override
   State<ShopPage> createState() => _ShopPageState();
-
-
 }
 
 class _ShopPageState extends State<ShopPage> {
-  ProductFilter _selectedFilter = ProductFilter.all;
-  String _searchQuery = '';
+  ShopItemType _selectedItemType = ShopItemType.unknown;
+
+  List<ShopItemType> itemTypes = [
+    ShopItemType.unknown,
+    ShopItemType.potion,
+    ShopItemType.tools,
+    ShopItemType.knowledge
+  ];
 
   @override
   void initState() {
@@ -26,26 +29,11 @@ class _ShopPageState extends State<ShopPage> {
     context.read<ShopCubit>().loadProducts();
   }
 
-  List<ShopItem> _applyFilterAndSearch(List<ShopItem> products) {
-    var filteredProducts = _applyFilter(products);
-    if (_searchQuery.isNotEmpty) {
-      filteredProducts = filteredProducts
-          .where((product) => product.name.toLowerCase().contains(_searchQuery.toLowerCase()))
-          .toList();
-    }
-    return filteredProducts;
-  }
-
   List<ShopItem> _applyFilter(List<ShopItem> products) {
-    switch (_selectedFilter) {
-      case ProductFilter.lowToHigh:
-        return List.from(products)..sort((a, b) => a.cost.compareTo(b.cost));
-      case ProductFilter.highToLow:
-        return List.from(products)..sort((a, b) => b.cost.compareTo(a.cost));
-      case ProductFilter.all:
-      default:
-        return products;
+    if (_selectedItemType == ShopItemType.unknown) {
+      return products;
     }
+    return products.where((product) => product.type == _selectedItemType).toList();
   }
 
   @override
@@ -64,68 +52,91 @@ class _ShopPageState extends State<ShopPage> {
               ),
             ),
           ),
-          const Icon(Icons.monetization_on)
+          const Icon(Icons.monetization_on),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60), // Height of the search bar
-          child: Padding(
+          preferredSize: const Size.fromHeight(80), // Height for the filter row
+          child: Container(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search items...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
+            color: Colors.blueGrey.shade200,
+            child: SizedBox(
+              height: 50, // Height of the row of asset images
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: itemTypes.length,
+                itemBuilder: (context, index) {
+                  String assetName = itemTypes[index].getImageAsset();
+                  bool isSelected = _selectedItemType == itemTypes[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedItemType = itemTypes[index];
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected ? Colors.blueAccent : Colors.grey.shade50, // Highlight color
+                          border: isSelected
+                              ? Border.all(color: Colors.green, width: 3) // Add border for selected item
+                              : null,
+                        ),
+                        // Use a CircleAvatar to display the image (or icon
+                        child: CircleAvatar(
+                          radius: 30, // Set radius to control the size of the circle
+                          backgroundColor: Colors.grey.shade300,
+                          child: ClipOval(
+                            child: Image.asset(
+                              assetName, // Use the getImageAsset method to get the image
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
+                        ),
+                      )
+                      ),
+                    );
+                },
               ),
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
             ),
           ),
         ),
       ),
-        body: Column(
-          children: [
-            FilterBar(
-              selectedFilter: _selectedFilter,
-              onFilterChanged: (filter) {
-                setState(() {
-                  _selectedFilter = filter;
-                });
+      body: Column(
+        children: [
+          // Optionally use the FilterBar if needed for other filters
+
+          Expanded(
+            child: BlocBuilder<ShopCubit, ShopState>(
+              builder: (context, state) {
+                if (state is ShopLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state is ShopLoaded && state.products.isEmpty) {
+                  return const Center(child: Text('No products available.'));
+                }
+
+                if (state is ShopError) {
+                  return Center(child: Text('Error: ${state.message}'));
+                }
+
+                if (state is ShopLoaded) {
+                  // Apply the filter based on the selected item type
+                  final filteredProducts = _applyFilter(state.products);
+                  return ItemsGird(items: filteredProducts);
+                }
+
+                return const SizedBox.shrink();
               },
             ),
-            Expanded(
-              child: BlocBuilder<ShopCubit, ShopState>(
-                builder: (context, state) {
-                  if (state is ShopLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state is ShopLoaded && state.products.isEmpty) {
-                    return const Center(child: Text('No products available.'));
-                  }
-
-                  if (state is ShopError) {
-                    return Center(child: Text('Error: ${state.message}'));
-                  }
-
-                  if (state is ShopLoaded) {
-                    final filteredProducts = _applyFilterAndSearch(state.products);
-                    return ItemsGird(items: filteredProducts);
-                  }
-
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -4,12 +4,14 @@ import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
+import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
 import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
+import '../../inventory/view/inventory_page.dart';
 import '../../profile/view/profile_page.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -49,45 +51,11 @@ class WelcomePage extends StatelessWidget {
             children: [
               const AvatarSection(),
               const SizedBox(height: 16.0),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2, // Two cards per row
-                  crossAxisSpacing: 16.0,
-                  mainAxisSpacing: 16.0,
-                  children: [
-                    _buildFlatCard(
-                      context,
-                      icon: Icons.shop,
-                      title: "Shop",
-                      color: Colors.blueAccent,
-                      onTap: () {
-                        _goToShopPage(context);
-                      },
-                    ),
-                    _buildFlatCard(
-                      context,
-                      icon: Icons.inventory,
-                      title: "Inventory",
-                      color: Colors.orangeAccent,
-                      onTap: () {},
-                    ),
-                    _buildFlatCard(
-                      context,
-                      icon: Icons.eco,
-                      title: "Plants",
-                      color: Colors.greenAccent,
-                      onTap: () {},
-                    ),
-                    _buildFlatCard(
-                      context,
-                      icon: Icons.calendar_today,
-                      title: "Calendar",
-                      color: Colors.pinkAccent,
-                      onTap: () {},
-                    ),
-                  ],
-                ),
+              InventorySummaryWidget(
+                onShopTap: () => _goToShopPage(context),
+                onInventoryTap: () => _goToInventoryPage(context),
               ),
+
             ],
           ),
         ),
@@ -95,34 +63,8 @@ class WelcomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildFlatCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.2), // Light flat color background
-          borderRadius: BorderRadius.circular(12), // Rounded edges
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 48, color: color),
-            SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: color),
-            ),
-          ],
-        ),
-      ),
-    );
+  onInventoryTap() {
+    print('Inventory tapped');
   }
 
   _goToShopPage(context) {
@@ -139,7 +81,7 @@ class WelcomePage extends StatelessWidget {
             ),
             BlocProvider<ShopCubit>(
               create: (context) => ShopCubit(
-                context.read<UserApiServices>().shopApi as ShopFirestoreApi
+                  context.read<UserApiServices>().shopApi as ShopFirestoreApi
               ),
             )
           ],
@@ -148,6 +90,23 @@ class WelcomePage extends StatelessWidget {
       ),
     );
   }
+
+  _goToInventoryPage(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<InventoryCubit>.value(
+              value: context.read<InventoryCubit>(),
+            ),
+          ],
+          child: InventoryPage(),
+        ),
+      ),
+    );
+  }
+
 }
 
 class AvatarSection extends StatelessWidget {
@@ -183,4 +142,6 @@ class AvatarSection extends StatelessWidget {
       ),
     );
   }
+
+
 }

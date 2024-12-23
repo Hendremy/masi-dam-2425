@@ -35,4 +35,15 @@ class InventoryCubit extends Cubit<InventoryState> {
       emit(InventoryLoaded(updatedProducts));
     }
   }
+
+  void toggleItem(ShopItem item) async {
+    if (state is InventoryLoaded) {
+      final currentState = state as InventoryLoaded;
+      final updatedProducts = currentState.inventory..toggleItem(item);
+      await repository.updateInventory(updatedProducts);
+      emit(InventoryUpdated("Inventory updated"));
+      emit(InventoryLoaded(updatedProducts));
+    }
+  }
+
 }
