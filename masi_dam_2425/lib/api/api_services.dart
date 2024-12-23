@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/inventory_api.dart';
 import 'package:masi_dam_2425/api/plants_api.dart';
@@ -23,6 +25,7 @@ abstract class InventoryApi {
 
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
+  Future<void> addPlant(String name, Image img);
 }
 
 abstract class AvatarApi {
