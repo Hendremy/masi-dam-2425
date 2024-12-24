@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:io';
 
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/inventory_api.dart';
@@ -12,10 +12,10 @@ class UserApiServices {
   late PlantsApi plantsApi;
   late AvatarApi avatarApi;
 
-  UserApiServices({firestoreDb, auth}) {
-    inventoryApi = InventoryFirestoreApi(db: firestoreDb);
-    plantsApi = PlantsFirestoreApi(db: firestoreDb);
-    avatarApi = AvatarFirestoreApi(db: firestoreDb, auth: auth); 
+  UserApiServices({firestoreDb, firebaseStorage, auth}) {
+    inventoryApi = InventoryFirestoreApi(db: firestoreDb, storage: firebaseStorage);
+    plantsApi = PlantsFirestoreApi(db: firestoreDb, storage: firebaseStorage);
+    avatarApi = AvatarFirestoreApi(db: firestoreDb, storage: firebaseStorage,auth: auth); 
   }
 }
 
@@ -25,7 +25,7 @@ abstract class InventoryApi {
 
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
-  Future<void> addPlant(String name, Image img);
+  Future<void> addPlant(String name, File img);
 }
 
 abstract class AvatarApi {

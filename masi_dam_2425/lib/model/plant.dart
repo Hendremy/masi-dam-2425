@@ -1,4 +1,7 @@
+import 'package:uuid/uuid.dart';
+
 class Plant {
+  late String uuid;
   late String name;
   late double xp;
   late double hp;
@@ -6,6 +9,7 @@ class Plant {
   late String species;
 
   Plant({
+    required this.uuid,
     required this.name,
     required this.species,
     required this.level, 
@@ -25,6 +29,7 @@ class Plant {
   }
 
   Plant.fromMap(Map<String, dynamic> map){
+    uuid = map['uuid'];
     name = map['name'];
     level = map['level'];
     xp = (map['xp'] as num).toDouble();
@@ -32,6 +37,7 @@ class Plant {
   }
 
   Plant.empty(){
+    uuid = Uuid().v4();
     name = 'New Plant';
     level = 1;
     xp = 0;
@@ -46,6 +52,7 @@ class Plant {
       'xp': xp,
       'hp': hp,
       'species': species,
+      'uuid': uuid
     };
   }
 }

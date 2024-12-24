@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
   final FirebaseAuth auth;
 
-  AvatarFirestoreApi({required this.auth, required super.db});
+  AvatarFirestoreApi({required this.auth, required super.db, required super.storage});
 
   Future<Avatar?> getAvatar() async {
     final user = auth.currentUser;

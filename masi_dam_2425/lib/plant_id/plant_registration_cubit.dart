@@ -1,25 +1,33 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/api/api_services.dart';
 
-class PlantRegistrationState{
-  final bool isLoading;
-  final String? errorMessage;
+abstract class PlantRegistrationState{
 
-  PlantRegistrationState({
-    this.isLoading = false,
-    this.errorMessage,
-  });
-
-  PlantRegistrationState copyWith({
-    bool? isLoading,
-    String? errorMessage,
-  }){
-    return PlantRegistrationState(
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage,
-    );
-  }
 }
 
+class PlantRegistrationInitial extends PlantRegistrationState{
+
+}
+
+class PlantRegistriationSaving extends PlantRegistrationState{
+
+}
+
+class PlantRegistrationSaved extends PlantRegistrationState{
+
+}
+
+
 class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
-  PlantRegistrationCubit(super.initialState);
+  final PlantsApi api;
+  PlantRegistrationCubit({required PlantsApi this.api}) : super(PlantRegistrationInitial());
+
+  Future<void> savePlant(String name, File img) async{
+    // save plant to firestore
+    emit(PlantRegistriationSaving());
+    await api.addPlant(name, img);
+    emit(PlantRegistrationSaved());
+  }
 }

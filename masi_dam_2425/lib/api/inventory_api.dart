@@ -3,7 +3,7 @@ import 'package:masi_dam_2425/api/firestore_api.dart';
 import 'package:masi_dam_2425/model/inventory.dart';
 
 class InventoryFirestoreApi extends FirestoreApi implements InventoryApi{
-  InventoryFirestoreApi({required super.db});
+  InventoryFirestoreApi({required super.db, required super.storage});
 
   @override
   Future<Inventory?> getInventory() async{
