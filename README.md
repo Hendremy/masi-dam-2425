@@ -58,6 +58,22 @@
 
 ## 📈 État d'Avancement
 
+### Création de compte
+https://github.com/user-attachments/assets/ba2b2547-1c32-4a2a-ac14-fd6975e0b066
+
+### Se connecter
+https://github.com/user-attachments/assets/72b902ef-ff76-495a-a98f-dfa99aa84283
+
+### Le shop
+https://github.com/user-attachments/assets/89b48983-34dd-479e-9a4b-b71838c273df
+
+### Acheter des artéfacts
+https://github.com/user-attachments/assets/6417e0e9-1571-4814-bad2-e7a4a745be8a
+
+### Gérer son inventaire
+https://github.com/user-attachments/assets/af399a79-0c9f-40a1-b27d-0f6667dfbe56
+
+
 >  Un état d'avancement pour chaque fonctionnalité de votre application. Ceci doit évidemment être mis à jour régulièrement. Dès lors que vous aurez terminé de programmer une fonctionnalité, ajoutez dans le document `README.md` un `.gif` qui l'illustre. Vous pouvez vous servir de [GIF Brewery](https://apps.apple.com/us/app/gif-brewery-3-by-gfycat/id1081413713?mt=12) (Si vous êtes sous macOS) ou de [Gyazo](https://gyazo.com) (Si vous êtes sous Windows).
 
 ## ⚙️ Compilation de l'Application
