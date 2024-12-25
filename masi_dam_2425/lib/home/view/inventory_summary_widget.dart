@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
@@ -82,7 +81,6 @@ class _buildInventorySummary extends StatelessWidget {
   final InventoryState state;
 
   const _buildInventorySummary({
-    super.key,
     required this.onShopTap,
     required this.onInventoryTap,
     required this.state,
@@ -138,7 +136,7 @@ class _buildInventorySummary extends StatelessWidget {
                     child:  ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
 
-                      child: Image.asset(
+                      child: Image.network(
                         assetPath,
                         fit: BoxFit.contain,
                         width: 40,

@@ -1,3 +1,4 @@
+
 class ShopItem {
   late String id;
   late String name;
@@ -55,13 +56,13 @@ enum ShopItemType {
   String getImageAsset() {
     switch (this) {
       case ShopItemType.potion:
-        return 'assets/potions/tile060.png';
+        return 'https://firebasestorage.googleapis.com/v0/b/hepl-masi5-flutter.firebasestorage.app/o/assets%2Fitems%2Fred-potion.png?alt=media&token=f0d9e27d-4785-4649-a317-ba5a0ea8e969';
       case ShopItemType.tools:
-        return 'assets/weapons/tile090.png';
+        return 'https://firebasestorage.googleapis.com/v0/b/hepl-masi5-flutter.firebasestorage.app/o/assets%2Fitems%2Ftool.png?alt=media&token=085ddd2f-1bc9-48da-898f-fe73f0fb71c4';
       case ShopItemType.knowledge:
-        return 'assets/protections/tile130.png';
+        return 'https://firebasestorage.googleapis.com/v0/b/hepl-masi5-flutter.firebasestorage.app/o/assets%2Fitems%2Fknowledge-book.png?alt=media&token=c27e8159-0e3f-4058-a63e-ed2fdacb2b25';
       case ShopItemType.unknown:
-        return 'assets/weapons/tile091.png';
+        return 'https://firebasestorage.googleapis.com/v0/b/hepl-masi5-flutter.firebasestorage.app/o/assets%2Fitems%2Fenergy.png?alt=media&token=280d571e-dd5f-423a-8818-90afe57e9eea';
       default:
         return '';  // Default image in case something goes wrong
     }

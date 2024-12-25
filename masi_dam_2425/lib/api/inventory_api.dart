@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
 
@@ -13,7 +12,7 @@ class InventoryFirestoreApi extends FirestoreApi implements InventoryApi {
   final _inventoryController = StreamController<Inventory>.broadcast();
   Stream<Inventory> get inventoryStream => _inventoryController.stream;
 
-  InventoryFirestoreApi({required super.db, required this.shopApi});
+  InventoryFirestoreApi({required super.db, required super.storage, required this.shopApi});
 
   Future<void> loadInventory() async {
     try {

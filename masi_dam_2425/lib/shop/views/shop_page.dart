@@ -89,9 +89,9 @@ class _ShopPageState extends State<ShopPage> {
                           radius: 30, // Set radius to control the size of the circle
                           backgroundColor: Colors.grey.shade300,
                           child: ClipOval(
-                            child: Image.asset(
+                            child: Image.network(
                               assetName, // Use the getImageAsset method to get the image
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               width: 50,
                               height: 50,
                             ),

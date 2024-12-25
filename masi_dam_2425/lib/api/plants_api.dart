@@ -4,7 +4,7 @@ import 'package:masi_dam_2425/model/plant.dart';
 
 
 class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
-  PlantsFirestoreApi({required super.db});
+  PlantsFirestoreApi({required super.db, required super.storage});
 
   @override
   Future<List<Plant>> getPlants() async{
