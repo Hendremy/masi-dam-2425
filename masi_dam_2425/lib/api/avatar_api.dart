@@ -14,7 +14,7 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
   Stream<Avatar> get avatarStream => _profileController.stream;
 
   AvatarFirestoreApi(
-      {required this.auth, required super.db, required this.inventoryApi});
+      {required this.auth, required super.storage, required super.db, required this.inventoryApi});
 
   Future<void> loadProfile() async {
     try {
@@ -27,16 +27,16 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
       final snapshot = await document.get();
 
       if (snapshot.exists) {
-          var json = {
-            ...snapshot.data()!,
-            'connectionData': {
-              'email': user.email,
-              'lastLogin': user.metadata.lastSignInTime,
-              'firstLogin': user.metadata.creationTime,
-              'isVerified': user.emailVerified,
-            }
-          };
-          _profileController.add(Avatar.fromJson(json));
+        var json = {
+          ...snapshot.data()!,
+          'connectionData': {
+            'email': user.email,
+            'lastLogin': user.metadata.lastSignInTime,
+            'firstLogin': user.metadata.creationTime,
+            'isVerified': user.emailVerified,
+          }
+        };
+        _profileController.add(Avatar.fromJson(json));
       } else {
         var accountData = {
           'email': user.email,
@@ -44,10 +44,10 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
           'firstLogin': user.metadata.creationTime,
           'isVerified': user.emailVerified,
         };
+        var newProfile = Avatar.starter(user.displayName, accountData);
+        await document.set(newProfile.toJson());
         _profileController.add(Avatar.starter(user.displayName, accountData));
       }
-
-
     } catch (e) {
       _profileController.addError(e);
     }
@@ -56,7 +56,8 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
   Future<void> updateProfile(Avatar profile) async {
     try {
       final user = auth.currentUser;
-      await updateFirebaseUser(user, profile.name, profile.connectionData.email);
+      await updateFirebaseUser(
+          user, profile.name, profile.connectionData.email);
       final updates = <String, dynamic>{
         'name': profile.name,
       };
@@ -91,7 +92,8 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     await updateFirestoreProfile(updates);
   }
 
-  Future<void> updateFirebaseUser(User? user, String? displayName, String? email) async {
+  Future<void> updateFirebaseUser(
+      User? user, String? displayName, String? email) async {
     if (user == null) throw Exception('No authenticated user');
 
     if (displayName != null && displayName != user.displayName) {
@@ -124,5 +126,4 @@ class AvatarFirestoreApi extends FirestoreApi implements AvatarApi {
     } on FirebaseAuthException {
     } catch (e) {}
   }
-
 }

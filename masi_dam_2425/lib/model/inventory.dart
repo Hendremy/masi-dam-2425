@@ -7,7 +7,7 @@ class Inventory {
   Inventory({required this.coins, required this.items});
 
   Inventory.empty() {
-    coins = 0;
+    coins = 30;
     items = {};
   }
 

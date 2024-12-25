@@ -6,7 +6,7 @@ import 'package:masi_dam_2425/api/firestore_api.dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
 
 class ShopFirestoreApi extends FirestoreApi implements ShopApi {
-  ShopFirestoreApi({required super.db});
+  ShopFirestoreApi({required super.db, required super.storage});
 
   final _productsController = StreamController<List<ShopItem>>.broadcast();
 
@@ -23,6 +23,8 @@ class ShopFirestoreApi extends FirestoreApi implements ShopApi {
           ...doc.data(), // Spread the existing document data
           'id': doc.id,  // Add the id field
         };
+        final gsReference = storage.refFromURL(dataWithId['image']);
+        dataWithId['image'] = await gsReference.getDownloadURL();
         items.add(ShopItem.fromJson(dataWithId));
       }
     } catch (e) {
@@ -43,6 +45,8 @@ class ShopFirestoreApi extends FirestoreApi implements ShopApi {
           ...doc.data(), // Spread the existing document data
           'id': doc.id,  // Add the id field
         };
+        final gsReference = storage.refFromURL(dataWithId['image']);
+        dataWithId['image'] = await gsReference.getDownloadURL();
         result.add(dataWithId);
       }
     } catch (e) {

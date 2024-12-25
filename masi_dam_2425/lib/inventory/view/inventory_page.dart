@@ -82,10 +82,10 @@ class InventoryPage extends StatelessWidget{
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
           contentPadding: const EdgeInsets.all(16),
-          leading: CircleAvatar(
-            backgroundImage: AssetImage(item.image),
+            leading: CircleAvatar(
+            backgroundImage: NetworkImage(item.image, scale: 1.0),
             radius: 30,
-          ),
+            ),
           title: Text(
             item.name,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

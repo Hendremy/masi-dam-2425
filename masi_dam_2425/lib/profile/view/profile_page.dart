@@ -1,7 +1,5 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 
@@ -214,7 +212,7 @@ class UserWidget extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.verified,
-                        color: (user.connectionData.isVerified ?? false)
+                        color: (user.connectionData.isVerified)
                             ? Colors.green
                             : Colors.red,
                         size: 24,

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
 
@@ -42,12 +41,12 @@ class ItemDetails extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
+                        child: Image.network(
                         product.image,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         width: 80,
                         height: 80,
-                      ),
+                        ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(

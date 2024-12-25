@@ -13,12 +13,12 @@ class UserApiServices {
   late AvatarApi avatarApi;
   late ShopApi shopApi;
 
-  UserApiServices({firestoreDb, auth}) {
-    shopApi = ShopFirestoreApi(db: firestoreDb);
-    inventoryApi = InventoryFirestoreApi(db: firestoreDb, shopApi: shopApi);
-    plantsApi = PlantsFirestoreApi(db: firestoreDb);
+  UserApiServices({firestoreDb, firebaseStorage, auth}) {
+    shopApi = ShopFirestoreApi(db: firestoreDb, storage: firebaseStorage);
+    inventoryApi = InventoryFirestoreApi(db: firestoreDb, shopApi: shopApi, storage: firebaseStorage);
+    plantsApi = PlantsFirestoreApi(db: firestoreDb, storage: firebaseStorage);
     avatarApi = AvatarFirestoreApi(
-        db: firestoreDb, auth: auth, inventoryApi: inventoryApi);
+        db: firestoreDb, storage: firebaseStorage, auth: auth, inventoryApi: inventoryApi);
   }
 }
 
