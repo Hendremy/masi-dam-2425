@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
+import 'package:masi_dam_2425/common/image_loader.dart';
 import 'package:masi_dam_2425/shop/views/items_gird.dart';
 
 import '../../inventory/cubit/inventory_cubit.dart';
@@ -39,7 +40,20 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     final wallet = context.select((InventoryCubit cubit) => cubit.state.coins);
-    return Scaffold(
+
+    return BlocListener<InventoryCubit, InventoryState>(
+        listener: (context, state) {
+          if (state is InventoryUpdated) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+          }
+        },
+        child: Scaffold(
       appBar: AppBar(
         title: const Text('Shop'),
         actions: [
@@ -89,12 +103,7 @@ class _ShopPageState extends State<ShopPage> {
                           radius: 30, // Set radius to control the size of the circle
                           backgroundColor: Colors.grey.shade300,
                           child: ClipOval(
-                            child: Image.network(
-                              assetName, // Use the getImageAsset method to get the image
-                              fit: BoxFit.contain,
-                              width: 50,
-                              height: 50,
-                            ),
+                            child: ImageLoader(imageUrl: assetName, width: 50, height: 50)
                           ),
                         ),
                       )
@@ -137,6 +146,6 @@ class _ShopPageState extends State<ShopPage> {
           ),
         ],
       ),
-    );
+    ));
   }
 }

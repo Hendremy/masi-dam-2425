@@ -32,6 +32,7 @@ class InventoryCubit extends Cubit<InventoryState> {
       final currentState = state as InventoryLoaded;
       final updatedProducts = currentState.inventory..add(product);
       await repository.updateInventory(updatedProducts);
+      emit(InventoryUpdated("Inventory updated"));
       emit(InventoryLoaded(updatedProducts));
     }
   }

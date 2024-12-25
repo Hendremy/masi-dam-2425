@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
+import 'package:masi_dam_2425/common/image_loader.dart';
 
 import '../../inventory/cubit/inventory_cubit.dart';
-import 'item_details.dart';
+import '../../common/item_details.dart';
 
 class ItemCard extends StatelessWidget {
   final ShopItem product;
@@ -16,8 +17,10 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wallet = context.select((InventoryCubit cubit) => cubit.state.coins);
-    return GestureDetector(
+    
+    return InkWell(
       onTap: () => _showDetails(context, product, wallet),
+      splashColor: Colors.green,
       child: Card(
         color: Colors.white,
         clipBehavior: Clip.antiAlias,
@@ -33,10 +36,7 @@ class ItemCard extends StatelessWidget {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    product.image,
-                    fit: BoxFit.contain,
-                  ),
+                  child: ImageLoader(imageUrl: product.image, width: 100, height: 100)
                 ),
               ),
               const SizedBox(height: 8),

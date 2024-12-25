@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
 
+import '../../common/image_loader.dart';
+
 class InventorySummaryWidget extends StatelessWidget {
 
   final VoidCallback onShopTap; // Callback for navigating to the shop
@@ -136,12 +138,7 @@ class _buildInventorySummary extends StatelessWidget {
                     child:  ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
 
-                      child: Image.network(
-                        assetPath,
-                        fit: BoxFit.contain,
-                        width: 40,
-                        height: 40,
-                      ),
+                      child: ImageLoader(imageUrl: assetPath, width: 40, height: 40)
                     ));
 
                 },

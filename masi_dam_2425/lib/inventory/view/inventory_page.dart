@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
-import 'package:masi_dam_2425/shop/views/item_details.dart';
+import 'package:masi_dam_2425/common/item_details.dart';
 
 import '../../model/shop_item.dart';
 
@@ -13,7 +13,7 @@ class InventoryPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventory'),
+        title: const Text('Your Inventory'),
       ),
       body: BlocListener<InventoryCubit, InventoryState>(
         listener: (context, state) {
@@ -71,10 +71,11 @@ class InventoryPage extends StatelessWidget{
 
   Widget buildInventoryItem(ShopItem item, bool isSelected, BuildContext context) {
 
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           _showDetails(context, item, isSelected);
         },
+      splashColor: Colors.green,
       child: Card(
         elevation: 4,
         color: !isSelected ? Colors.green[100] : Colors.white,
