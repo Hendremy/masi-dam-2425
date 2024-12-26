@@ -20,7 +20,9 @@ class PlantRegistrationSaved extends PlantRegistrationState{
 }
 
 class PlantRegistrationError extends PlantRegistrationState{
+  String message;
 
+  PlantRegistrationError({required this.message});
 }
 
 
@@ -35,7 +37,7 @@ class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
       await api.addPlant(name, img);
       emit(PlantRegistrationSaved());
     }catch(e){
-      emit(PlantRegistrationError());
+      emit(PlantRegistrationError(message: 'An unexpected error occurred, try again later'));
     }
   }
 }
