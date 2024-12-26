@@ -49,12 +49,8 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
         String fileExtension = p.extension(img.path);
         final storageRef = storage.ref();
         final newPlantRef = storageRef.child("plants/${newPlant.uuid}${fileExtension}");
-        //final newPlantRef = storageRef.child("plants/code.png");
-        // final newPlantRef = storageRef.child("plants/${newPlant.uuid}");
         UploadTask upload = newPlantRef.putFile(img);
         await upload.whenComplete((){});
-        //final uploadTask = newPlantRef.putFile(img);
-        //await uploadTask.whenComplete(() async {
         await document.set({'plants': plants.map((e) => e.toMap()).toList()});  
         //});
     }

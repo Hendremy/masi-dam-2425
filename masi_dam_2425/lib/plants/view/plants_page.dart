@@ -5,6 +5,7 @@ import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plant_id/plant_id_view.dart';
 import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
+import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
   const PlantsPage({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class PlantsPage extends StatelessWidget {
                 return Column(
                   children: [
                     ...state.plants
-                        .map((Plant plant) => PlantTile(plant))
+                        .map((Plant plant) => NewPlantTile(plant: plant,))
                         .toList(),
                   ],
                 );

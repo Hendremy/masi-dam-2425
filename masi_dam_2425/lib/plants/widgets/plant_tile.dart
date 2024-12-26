@@ -21,29 +21,40 @@ class PlantTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(imgPath, height: 75,),
-        Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      child: Card(
+        elevation: 2,
+        color: Colors.white,
+        clipBehavior: Clip.hardEdge,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${plant.name} Lvl ${plant.level}'),
-            Row(
-              children: [
-                const Text('HP'),
-                //ExperienceBar(currentXp: plant.xp, maxXp: 100, color: Colors.green),
-              ],
+            Image.asset(imgPath, height: 75,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                children: [
+                  Text('${plant.name} Lvl ${plant.level}'),
+                  Row(
+                    children: [
+                      const Text('HP'),
+                      //ExperienceBar(currentXp: plant.xp, maxXp: 100, color: Colors.green),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('XP'),
+                      // ExperienceBar(currentXp: plant.hp, maxXp: 100, color: Colors.blue),
+                    ],
+                  )
+                ],
+              ),
             ),
-            Row(
-              children: [
-                const Text('XP'),
-                // ExperienceBar(currentXp: plant.hp, maxXp: 100, color: Colors.blue),
-              ],
-            )
+        
           ],
         ),
-
-      ],
+      ),
     );
   }
 

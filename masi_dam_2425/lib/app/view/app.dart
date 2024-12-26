@@ -10,6 +10,7 @@ import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/app/routes.dart';
 import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
+import 'package:masi_dam_2425/plantnet_options.dart';
 import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
 import 'package:masi_dam_2425/theme.dart';
 
@@ -33,6 +34,7 @@ class App extends StatelessWidget {
             firestoreDb: FirebaseFirestore.instance,
             firebaseStorage: FirebaseStorage.instanceFor(bucket: "gs://hepl-masi5-flutter.firebasestorage.app"),
             auth: FirebaseAuth.instance,
+            plantnetOptions: PlantnetOptions.currentPlatform,
           ),
         ),
       ],

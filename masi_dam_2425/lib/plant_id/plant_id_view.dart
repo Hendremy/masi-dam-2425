@@ -1,11 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/plant_id/plant_id_bloc.dart';
 import 'package:masi_dam_2425/plant_id/plant_registration_view.dart';
-import 'package:masi_dam_2425/theme.dart';
 
 class PlantIdView extends StatefulWidget {
   PlantIdView({Key? key}) : super(key: key) {}
@@ -39,7 +36,7 @@ class _PlantIdViewState extends State<PlantIdView> {
           builder: (context, state) {
             if (state is PlantIdReadyState) {
               _controller = state.controller;
-                return CameraPreview(state.controller);
+              return CameraPreview(state.controller);
             }else if(state is PlantIdNotReadyState){
               context.read<PlantIdBloc>().add(LoadCameraEvent());
             }else if(state is PlantIdErrorState){
@@ -57,10 +54,10 @@ class _PlantIdViewState extends State<PlantIdView> {
 
             // If picture is taken successfully, navigate to a preview screen
             if (!mounted) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
                     PlantRegistrationScreen(imagePath: image.path),
               ),
             );
