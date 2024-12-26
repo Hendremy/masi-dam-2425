@@ -18,6 +18,7 @@ class PlantRegistrationScreen extends StatefulWidget {
 
 class _DisplayPictureScreenState extends State<PlantRegistrationScreen> {
   bool _isPlantNameValid = false;
+  String _plantName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,43 +27,58 @@ class _DisplayPictureScreenState extends State<PlantRegistrationScreen> {
         api: context.read<UserApiServices>().plantsApi),
       child: BlocBuilder<PlantRegistrationCubit, PlantRegistrationState>(
         builder: (context, state) {
+          if (state is PlantRegistrationSaved) {
+            Navigator.pop(context);
+          }
           return Scaffold(
             appBar: AppBar(title: Text('New plant')),
             resizeToAvoidBottomInset: false,
-            body: SizedBox(
-              child: Column(
-                children: [
-                  Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Plant name',
+            body: Stack(
+              children: [
+                SizedBox(
+                child: Column(
+                  children: [
+                    Container(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Plant name',
+                        ),
+                        onChanged: (text) => {
+                          setState(() {
+                            _isPlantNameValid = text.isNotEmpty;
+                            _plantName = text;
+                          })
+                        },
                       ),
-                      onChanged: (text) => {
-                        setState(() {
-                          _isPlantNameValid = text.isNotEmpty;
-                        })
-                      },
+                      padding: const EdgeInsets.all(10),
                     ),
-                    padding: const EdgeInsets.all(10),
-                  ),
-                  Container(
-                    child: Image.file(
-                      File(widget.imagePath),
-                      height: 500,
+                    Container(
+                      child: Image.file(
+                        File(widget.imagePath),
+                        height: 500,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              if (state is PlantRegistriationSaving)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.check),
               backgroundColor:
                   _isPlantNameValid ? theme.primaryColor : Colors.grey,
               onPressed: () {
-                if (_isPlantNameValid && state is PlantRegistrationInitial) {
+                  if (_isPlantNameValid && state is PlantRegistrationInitial || state is PlantRegistrationError) {
                   context.read<PlantRegistrationCubit>().savePlant(
-                      'plant', File(widget.imagePath));
+                      _plantName, File(widget.imagePath));
                 }
                 ;
               },

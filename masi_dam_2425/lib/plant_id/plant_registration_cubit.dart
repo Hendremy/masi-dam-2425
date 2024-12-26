@@ -19,6 +19,10 @@ class PlantRegistrationSaved extends PlantRegistrationState{
 
 }
 
+class PlantRegistrationError extends PlantRegistrationState{
+
+}
+
 
 class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
   final PlantsApi api;
@@ -27,7 +31,11 @@ class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
   Future<void> savePlant(String name, File img) async{
     // save plant to firestore
     emit(PlantRegistriationSaving());
-    await api.addPlant(name, img);
-    emit(PlantRegistrationSaved());
+    try{
+      await api.addPlant(name, img);
+      emit(PlantRegistrationSaved());
+    }catch(e){
+      emit(PlantRegistrationError());
+    }
   }
 }

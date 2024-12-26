@@ -31,7 +31,7 @@ class App extends StatelessWidget {
         RepositoryProvider<UserApiServices>(
           create: (context) => UserApiServices(
             firestoreDb: FirebaseFirestore.instance,
-            firebaseStorage: FirebaseStorage.instance,
+            firebaseStorage: FirebaseStorage.instanceFor(bucket: "gs://hepl-masi5-flutter.firebasestorage.app"),
             auth: FirebaseAuth.instance,
           ),
         ),

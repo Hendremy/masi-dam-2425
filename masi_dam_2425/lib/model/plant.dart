@@ -34,6 +34,7 @@ class Plant {
     level = map['level'];
     xp = (map['xp'] as num).toDouble();
     hp = (map['hp'] as num).toDouble();
+    species = map['species'];
   }
 
   Plant.empty(){

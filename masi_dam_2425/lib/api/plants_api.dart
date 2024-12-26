@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as p;
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
 import 'package:masi_dam_2425/model/plant.dart';
@@ -34,20 +36,26 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
 
     @override
     Future<void> addPlant(String name, File img) async{
-      try{
         final document = db.collection('plants').doc(user.uid);
+        await document.get();
+
         List<Plant> plants = await getPlants();
         Plant newPlant = Plant.empty();
         newPlant.name = name;
         plants.add(newPlant);
 
-        final storageRef = storage.ref().child('plants').child(newPlant.uuid);
-        final uploadTask = storageRef.putFile(img);
-        await uploadTask.whenComplete(() async {
-          await document.set({'plants': plants.map((e) => e.toMap()).toList()});  
-        });
-        }catch(e){
-        print(e);
-      }
+        print(img.path);
+
+        String fileExtension = p.extension(img.path);
+        final storageRef = storage.ref();
+        final newPlantRef = storageRef.child("plants/${newPlant.uuid}${fileExtension}");
+        //final newPlantRef = storageRef.child("plants/code.png");
+        // final newPlantRef = storageRef.child("plants/${newPlant.uuid}");
+        UploadTask upload = newPlantRef.putFile(img);
+        await upload.whenComplete((){});
+        //final uploadTask = newPlantRef.putFile(img);
+        //await uploadTask.whenComplete(() async {
+        await document.set({'plants': plants.map((e) => e.toMap()).toList()});  
+        //});
     }
 }
