@@ -8,15 +8,9 @@ import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
 import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
-  const PlantsPage({Key? key}) : super(key: key);
+  final PlantsBloc plantsBloc;
 
-  static MaterialPage page() {
-    return MaterialPage(
-      name: 'PlantsPage',
-      key: const ValueKey('PlantsPage'),
-      child: const PlantsPage(),
-    );
-  }
+  const PlantsPage({Key? key, required this.plantsBloc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +25,7 @@ class PlantsPage extends StatelessWidget {
           },
           child: const Icon(Icons.add)),
       body: BlocProvider<PlantsBloc>(
-          create: (context) => PlantsBloc(
-            api: context.read<UserApiServices>().plantsApi,
-          ),
+          create: (context) => this.plantsBloc,
         child: BlocBuilder<PlantsBloc, PlantsState>(
           builder: (context, state) {
             if (state.isLoading) {
@@ -44,12 +36,14 @@ class PlantsPage extends StatelessWidget {
                   child: Text('No plants added yet'),
                 );
               } else {
-                return Column(
-                  children: [
-                    ...state.plants
-                        .map((Plant plant) => NewPlantTile(plant: plant,))
-                        .toList(),
-                  ],
+                return SingleChildScrollView(
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...state.plants.map((Plant plant) => NewPlantTile(plant: plant,)).toList(),
+                    ],
+                  ),
                 );
               }
             }

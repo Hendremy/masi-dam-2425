@@ -174,7 +174,9 @@ class PlantsSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const PlantsPage()),
+                            builder: (newContext) => PlantsPage(
+                              plantsBloc: context.read<PlantsBloc>()
+                            )),
                       );
                     },
                     child: const Text('Plants'),
