@@ -44,15 +44,23 @@ class NewPlantTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Colors.black, width: 2.0),
+        //border: Border.all(color: Colors.black, width: 2.0),
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: const Offset(0, 1.5),
+          ),
+        ],
       ),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.all(4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Pokemon Image and Level Column
+          // Plant Image and Level Column
           Column(
             children: [
               Container(
@@ -88,7 +96,7 @@ class NewPlantTile extends StatelessWidget {
             ],
           ),
           
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           
           // Status Information Column
           Expanded(
@@ -98,7 +106,7 @@ class NewPlantTile extends StatelessWidget {
               children: [
                 // Name Row
                 Text(
-                  name.toUpperCase(),
+                  name,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -106,56 +114,78 @@ class NewPlantTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 
-                // HP Section
-                Row(
-                  children: [
-                    const Text(
-                      'HP',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: LinearProgressIndicator(
-                              value: currentHP / maxHP,
-                              backgroundColor: Colors.grey[300],
-                              color: _getHPColor(),
-                              minHeight: 12,
+                // HP Bar Container
+                Container(
+                  padding: const EdgeInsets.all(2),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // HP Label and Bar
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                        child: Row(
+                          children: [
+                            Container(
+                              // padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              // decoration: BoxDecoration(
+                              //   color: Colors.grey[200],
+                              //   borderRadius: BorderRadius.circular(4),
+                              // ),
+                              child: const Text(
+                                'HP',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '$currentHP/$maxHP',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: LinearProgressIndicator(
+                                  value: currentHP / maxHP,
+                                  backgroundColor: Colors.grey[300],
+                                  color: _getHPColor(),
+                                  minHeight: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
+                      const SizedBox(height: 4),
+                      // HP Numbers
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '$currentHP/$maxHP',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),const SizedBox(height: 8),
                 
                 // XP Bar
                 Row(
                   children: [
-                    const Text(
-                      'EXP',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
+                    // const Text(
+                    //   'EXP',
+                    //   style: TextStyle(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 8),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
@@ -163,7 +193,7 @@ class NewPlantTile extends StatelessWidget {
                               value: currentXP / maxXP,
                               backgroundColor: Colors.grey[300],
                               color: Colors.blue,
-                              minHeight: 8,
+                              minHeight: 4,
                             ),
                           ),
                         ],
