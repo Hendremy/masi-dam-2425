@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
+import 'package:masi_dam_2425/model/plant.dart';
 
 abstract class PlantRegistrationState{
 
@@ -16,6 +17,9 @@ class PlantRegistriationSaving extends PlantRegistrationState{
 }
 
 class PlantRegistrationSaved extends PlantRegistrationState{
+  List<Plant> plants;
+
+  PlantRegistrationSaved({required this.plants});
 
 }
 
@@ -34,8 +38,8 @@ class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
     // save plant to firestore
     emit(PlantRegistriationSaving());
     try{
-      await api.addPlant(name, img);
-      emit(PlantRegistrationSaved());
+      List<Plant> plants = await api.addPlant(name, img);
+      emit(PlantRegistrationSaved(plants: plants));
     }catch(e){
       emit(PlantRegistrationError(message: 'An unexpected error occurred, try again later'));
     }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/plant_id/plant_id_bloc.dart';
 import 'package:masi_dam_2425/plant_id/plant_registration_view.dart';
 
 class PlantIdView extends StatefulWidget {
-  PlantIdView({Key? key}) : super(key: key) {}
+  final PlantsBloc plantBloc;
+
+  PlantIdView({Key? key, required PlantsBloc this.plantBloc}) : super(key: key) {}
 
   @override
   _PlantIdViewState createState() => _PlantIdViewState();
@@ -27,7 +30,7 @@ class _PlantIdViewState extends State<PlantIdView> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     return Scaffold(
       appBar: AppBar(title: const Text('Take a Picture')),
       body: BlocProvider(
@@ -37,9 +40,9 @@ class _PlantIdViewState extends State<PlantIdView> {
             if (state is PlantIdReadyState) {
               _controller = state.controller;
               return CameraPreview(state.controller);
-            }else if(state is PlantIdNotReadyState){
+            } else if (state is PlantIdNotReadyState) {
               context.read<PlantIdBloc>().add(LoadCameraEvent());
-            }else if(state is PlantIdErrorState){
+            } else if (state is PlantIdErrorState) {
               return Center(child: Text(state.message));
             }
             return const Center(child: CircularProgressIndicator());
@@ -54,11 +57,10 @@ class _PlantIdViewState extends State<PlantIdView> {
 
             // If picture is taken successfully, navigate to a preview screen
             if (!mounted) return;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                    PlantRegistrationScreen(imagePath: image.path),
+            Navigator.push(
+              mainContext,
+              MaterialPageRoute(
+                builder: (context) => PlantRegistrationScreen(imagePath: image.path, plantsBloc: widget.plantBloc),
               ),
             );
           } catch (e) {

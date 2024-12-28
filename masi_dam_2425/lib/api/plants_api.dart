@@ -35,7 +35,7 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
     }}
 
     @override
-    Future<void> addPlant(String name, File img) async{
+    Future<List<Plant>> addPlant(String name, File img) async{
         final document = db.collection('plants').doc(user.uid);
         await document.get();
 
@@ -53,5 +53,6 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
         await upload.whenComplete((){});
         await document.set({'plants': plants.map((e) => e.toMap()).toList()});  
         //});
+        return plants;
     }
 }

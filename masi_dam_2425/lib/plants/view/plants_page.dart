@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plant_id/plant_id_view.dart';
-import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
 import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
@@ -13,42 +11,46 @@ class PlantsPage extends StatelessWidget {
   const PlantsPage({Key? key, required this.plantsBloc}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     return Scaffold(
       appBar: AppBar(title: const Text('My Plants')),
       floatingActionButton: FloatingActionButton(
           key: const Key('register_plant_button'),
           onPressed: () {
             //open the plant_id_view page
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PlantIdView()));
+            Navigator.push(
+                mainContext,
+                MaterialPageRoute(
+                    builder: (context) => PlantIdView(plantBloc: plantsBloc)));
           },
           child: const Icon(Icons.add)),
-      body: BlocProvider<PlantsBloc>(
-          create: (context) => this.plantsBloc,
-        child: BlocBuilder<PlantsBloc, PlantsState>(
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const CircularProgressIndicator();
+      body: BlocBuilder<PlantsBloc, PlantsState>(
+        bloc: plantsBloc,
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const CircularProgressIndicator();
+          } else {
+            if (state.plants.isEmpty) {
+              return const Center(
+                child: Text('No plants added yet'),
+              );
             } else {
-              if (state.plants.isEmpty) {
-                return const Center(
-                  child: Text('No plants added yet'),
-                );
-              } else {
-                return SingleChildScrollView(
-                  padding: EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ...state.plants.map((Plant plant) => NewPlantTile(plant: plant,)).toList(),
-                    ],
-                  ),
-                );
-              }
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...state.plants
+                        .map((Plant plant) => NewPlantTile(
+                              plant: plant,
+                            ))
+                        .toList(),
+                  ],
+                ),
+              );
             }
-          },
-        ),
+          }
+        },
       ),
     );
   }

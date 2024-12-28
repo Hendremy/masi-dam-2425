@@ -28,7 +28,7 @@ abstract class InventoryApi {
 
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
-  Future<void> addPlant(String name, File img);
+  Future<List<Plant>> addPlant(String name, File img);
 }
 
 abstract class AvatarApi {
