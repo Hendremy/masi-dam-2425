@@ -6,6 +6,8 @@ abstract class FirestoreApi{
   final FirebaseFirestore db;
   final FirebaseStorage storage;
   late User user;
+  final FirebaseStorage storage;
+
 
   FirestoreApi({
     required this.db,

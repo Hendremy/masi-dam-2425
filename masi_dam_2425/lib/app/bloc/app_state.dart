@@ -1,6 +1,6 @@
 part of 'app_bloc.dart';
 
-enum AppStatus { authenticated, unauthenticated }
+enum AppStatus { authenticated, unauthenticated, calendar, plants }
 
 final class AppState extends Equatable {
   const AppState({User user = User.empty})

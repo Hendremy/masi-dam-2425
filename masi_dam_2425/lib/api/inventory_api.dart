@@ -1,30 +1,73 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/firestore_api.dart';
-import 'package:masi_dam_2425/model/inventory.dart';
 
-class InventoryFirestoreApi extends FirestoreApi implements InventoryApi{
-  InventoryFirestoreApi({required super.db, required super.storage});
+import '../model/inventory.dart';
 
-  @override
-  Future<Inventory?> getInventory() async{
-    try{
-      final document = db.collection('inventory').doc(user.uid);
-      final snapshot = await document.get();
-      Inventory inventory;
+class InventoryFirestoreApi extends FirestoreApi implements InventoryApi {
+  final ShopApi shopApi;
 
-      if (!snapshot.exists){
-        inventory = Inventory.empty();
-        await document.set(inventory.toMap());
-      }else{
-        final data = snapshot.data() as Map<String, dynamic>;
-        inventory = Inventory.fromMap(data);
+  final _inventoryController = StreamController<Inventory>.broadcast();
+  Stream<Inventory> get inventoryStream => _inventoryController.stream;
+
+  InventoryFirestoreApi({required super.db, required super.storage, required this.shopApi});
+
+  Future<void> loadInventory() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('No authenticated user');
       }
 
-      return inventory;
+      final document = db.collection('inventory').doc(user.uid);
+      final snapshot = await document.get();
 
-    }catch(e){
-      print(e);
-      return null;
+      if (snapshot.exists) {
+        final data = snapshot.data()!;
+        final ids = [];
+        final equippedItems = Set<String>();
+        Map items = data['items'];
+        if (!items.isEmpty) {
+
+          items.keys.forEach((key) {
+            ids.add(key as String);
+            if (items[key] == true) {
+              equippedItems.add(key);
+            }
+          });
+          final shopItems = await shopApi.getItemsByIds(ids.cast<String>());
+          data['items'] = Map.fromIterable(
+            shopItems,
+            key: (item) => item,
+            value: (item) => equippedItems.contains(item['id']),
+          );
+        }
+        _inventoryController.add(Inventory.fromJson(data));
+      } else {
+        await setEmptyInventory(document);
+      }
+    } catch (e) {
+      _inventoryController.addError(e);
     }
   }
+  
+  @override
+  Future<void> setEmptyInventory(document) async {
+    final inventory = Inventory.empty();
+    final json = inventory.toJson();
+    await document.set(json);
+    _inventoryController.add(inventory);
+  }
+
+  @override
+  updateInventory(Inventory updatedProducts) {
+    final user = FirebaseAuth.instance.currentUser;
+    final document = db.collection('inventory').doc(user!.uid);
+    final json = updatedProducts.toJson();
+    document.set(json);
+    _inventoryController.add(updatedProducts);
+  }
+
 }

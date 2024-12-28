@@ -1,20 +1,17 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
+import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
-import 'package:masi_dam_2425/home/bloc/inventory_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
-import 'package:masi_dam_2425/inventory/view/shop_page.dart';
-import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/plants/view/calendar_page.dart';
-import 'package:masi_dam_2425/plants/view/plants_page.dart';
-import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
-import 'package:masi_dam_2425/profile/cubit/avatar_cubit.dart';
-import 'package:masi_dam_2425/profile/cubit/profile_cubit.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
-import 'package:masi_dam_2425/profile/widgets/avatar_summary.dart';
+import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
+import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
+import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
+import 'package:masi_dam_2425/shop/shop_cubit.dart';
+import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -23,14 +20,10 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AvatarCubit>().loadAvatar();
+    context.read<ProfileBloc>().add(LoadProfile());
+    context.read<InventoryCubit>().loadInventory();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<InventoryBloc>(
-          create: (context) => InventoryBloc(
-            api: context.read<UserApiServices>().inventoryApi,
-          ),
-        ),
         BlocProvider<PlantsBloc>(
           create: (context) => PlantsBloc(
             api: context.read<UserApiServices>().plantsApi,
@@ -39,7 +32,8 @@ class WelcomePage extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Home'),
+          title: const Text('Dashboard'),
+          elevation: 0,
           actions: [
             IconButton(
               key: const Key('homePage_logout_iconButton'),
@@ -50,21 +44,68 @@ class WelcomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-        padding: EdgeInsets.all(10.0),
-
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              AvatarSection(),
-              InventorySection(),
-              PlantsSection(),
+            children: [
+              const AvatarSection(),
+              const SizedBox(height: 16.0),
+              InventorySummaryWidget(
+                onShopTap: () => _goToShopPage(context),
+                onInventoryTap: () => _goToInventoryPage(context),
+              ),
+
             ],
           ),
         ),
       ),
     );
   }
+
+  onInventoryTap() {
+    print('Inventory tapped');
+  }
+
+  _goToShopPage(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileBloc>.value(
+              value: context.read<ProfileBloc>(),
+            ),
+            BlocProvider<InventoryCubit>.value(
+              value: context.read<InventoryCubit>(),
+            ),
+            BlocProvider<ShopCubit>(
+              create: (context) => ShopCubit(
+                  context.read<UserApiServices>().shopApi as ShopFirestoreApi
+              ),
+            )
+          ],
+          child: ShopPage(),
+        ),
+      ),
+    );
+  }
+
+  _goToInventoryPage(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<InventoryCubit>.value(
+              value: context.read<InventoryCubit>(),
+            ),
+          ],
+          child: InventoryPage(),
+        ),
+      ),
+    );
+  }
+
 }
 
 class AvatarSection extends StatelessWidget {
@@ -72,131 +113,78 @@ class AvatarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AvatarCubit, AvatarState>(
+    return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        if (state.isLoading) {
+        if (state is ProfileLoading) {
           return const CircularProgressIndicator();
-        } else if (state.avatar != null) {
-          return AvatarSummary(
-            profile: state.avatar!,
-            action: () => _goToProfilePage(context),
-          );
-        } else {
-          return const Text('Failed to load profile.');
         }
+
+        if (state is ProfileLoaded) {
+          return ProfileSummaryWidget(
+            profile: state.profile,
+            action: () => {
+              _goToProfilePage(context),
+            }
+          );
+        }
+
+        return const Text('Failed to load profile.');
       },
     );
   }
 
   _goToProfilePage(context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider<AvatarCubit>.value(
-                value: context.read<AvatarCubit>(),
-              ),
-              BlocProvider<ProfileCubit>(
-                create: (context) => ProfileCubit(
-                  context.read<AvatarCubit>(),
-                  context.read<AuthenticationRepository>(),
-                ),
-              ),
-            ],
-            child: ProfilePage(),
-          ),
-        ));
-  }
-}
-
-class InventorySection extends StatelessWidget {
-  const InventorySection({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<InventoryBloc, InventoryState>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const CircularProgressIndicator();
-        } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ShopPage()),
-                  );
-                },
-                icon: const Icon(Icons.currency_exchange),
-                label: Text('${state.inventory?.coins ?? 0} Coins'),
-              ),
-              TextButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InventoryPage()),
-                  );
-                },
-                icon: const Icon(Icons.backpack),
-                label: const Text("Inventory"),
-              ),
-            ],
-          );
-        }
-      },
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+      ),
     );
   }
-}
 
-class PlantsSection extends StatelessWidget {
-  const PlantsSection({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PlantsBloc, PlantsState>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const CircularProgressIndicator();
-        } else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (newContext) => PlantsPage(
-                              plantsBloc: context.read<PlantsBloc>()
-                            )),
-                      );
-                    },
-                    child: const Text('Plants'),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CalendarPage()),
-                      );
-                    },
-                    icon: const Icon(Icons.calendar_month),
-                  ),
-                ],
-              ),
-              ...state.plants.map((Plant plant) => NewPlantTile(plant: plant,)).toList(),
-            ],
-          );
-        }
-      },
-    );
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return BlocBuilder<PlantsBloc, PlantsState>(
+  //     builder: (context, state) {
+  //       if (state.isLoading) {
+  //         return const CircularProgressIndicator();
+  //       } else {
+  //         return Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 TextButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                           builder: (newContext) => PlantsPage(
+  //                             plantsBloc: context.read<PlantsBloc>()
+  //                           )),
+  //                     );
+  //                   },
+  //                   child: const Text('Plants'),
+  //                 ),
+  //                 IconButton(
+  //                   onPressed: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                           builder: (context) => const CalendarPage()),
+  //                     );
+  //                   },
+  //                   icon: const Icon(Icons.calendar_month),
+  //                 ),
+  //               ],
+  //             ),
+  //             ...state.plants.map((Plant plant) => NewPlantTile(plant: plant,)).toList(),
+  //           ],
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 }

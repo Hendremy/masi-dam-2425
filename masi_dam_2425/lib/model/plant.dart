@@ -5,7 +5,9 @@ class Plant {
   late String name;
   late double xp;
   late double hp;
+  late double maxHp;
   late int level;
+  late double growth;
   late String species;
 
   Plant({
@@ -18,13 +20,13 @@ class Plant {
 
   PlantMood get mood {
     PlantMood plantMood;
-    if(hp >= 70){
-        plantMood = PlantMood.happy;
-      }else if(hp >= 30){
-        plantMood = PlantMood.sad;
-      }else{
-        plantMood = PlantMood.dead;
-      }
+    if (hp >= 70) {
+      plantMood = PlantMood.happy;
+    } else if (hp >= 30) {
+      plantMood = PlantMood.sad;
+    } else {
+      plantMood = PlantMood.dead;
+    }
     return plantMood;
   }
 
@@ -56,10 +58,9 @@ class Plant {
       'uuid': uuid
     };
   }
+
+    bool isFullyGrown() => growth >= 100;
+
 }
 
-enum PlantMood{
-  happy,
-  sad,
-  dead
-}
+enum PlantMood { happy, sad, dead }
