@@ -23,7 +23,7 @@ class PlantRegistrationScreen extends StatefulWidget {
 class _DisplayPictureScreenState extends State<PlantRegistrationScreen> {
   bool _isPlantNameValid = false;
   String _plantName = '';
-  String _species = 'loading';
+  String _species = 'Searching...';
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,9 @@ class _DisplayPictureScreenState extends State<PlantRegistrationScreen> {
                               padding: const EdgeInsets.all(10),
                             ),
                             Container(
-                              child: Text(
+                              child: (_species == 'Searching...') 
+                              ? Center(child: CircularProgressIndicator()) 
+                              : Text(
                                 'Species: $_species',
                                 style: TextStyle(
                                   color: _species == 'Unknown'
