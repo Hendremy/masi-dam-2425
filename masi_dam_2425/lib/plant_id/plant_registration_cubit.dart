@@ -12,7 +12,7 @@ class PlantRegistrationInitial extends PlantRegistrationState{
 
 }
 
-class PlantRegistriationSaving extends PlantRegistrationState{
+class PlantRegistrationSaving extends PlantRegistrationState{
 
 }
 
@@ -32,13 +32,14 @@ class PlantRegistrationError extends PlantRegistrationState{
 
 class PlantRegistrationCubit extends Cubit<PlantRegistrationState>{
   final PlantsApi api;
-  PlantRegistrationCubit({required PlantsApi this.api}) : super(PlantRegistrationInitial());
+  PlantRegistrationCubit({
+    required PlantsApi this.api,}) : super(PlantRegistrationInitial());
 
-  Future<void> savePlant(String name, File img) async{
+  Future<void> savePlant(String name, File img, String species) async{
     // save plant to firestore
-    emit(PlantRegistriationSaving());
+    emit(PlantRegistrationSaving());
     try{
-      List<Plant> plants = await api.addPlant(name, img);
+      List<Plant> plants = await api.addPlant(name, img, species);
       emit(PlantRegistrationSaved(plants: plants));
     }catch(e){
       emit(PlantRegistrationError(message: 'An unexpected error occurred, try again later'));

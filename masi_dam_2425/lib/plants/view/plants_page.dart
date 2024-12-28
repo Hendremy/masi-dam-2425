@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/plant_id/plant_id_view.dart';
+import 'package:masi_dam_2425/plant_id/plant_camera_view.dart';
 import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
@@ -21,7 +21,7 @@ class PlantsPage extends StatelessWidget {
             Navigator.push(
                 mainContext,
                 MaterialPageRoute(
-                    builder: (context) => PlantIdView(plantBloc: plantsBloc)));
+                    builder: (context) => PlantCameraView(plantBloc: plantsBloc)));
           },
           child: const Icon(Icons.add)),
       body: BlocBuilder<PlantsBloc, PlantsState>(

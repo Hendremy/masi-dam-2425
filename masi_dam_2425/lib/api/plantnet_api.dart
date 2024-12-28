@@ -39,20 +39,34 @@ class PlantnetApi extends PlantIdApi {
   
   @override
   Future<String> identifyPlant(File img) async {
-    final String route = '/v2/identify/{project}';
+    final String route = '/v2/identify/all?api-key=$apiKey';
     final Uri path = Uri.parse('$url$route');
 
     var request = new http.MultipartRequest("POST", path);
-    request.fields['project'] = 'all';
     var file = await http.MultipartFile.fromPath(
         'images',
         img.path,
         contentType: MediaType('image', 'jpeg'));
     request.files.add(file);
     var response = await request.send();
-    var responseString = await response.stream.bytesToString();
-    var rjson = jsonDecode(responseString);
-    return rjson['bestMatch'];
+    switch(response.statusCode){
+      case 200:
+        var responseString = await response.stream.bytesToString();
+        var rjson = jsonDecode(responseString);
+        return rjson['bestMatch'];
+      case 400:
+        throw Exception('Bad request');
+      case 401:
+        throw Exception('Unauthorized');
+      case 403:
+        throw Exception('Forbidden');
+      case 404:// If not found, return nothing
+        return '';
+      case 500:
+        throw Exception('Internal server error');
+      default:
+        throw Exception('Unknown error');
+    }
   }
 }
 
