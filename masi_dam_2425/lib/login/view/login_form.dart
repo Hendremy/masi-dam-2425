@@ -24,22 +24,31 @@ class LoginForm extends StatelessWidget {
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
+          child: Card(
+            elevation: 5, // Add shadow effect for the card
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Rounded corners
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16), // Internal padding for the card
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                Image.asset(
                 'assets/greenmon-logo.png',
                 height: 120,
               ),
-              const SizedBox(height: 16),
-              _EmailInput(),
-              const SizedBox(height: 8),
-              _PasswordInput(),
-              const SizedBox(height: 8),
-              _LoginButton(),
-              const SizedBox(height: 4),
-              _SignUpButton(),
-            ],
+                  const SizedBox(height: 16),
+                  _EmailInput(),
+                  const SizedBox(height: 4),
+                  _PasswordInput(),
+                  const SizedBox(height: 8),
+                  _LoginButton(),
+                  const SizedBox(height: 4),
+                  _SignUpButton(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -59,7 +68,24 @@ class _EmailInput extends StatelessWidget {
       onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: 'email',
+        prefixIcon: const Icon(Icons.email),
+        labelText: 'Email Address',
+        hintText: 'Enter your email',
+        hintStyle: const TextStyle(color: Colors.grey),
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
         helperText: '',
         errorText: displayError != null ? 'invalid email' : null,
       ),
@@ -80,7 +106,24 @@ class _PasswordInput extends StatelessWidget {
           context.read<LoginCubit>().passwordChanged(password),
       obscureText: true,
       decoration: InputDecoration(
-        labelText: 'password',
+        prefixIcon: const Icon(Icons.lock),
+        labelText: 'Password',
+        hintText: 'Enter your password',
+        hintStyle: const TextStyle(color: Colors.grey),
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
         helperText: '',
         errorText: displayError != null ? 'invalid password' : null,
       ),

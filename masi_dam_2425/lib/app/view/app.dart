@@ -16,19 +16,20 @@ import 'package:masi_dam_2425/theme.dart';
 import '../../inventory/cubit/inventory_cubit.dart';
 
 class App extends StatelessWidget {
-  const App({
-    required AuthenticationRepository authenticationRepository,
-    super.key,
-  }) : _authenticationRepository = authenticationRepository;
 
-  final AuthenticationRepository _authenticationRepository;
+  final AuthenticationRepository authenticationRepository;
+
+  const App({
+    required this.authenticationRepository,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(
-          value: _authenticationRepository,
+          value: authenticationRepository,
         ),
         RepositoryProvider<UserApiServices>(
           create: (context) => UserApiServices(
@@ -47,7 +48,7 @@ class App extends StatelessWidget {
           BlocProvider<AppBloc>(
             lazy: false,
             create: (_) => AppBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             )..add(const AppUserLoginRequested()),
           ),
            BlocProvider<ProfileBloc>(

@@ -22,12 +22,10 @@ class ItemCard extends StatelessWidget {
       onTap: () => _showDetails(context, product, wallet),
       splashColor: Colors.green,
       child: Card(
-        color: Colors.white,
-        clipBehavior: Clip.antiAlias,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        elevation: Theme.of(context).cardTheme.elevation,
+        color: Theme.of(context).cardTheme.color,
+        margin: Theme.of(context).cardTheme.margin,
+        shape: Theme.of(context).cardTheme.shape,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

@@ -32,7 +32,10 @@ dependencies:
   formz: ^0.7.0
   google_fonts: ^6.2.1
   firebase_storage: ^12.3.7
-  
+  flutter_local_notifications: ^18.0.1
+  permission_handler: ^11.3.1
+  workmanager: ^0.5.2
+
 
 dev_dependencies:
   bloc_test: ^9.0.0
@@ -52,10 +55,6 @@ flutter:
      - assets/plant_sad.png
      - assets/plant2_sad.png
      - assets/plant_dead.jpg
-     - assets/potions/
-     - assets/protections/
-     - assets/weapons/
-     - assets/compost/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

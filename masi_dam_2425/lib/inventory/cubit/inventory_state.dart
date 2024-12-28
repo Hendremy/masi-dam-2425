@@ -39,6 +39,15 @@ class InventoryUpdated extends InventoryState {
   List<Object> get props => [message];
 }
 
+class InventoryMessage extends InventoryState {
+  final String message;
+
+  const InventoryMessage(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class InventoryError extends InventoryState {
   final String message;
 

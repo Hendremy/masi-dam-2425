@@ -47,12 +47,10 @@ class _buildInventoryLoading extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Card(
-      color: Colors.white,
-      margin: const EdgeInsets.all(8.0),
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      elevation: Theme.of(context).cardTheme.elevation,
+      color: Theme.of(context).cardTheme.color,
+      margin: Theme.of(context).cardTheme.margin,
+      shape: Theme.of(context).cardTheme.shape,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
