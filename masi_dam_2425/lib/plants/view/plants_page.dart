@@ -10,6 +10,14 @@ class PlantsPage extends StatelessWidget {
 
   const PlantsPage({Key? key, required this.plantsBloc}) : super(key: key);
 
+  static MaterialPage page() {
+    return MaterialPage(
+      name: 'CalendarPage',
+      key: const ValueKey('CalendarPage'),
+      child: Text('TODO : Redo plants page because it breaks bloc heritence and stuff')//const PlantsPage(plantsBloc: ,),
+    );
+  }
+
   @override
   Widget build(BuildContext mainContext) {
     return Scaffold(
