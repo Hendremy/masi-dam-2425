@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/api/inventory_api.dart';
+import 'package:masi_dam_2425/api/plantnet_api.dart';
 import 'package:masi_dam_2425/api/plants_api.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/model/inventory.dart';
@@ -11,14 +14,16 @@ class UserApiServices {
   late InventoryApi inventoryApi;
   late PlantsApi plantsApi;
   late AvatarApi avatarApi;
+  late PlantIdApi plantIdApi;
   late ShopApi shopApi;
 
-  UserApiServices({firestoreDb, firebaseStorage, auth}) {
+  UserApiServices({firestoreDb, firebaseStorage, auth, plantnetOptions}) {
     shopApi = ShopFirestoreApi(db: firestoreDb, storage: firebaseStorage);
     inventoryApi = InventoryFirestoreApi(db: firestoreDb, shopApi: shopApi, storage: firebaseStorage);
     plantsApi = PlantsFirestoreApi(db: firestoreDb, storage: firebaseStorage);
     avatarApi = AvatarFirestoreApi(
         db: firestoreDb, storage: firebaseStorage, auth: auth, inventoryApi: inventoryApi);
+    plantIdApi = PlantnetApi(apiKey: plantnetOptions.apiKey);
   }
 }
 
@@ -32,6 +37,7 @@ abstract class InventoryApi {
 
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
+  Future<List<Plant>> addPlant(String name, File img, String species);
 }
 
 abstract class ShopApi {
@@ -47,4 +53,8 @@ abstract class AvatarApi {
   Future<void> updateProfile(Avatar profile);
   Future<bool> deleteProfile(String password);
   void dispose();
+}
+
+abstract class PlantIdApi {
+  Future<String> identifyPlant(File img);
 }

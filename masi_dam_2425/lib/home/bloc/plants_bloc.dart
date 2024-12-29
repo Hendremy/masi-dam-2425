@@ -18,6 +18,10 @@ class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
       emit(PlantsState(plants: [], isLoading: true));
     });
 
+    on<PlantsUpdated>((event, emit){
+      emit(PlantsState(plants: event.plants, isLoading: false));
+    });
+
     _loadPlants();
   }
 
@@ -43,6 +47,12 @@ class PlantsLoaded extends PlantsEvent {
 class PlantsLoadFailed extends PlantsEvent {}
 
 class PlantsLoading extends PlantsEvent{}
+
+class PlantsUpdated extends PlantsEvent {
+  final List<Plant> plants;
+
+  PlantsUpdated({required this.plants});
+}
 
 // States
 

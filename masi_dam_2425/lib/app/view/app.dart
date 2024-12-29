@@ -7,9 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
-import 'package:masi_dam_2425/home/view/welcome_page.dart';
+import 'package:masi_dam_2425/home/view/home_page.dart';
 import 'package:masi_dam_2425/login/view/login_page.dart';
 import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
+import 'package:masi_dam_2425/plantnet_options.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/theme.dart';
 
@@ -34,8 +35,9 @@ class App extends StatelessWidget {
         RepositoryProvider<UserApiServices>(
           create: (context) => UserApiServices(
             firestoreDb: FirebaseFirestore.instance,
-            firebaseStorage: FirebaseStorage.instance,
+            firebaseStorage: FirebaseStorage.instanceFor(bucket: "gs://hepl-masi5-flutter.firebasestorage.app"),
             auth: FirebaseAuth.instance,
+            plantnetOptions: PlantnetOptions.currentPlatform,
           ),
         ),
       ],
@@ -78,7 +80,7 @@ class AppView extends StatelessWidget {
       home: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           if (state.status == AppStatus.authenticated) {
-            return WelcomePage(); // Replace with your home page widget
+            return HomePage(); // Replace with your home page widget
           } else  {
             return LoginPage(); // Replace with your login page widget
           }
