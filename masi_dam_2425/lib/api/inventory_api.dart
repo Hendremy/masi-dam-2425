@@ -70,4 +70,10 @@ class InventoryFirestoreApi extends FirestoreApi implements InventoryApi {
     _inventoryController.add(updatedProducts);
   }
 
+  @override
+  Future<void> deleteInventory(String uid) {
+    final document = db.collection('inventory').doc(uid);
+    return document.delete();
+  }
+
 }

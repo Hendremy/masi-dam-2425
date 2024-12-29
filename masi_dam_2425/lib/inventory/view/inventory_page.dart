@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
 import 'package:masi_dam_2425/common/item_details.dart';
 import '../../model/shop_item.dart';
-
 class InventoryPage extends StatelessWidget {
   const InventoryPage({Key? key}) : super(key: key);
 
@@ -14,7 +13,7 @@ class InventoryPage extends StatelessWidget {
         if (state is InventoryUpdated) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text('${state.message}')));
+            ..showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       child: Scaffold(
@@ -26,44 +25,50 @@ class InventoryPage extends StatelessWidget {
           builder: (context, state) {
             if (state is InventoryLoading) {
               return const Center(child: CircularProgressIndicator());
+            } else if (state is InventoryError) {
+              return _buildErrorState(context, state);
+            } else if (state is InventoryLoaded) {
+              return state.inventory.items.isEmpty
+                  ? const Center(child: Text('No items in your inventory'))
+                  : _buildInventoryList(state.inventory.items, context);
             }
-
-            if (state is InventoryLoaded && state.inventory.items.isEmpty) {
-              return const Center(child: Text('No items in your inventory'));
-            }
-
-            if (state is InventoryError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.message, style: const TextStyle(color: Colors.red)),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<InventoryCubit>().loadInventory();
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            if (state is InventoryLoaded) {
-              return ListView.builder(
-                itemCount: state.inventory.items.length,
-                itemBuilder: (context, index) {
-                  final entry = state.inventory.items.entries.elementAt(index);
-                  return _buildInventoryItem(entry.key, entry.value, context);
-                },
-              );
-            }
-
             return const SizedBox.shrink();
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, InventoryError state) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            state.message,
+            style: const TextStyle(color: Colors.red, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              context.read<InventoryCubit>().loadInventory();
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInventoryList(
+      Map<ShopItem, bool> items, BuildContext context) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final entry = items.entries.elementAt(index);
+        return _buildInventoryItem(entry.key, entry.value, context);
+      },
     );
   }
 
@@ -87,7 +92,7 @@ class InventoryPage extends StatelessWidget {
         trailing: Switch(
           value: isSelected,
           onChanged: (value) {
-            context.read<InventoryCubit>().toggleItem(item);
+            _onToggleItem(context, item);
           },
         ),
         onTap: () {
@@ -110,11 +115,22 @@ class InventoryPage extends StatelessWidget {
             value: isSelected,
             onChanged: (value) {
               Navigator.pop(context);
-              context.read<InventoryCubit>().toggleItem(item);
+              _onToggleItem(context, item);
             },
           ),
         );
       },
     );
+  }
+
+  void _onToggleItem(BuildContext context, ShopItem item) {
+    final cubit = context.read<InventoryCubit>();
+    if (cubit.state is InventoryLoaded) {
+      cubit.toggleItem(item);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cannot toggle items while loading')),
+      );
+    }
   }
 }

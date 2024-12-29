@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/profile/view/goodbye_page.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -133,8 +134,20 @@ class ProfilePage extends StatelessWidget {
                                         'Delete',
                                         style: TextStyle(color: Colors.red),
                                       ),
-                                      onPressed: () {
-
+                                      onPressed: () async {
+                                        final password = passwordController.text;
+                                        final profileBloc = context.read<ProfileBloc>();
+                                        final isDeleted = await profileBloc.deleteAccount(password);
+                                        if (isDeleted) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(builder: (context) => GoodbyePage()),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text('Account deletion failed. Please try again.')),
+                                          );
+                                          Navigator.of(context).pop();
+                                        }
                                       },
                                     ),
                                   ],
@@ -260,7 +273,7 @@ class UserWidget extends StatelessWidget {
                       controller: emailController,
                       labelText: 'Email',
                       hintText: 'Enter your email',
-                      active: user.connectionData.isVerified,
+                      active: false,
                       icon: Icons.email),
                   SizedBox(height: 16),
                 ],

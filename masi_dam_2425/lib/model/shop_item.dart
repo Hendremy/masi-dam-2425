@@ -1,5 +1,4 @@
 
-import 'package:equatable/equatable.dart';
 
 class ShopItem {
   late String id;

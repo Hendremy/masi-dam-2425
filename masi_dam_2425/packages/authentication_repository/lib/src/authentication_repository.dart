@@ -132,6 +132,7 @@ class AuthenticationRepository {
       );
       await result.user?.updateProfile(displayName: name);
       result.user?.sendEmailVerification();
+      logOut();
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
