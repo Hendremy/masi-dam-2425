@@ -4,6 +4,8 @@ import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
+import 'package:masi_dam_2425/model/plant.dart';
+import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
 import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
@@ -13,55 +15,97 @@ import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
 import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static Page<void> page() => const MaterialPage<void>(child: HomePage());
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  @override
   Widget build(BuildContext context) {
     context.read<ProfileBloc>().add(LoadProfile());
     context.read<InventoryCubit>().loadInventory();
     PermissionService.requestNotificationPermission();
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<PlantsBloc>(
+
+    return Scaffold(
+      // appBar: AppBar(
+      //   leading: Padding(
+      //     padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
+      //     child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
+      //   ),        title: const Text('Dashboard'),
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      // ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.grass),
+            label: 'Greenmons',
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.shopping_cart),
+            label: 'Shop',
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.inventory),
+            label: 'Inventory',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: <Widget>[
+          _homePage(context),
+          _shopPage(context),
+          _inventoryPage(context),
+        ][_selectedIndex]
+        ),
+      );
+  }
+  _homePage(BuildContext context){
+    return BlocProvider<PlantsBloc>(
           create: (context) => PlantsBloc(
             api: context.read<UserApiServices>().plantsApi,
           ),
-        ),
-      ],
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
-            child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
-          ),        title: const Text('Dashboard'),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const AvatarSection(),
-              const SizedBox(height: 16.0),
-              InventorySummaryWidget(
-                onShopTap: () => _goToShopPage(context),
-                onInventoryTap: () => _goToInventoryPage(context),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const AvatarSection(),
+                const SizedBox(height: 16.0),
+                // InventorySummaryWidget(
+                //   onShopTap: () {},
+                //   onInventoryTap: () {},
+                // ),
+                BlocBuilder<PlantsBloc, PlantsState>(
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ...state.plants.map((Plant plant) => NewPlantTile(plant: plant,)).toList(),
+                        ]);
+                    }
+                  })
+                ]
               ),
-
-            ],
-          ),
-        ),
-      ),
-    );
+          ));
   }
 
-  _goToShopPage(context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
+  _shopPage(BuildContext context) {
+    return
+      MultiBlocProvider(
           providers: [
             BlocProvider<ProfileBloc>.value(
               value: context.read<ProfileBloc>(),
@@ -76,27 +120,19 @@ class HomePage extends StatelessWidget {
             )
           ],
           child: ShopPage(),
-        ),
-      ),
-    );
+        );
   }
 
-  _goToInventoryPage(context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MultiBlocProvider(
+  _inventoryPage(BuildContext context) {
+    return MultiBlocProvider(
           providers: [
             BlocProvider<InventoryCubit>.value(
               value: context.read<InventoryCubit>(),
             ),
           ],
           child: InventoryPage(),
-        ),
-      ),
-    );
+        );
   }
-
 }
 
 class AvatarSection extends StatelessWidget {
