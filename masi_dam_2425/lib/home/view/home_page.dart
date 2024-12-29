@@ -13,10 +13,10 @@ import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
 import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  static Page<void> page() => const MaterialPage<void>(child: WelcomePage());
+  static Page<void> page() => const MaterialPage<void>(child: HomePage());
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,13 @@ class WelcomePage extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
-            child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
-          ),        title: const Text('Dashboard'),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        ),
+        // appBar: AppBar(
+        //   leading: Padding(
+        //     padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
+        //     child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
+        //   ),        title: const Text('Dashboard'),
+        //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        // ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
