@@ -1,4 +1,5 @@
 
+
 class ShopItem {
   late String id;
   late String name;
@@ -47,6 +48,15 @@ class ShopItem {
   static String toJson(ShopItem item) {
     return item.id;
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ShopItem && other.id == id;
+  }
+
+  @override
+  int get hashCode => name.hashCode ^ cost.hashCode;
 
 }
 

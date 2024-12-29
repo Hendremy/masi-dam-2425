@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
+import 'package:masi_dam_2425/profile/view/goodbye_page.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
+import 'package:workmanager/workmanager.dart';
 
+import '../../app/bloc/app_bloc.dart';
 import '../../model/avatar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -11,7 +14,23 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Profile')),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(title: const Text('Profile'), actions: [
+          IconButton(
+            key: const Key('homePage_logout_iconButton'),
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () async {
+              context.read<AppBloc>().add(const AppLogoutPressed());
+              Navigator.of(context).pop();
+              // Test if notifications works in background
+              Workmanager().registerOneOffTask(
+              "local", "show_notification_task", initialDelay: Duration(seconds: 10), inputData: {
+                "title": "Hello",
+                "message": "World"
+              });
+            },
+          ),
+        ],),
         body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.all(8),
@@ -115,8 +134,20 @@ class ProfilePage extends StatelessWidget {
                                         'Delete',
                                         style: TextStyle(color: Colors.red),
                                       ),
-                                      onPressed: () {
-
+                                      onPressed: () async {
+                                        final password = passwordController.text;
+                                        final profileBloc = context.read<ProfileBloc>();
+                                        final isDeleted = await profileBloc.deleteAccount(password);
+                                        if (isDeleted) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(builder: (context) => GoodbyePage()),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text('Account deletion failed. Please try again.')),
+                                          );
+                                          Navigator.of(context).pop();
+                                        }
                                       },
                                     ),
                                   ],
@@ -168,12 +199,14 @@ class UserWidget extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Card(
-            elevation: 2,
-            color: Colors.white,
+            elevation: Theme.of(context).cardTheme.elevation,
+            color: Theme.of(context).cardTheme.color,
+            margin: Theme.of(context).cardTheme.margin,
+            shape: Theme.of(context).cardTheme.shape,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -240,7 +273,7 @@ class UserWidget extends StatelessWidget {
                       controller: emailController,
                       labelText: 'Email',
                       hintText: 'Enter your email',
-                      active: user.connectionData.isVerified,
+                      active: false,
                       icon: Icons.email),
                   SizedBox(height: 16),
                 ],

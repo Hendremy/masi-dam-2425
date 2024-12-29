@@ -1,3 +1,5 @@
+import 'package:masi_dam_2425/exceptions/already_in_possession_exception.dart';
+import 'package:masi_dam_2425/exceptions/insufficient_funds_exception .dart';
 import 'package:masi_dam_2425/model/shop_item.dart';
 
 class Inventory {
@@ -12,9 +14,17 @@ class Inventory {
   }
 
   void add(ShopItem item) {
+    if (items.containsKey(item)) {
+      throw AlreadyInPossessionException("Item already in your possession!");
+    }
+    if (!canBuy(item.cost)) {
+      throw InsufficientFundsException("Not enough coins!");
+    }
     coins -= item.cost;
     items[item] = true;
   }
+
+  bool canBuy(int cost) => cost <= this.coins;
 
   factory Inventory.fromJson(Map<String, dynamic> json) {
     Map<ShopItem, bool> itemsObject = {};

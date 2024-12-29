@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
-import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
 import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
+import 'package:masi_dam_2425/permission_service.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
@@ -22,6 +22,7 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ProfileBloc>().add(LoadProfile());
     context.read<InventoryCubit>().loadInventory();
+    PermissionService.requestNotificationPermission();
     return MultiBlocProvider(
       providers: [
         BlocProvider<PlantsBloc>(
@@ -32,17 +33,11 @@ class WelcomePage extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Dashboard'),
-          elevation: 0,
-          actions: [
-            IconButton(
-              key: const Key('homePage_logout_iconButton'),
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                context.read<AppBloc>().add(const AppLogoutPressed());
-              },
-            ),
-          ],
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
+            child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
+          ),        title: const Text('Dashboard'),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -60,10 +55,6 @@ class WelcomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  onInventoryTap() {
-    print('Inventory tapped');
   }
 
   _goToShopPage(context) {

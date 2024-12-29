@@ -61,7 +61,6 @@ class Avatar {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'email': connectionData.email,
       'title': title,
       'stats': stats.toJson(),
     };

@@ -63,4 +63,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     _repository.dispose();
     return super.close();
   }
+
+  Future<bool> deleteAccount(String password) async {
+    try {
+      return _repository.deleteProfile(password);
+    } catch (e) {
+      return false;
+    }
+  }
 }

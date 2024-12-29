@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:authentication_repository/src/models/user.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
@@ -96,12 +95,6 @@ class AuthenticationRepository {
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  /// Whether or not the current environment is web
-  /// Should only be overridden for testing purposes. Otherwise,
-  /// defaults to [kIsWeb]
-  @visibleForTesting
-  bool isWeb = kIsWeb;
-
   /// User cache key.
   /// Should only be used for testing purposes.
   @visibleForTesting
@@ -137,9 +130,9 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-      final user = result.user;
-      await user?.updateProfile(displayName: name);
-      user?.sendEmailVerification();
+      await result.user?.updateProfile(displayName: name);
+      result.user?.sendEmailVerification();
+      logOut();
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {

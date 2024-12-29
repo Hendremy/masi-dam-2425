@@ -14,7 +14,8 @@ class User extends Equatable {
     this.photo,
     this.emailVerified,
     this.creationDate,
-    this.lastSignInDate
+    this.lastSignInDate,
+    this.password,
   });
 
   String? get formattedAccountCreationDate {
@@ -45,9 +46,11 @@ class User extends Equatable {
 
   final bool? emailVerified;
 
+  final String? password;
+
   /// Empty user which represents an unauthenticated user.
   static const empty = User(id: '');
 
   @override
-  List<Object?> get props => [email, id, name, photo, emailVerified, creationDate, lastSignInDate];
+  List<Object?> get props => [email, password, id, name, photo, emailVerified, creationDate, lastSignInDate];
 }

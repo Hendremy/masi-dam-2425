@@ -15,8 +15,10 @@ class ProfileSummaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final wallet = context.select((InventoryCubit cubit) => cubit.state.coins);
     return Card(
-        elevation: 2,
-        color: Colors.white,
+        elevation: Theme.of(context).cardTheme.elevation,
+        color: Theme.of(context).cardTheme.color,
+        margin: Theme.of(context).cardTheme.margin,
+        shape: Theme.of(context).cardTheme.shape,
         clipBehavior: Clip.hardEdge,
         child: InkWell(
             splashColor: Theme.of(context).primaryColor.withAlpha(30),

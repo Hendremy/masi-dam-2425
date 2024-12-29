@@ -22,17 +22,36 @@ class SignUpForm extends StatelessWidget {
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _NameInput(),
-            const SizedBox(height: 8),
-            _EmailInput(),
-            const SizedBox(height: 8),
-            _PasswordInput(),
-            const SizedBox(height: 8),
-            _SignUpButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Card(
+            elevation: 5, // Add shadow effect for the card
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Rounded corners
+            ),
+            margin: const EdgeInsets.symmetric(horizontal: 16), // Space between card and screen edges
+            child: Padding(
+              padding: const EdgeInsets.all(16), // Internal padding for the card
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Sign Up", style: TextStyle(fontSize: 24)),
+                  const SizedBox(height: 8),
+                  Image.asset(
+                    'assets/greenmon-logo.png',
+                    height: 120,
+                  ),
+                  const SizedBox(height: 16),
+                  _NameInput(),
+                  const SizedBox(height: 8),
+                  _EmailInput(),
+                  const SizedBox(height: 8),
+                  _PasswordInput(),
+                  const SizedBox(height: 8),
+                  _SignUpButton(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -47,8 +66,24 @@ class _NameInput extends StatelessWidget {
       onChanged: (name) => context.read<SignUpCubit>().nameChanged(name),
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        labelText: 'name',
-        helperText: 'Your game name'
+        prefixIcon: const Icon(Icons.person),
+        labelText: 'Full Name',
+        hintText: 'Enter your full name',
+        hintStyle: const TextStyle(color: Colors.grey), // Grey color for hint text
+        filled: true,
+        fillColor: Colors.grey.shade100, // Subtle background color
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
       ),
     );
   }
@@ -66,8 +101,24 @@ class _EmailInput extends StatelessWidget {
       onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: 'email',
-        helperText: '',
+        prefixIcon: const Icon(Icons.email),
+        labelText: 'Email Address',
+        hintText: 'Enter your email',
+        hintStyle: const TextStyle(color: Colors.grey),
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
         errorText: displayError != null ? 'invalid email' : null,
       ),
     );
@@ -87,8 +138,24 @@ class _PasswordInput extends StatelessWidget {
           context.read<SignUpCubit>().passwordChanged(password),
       obscureText: true,
       decoration: InputDecoration(
-        labelText: 'password',
-        helperText: '',
+        prefixIcon: const Icon(Icons.lock),
+        labelText: 'Password',
+        hintText: 'Enter your password',
+        hintStyle: const TextStyle(color: Colors.grey),
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
         errorText: displayError != null ? 'invalid password' : null,
       ),
     );

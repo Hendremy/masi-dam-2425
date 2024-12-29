@@ -2,13 +2,13 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/avatar_api.dart';
 import 'package:masi_dam_2425/app/bloc/app_bloc.dart';
-import 'package:masi_dam_2425/app/routes.dart';
+import 'package:masi_dam_2425/home/view/welcome_page.dart';
+import 'package:masi_dam_2425/login/view/login_page.dart';
 import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
 import 'package:masi_dam_2425/plantnet_options.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
@@ -17,19 +17,20 @@ import 'package:masi_dam_2425/theme.dart';
 import '../../inventory/cubit/inventory_cubit.dart';
 
 class App extends StatelessWidget {
-  const App({
-    required AuthenticationRepository authenticationRepository,
-    super.key,
-  }) : _authenticationRepository = authenticationRepository;
 
-  final AuthenticationRepository _authenticationRepository;
+  final AuthenticationRepository authenticationRepository;
+
+  const App({
+    required this.authenticationRepository,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(
-          value: _authenticationRepository,
+          value: authenticationRepository,
         ),
         RepositoryProvider<UserApiServices>(
           create: (context) => UserApiServices(
@@ -49,7 +50,7 @@ class App extends StatelessWidget {
           BlocProvider<AppBloc>(
             lazy: false,
             create: (_) => AppBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             )..add(const AppUserLoginRequested()),
           ),
            BlocProvider<ProfileBloc>(
@@ -76,9 +77,14 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      home: FlowBuilder<AppStatus>(
-        state: context.select((AppBloc bloc) => bloc.state.status),
-        onGeneratePages: onGenerateAppViewPages,
+      home: BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) {
+          if (state.status == AppStatus.authenticated) {
+            return WelcomePage(); // Replace with your home page widget
+          } else  {
+            return LoginPage(); // Replace with your login page widget
+          }
+        },
       ),
     );
   }

@@ -31,7 +31,7 @@ abstract class InventoryApi {
   Future<void> loadInventory();
   Future<void> setEmptyInventory(document);
   Stream<Inventory> get inventoryStream;
-
+  Future<void> deleteInventory(String uid);
   updateInventory(Inventory updatedProducts);
 }
 
@@ -51,6 +51,7 @@ abstract class AvatarApi {
   Stream<Avatar> get avatarStream;
   Future<void> loadProfile();
   Future<void> updateProfile(Avatar profile);
+  Future<bool> deleteProfile(String password);
   void dispose();
 }
 

@@ -17,11 +17,11 @@ class ShopPage extends StatefulWidget {
 class _ShopPageState extends State<ShopPage> {
   ShopItemType _selectedItemType = ShopItemType.unknown;
 
-  List<ShopItemType> itemTypes = [
+  final List<ShopItemType> _itemTypes = [
     ShopItemType.unknown,
     ShopItemType.potion,
     ShopItemType.tools,
-    ShopItemType.knowledge
+    ShopItemType.knowledge,
   ];
 
   @override
@@ -32,7 +32,7 @@ class _ShopPageState extends State<ShopPage> {
 
   List<ShopItem> _applyFilter(List<ShopItem> products) {
     if (_selectedItemType == ShopItemType.unknown) {
-      return products;
+      return products; // No filter applied
     }
     return products.where((product) => product.type == _selectedItemType).toList();
   }
@@ -42,110 +42,145 @@ class _ShopPageState extends State<ShopPage> {
     final wallet = context.select((InventoryCubit cubit) => cubit.state.coins);
 
     return BlocListener<InventoryCubit, InventoryState>(
-        listener: (context, state) {
-          if (state is InventoryUpdated) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
+          listener: (context, state) {
+            if (state is InventoryUpdated) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text('${state.message}')));
+            }
+
+            if (state is InventoryMessage) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text('${state.message}')));
+            }
+          },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: const Text('Shop'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'Balance: $wallet',
+                  style: const TextStyle(fontSize: 18),
                 ),
-              );
-          }
-        },
-        child: Scaffold(
-      appBar: AppBar(
-        title: const Text('Shop'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                'Balance: ${wallet}',
-                style: const TextStyle(fontSize: 18),
               ),
             ),
+            const Icon(Icons.monetization_on),
+          ],
+        ),
+        body: Column(
+          children: [
+            _buildFilterBar(),
+            Expanded(
+              child: BlocBuilder<ShopCubit, ShopState>(
+                builder: (context, state) {
+                  if (state is ShopLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state is ShopError) {
+                    return Center(child: Text('Error: ${state.message}'));
+                  }
+
+                  if (state is ShopLoaded) {
+                    final filteredProducts = _applyFilter(state.products);
+                    if (filteredProducts.isEmpty) {
+                      return const Center(child: Text('No products available.'));
+                    }
+                    return ItemsGird(items: filteredProducts);
+                  }
+
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterBar() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      child: Row( // Row to place the text beside the ListView
+        children: [
+          // Text in front of the ListView
+          Text(
+            'Filters:', // Your custom title text
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const Icon(Icons.monetization_on),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(80), // Height for the filter row
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            color: Colors.blueGrey.shade200,
+          const SizedBox(width: 16), // Space between text and list
+          // ListView next to the text
+          Expanded(
             child: SizedBox(
-              height: 50, // Height of the row of asset images
+              height: 100, // Adjusted height to accommodate the title and image
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: itemTypes.length,
+                itemCount: _itemTypes.length,
                 itemBuilder: (context, index) {
-                  String assetName = itemTypes[index].getImageAsset();
-                  bool isSelected = _selectedItemType == itemTypes[index];
+                  final type = _itemTypes[index];
+                  final isSelected = _selectedItemType == type;
 
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       setState(() {
-                        _selectedItemType = itemTypes[index];
+                        _selectedItemType = type;
                       });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelected ? Colors.blueAccent : Colors.grey.shade50, // Highlight color
-                          border: isSelected
-                              ? Border.all(color: Colors.green, width: 3) // Add border for selected item
-                              : null,
-                        ),
-                        // Use a CircleAvatar to display the image (or icon
-                        child: CircleAvatar(
-                          radius: 30, // Set radius to control the size of the circle
-                          backgroundColor: Colors.grey.shade300,
-                          child: ClipOval(
-                            child: ImageLoader(imageUrl: assetName, width: 50, height: 50)
+                      child: Column( // Use Column to stack title and avatar
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Avatar with selected border
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected ? Colors.blueAccent : Colors.grey.shade50,
+                              border: isSelected
+                                  ? Border.all(color: Colors.green, width: 3)
+                                  : null,
+                            ),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.grey.shade300,
+                              child: ClipOval(
+                                child: ImageLoader(
+                                  imageUrl: type.getImageAsset(),
+                                  width: 50,
+                                  height: 50,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      )
+                          const SizedBox(height: 8), // Space between image and title
+                          // Title below the image
+                          Text(
+                            type.name, // Replace with your actual title property
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
+                    ),
+                  );
                 },
               ),
             ),
           ),
-        ),
-      ),
-      body: Column(
-        children: [
-          // Optionally use the FilterBar if needed for other filters
-
-          Expanded(
-            child: BlocBuilder<ShopCubit, ShopState>(
-              builder: (context, state) {
-                if (state is ShopLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (state is ShopLoaded && state.products.isEmpty) {
-                  return const Center(child: Text('No products available.'));
-                }
-
-                if (state is ShopError) {
-                  return Center(child: Text('Error: ${state.message}'));
-                }
-
-                if (state is ShopLoaded) {
-                  // Apply the filter based on the selected item type
-                  final filteredProducts = _applyFilter(state.products);
-                  return ItemsGird(items: filteredProducts);
-                }
-
-                return const SizedBox.shrink();
-              },
-            ),
-          ),
         ],
       ),
-    ));
+    );
+
   }
 }
