@@ -32,13 +32,13 @@ class HomePage extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        // appBar: AppBar(
-        //   leading: Padding(
-        //     padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
-        //     child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
-        //   ),        title: const Text('Dashboard'),
-        //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // ),
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0), // Optional padding for better alignment
+            child: Image.asset('assets/greenmon-logo.png'), // Replace with your asset path
+          ),        title: const Text('Dashboard'),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
