@@ -59,26 +59,26 @@ Plus généralement, Greenmon s’adresse surtout aux personnes qui veulent simp
 
 ## 📋 Fonctionnalités
 
-> En tant que nouvel utilisateur, je veux pouvoir me créer un compte afin de faire partie de la communauté Greenmon.
-> En tant que nouvel utilisateur, je veux pouvoir me connecter à l'application via mon compte afin d'accéder à l'application.
+- En tant que nouvel utilisateur, je veux pouvoir me créer un compte afin de faire partie de la communauté Greenmon.
+- En tant que nouvel utilisateur, je veux pouvoir me connecter à l'application via mon compte afin d'accéder à l'application.
 
-> En tant qu'utilisateur déjà authentifié une première fois, je ne veux pas avoir à encoder systématiquement mon login/password lorsque j'ouvre l'application. Ceci afin d'améliorer mon expérience utilisateur.
-> Ent tant qu'utilisateur authentifié, je veux pouvoir me déconnecter de l'application afin de changer de compte.
-> En tant qu'utilisateur authentifié, je veux pouvoir supprimer mon compte et ses données afin de supprimer mes liens avec Greenmon.
-> En tant qu'utilisateur authentifié, je veux pouvoir valider mon compte afin de pouvoir modifier les données les plus sensibles.
-> En tant qu'utilisateur authentifié, je veux pouvoir consulter mes données personnelles détenues par Greenmon afin de pouvoir les modifier.
+- En tant qu'utilisateur déjà authentifié une première fois, je ne veux pas avoir à encoder systématiquement mon login/password lorsque j'ouvre l'application. Ceci afin d'améliorer mon expérience utilisateur.
+- Ent tant qu'utilisateur authentifié, je veux pouvoir me déconnecter de l'application afin de changer de compte.
+- En tant qu'utilisateur authentifié, je veux pouvoir supprimer mon compte et ses données afin de supprimer mes liens avec Greenmon.
+- En tant qu'utilisateur authentifié, je veux pouvoir valider mon compte afin de pouvoir modifier les données les plus sensibles.
+- En tant qu'utilisateur authentifié, je veux pouvoir consulter mes données personnelles détenues par Greenmon afin de pouvoir les modifier.
 
-> En tant qu'utilisateur authentifié, je veux avoir un dashboard comme page d'acceuil afin de voir l'état de mon application et naviguer entres les fonctionnalités.
+- En tant qu'utilisateur authentifié, je veux avoir un dashboard comme page d'acceuil afin de voir l'état de mon application et naviguer entres les fonctionnalités.
 
-> En tant qu'utilisateur authentifié, je veux pouvoir accéder au magasin afin de voir et de pouvoir acheter des artéfacts.
-> En tant qu'utilisateur authentifié, je veux pouvoir m'équiper pour améliorer mes compétences.
+- En tant qu'utilisateur authentifié, je veux pouvoir accéder au magasin afin de voir et de pouvoir acheter des artéfacts.
+- En tant qu'utilisateur authentifié, je veux pouvoir m'équiper pour améliorer mes compétences.
 
-> En tant qu'utilisateur authentifié, je veux pouvoir m'occuper de mes plantes pour les maintenir en vie et acquérir de l'expérience.
-> En tant qu'utilisateur authentifié, je veux pouvoir prendre une photo d'une plante réelle et récupérer diverses informations pour en savoir plus sur ma plante.
-> En tant qu'utilisateur authentifié, je veux pouvoir voir tous mes greenmon afin de pouvoir les gérer.
-> En tant qu'utilisateur authentifié, je veux pouvoir consulter les détails d'une plante afin d'en apprendre plus sur cette plante.
+- En tant qu'utilisateur authentifié, je veux pouvoir m'occuper de mes plantes pour les maintenir en vie et acquérir de l'expérience.
+- En tant qu'utilisateur authentifié, je veux pouvoir prendre une photo d'une plante réelle et récupérer diverses informations pour en savoir plus sur ma plante.
+- En tant qu'utilisateur authentifié, je veux pouvoir voir tous mes greenmon afin de pouvoir les gérer.
+- En tant qu'utilisateur authentifié, je veux pouvoir consulter les détails d'une plante afin d'en apprendre plus sur cette plante.
 
-> En tant qu'utilisateur authentifié, je veux pouvoir recevoir des notificiations de l'application lorsqu'un évènement survient afin d'être alerté.
+- En tant qu'utilisateur authentifié, je veux pouvoir recevoir des notificiations de l'application lorsqu'un évènement survient afin d'être alerté.
 
 ## 📈 État d'Avancement
 
