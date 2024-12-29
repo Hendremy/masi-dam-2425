@@ -14,7 +14,7 @@
     Chaque répertoire représente une fonctionnalité principale de notre application et contient donc les classes nécessaires à son fonctionnement. Dans chacun, nous retrouverons principalement 3 types de sous-dossiers:
     - view : pages principales
     - widgets : modules réutilisables de vue
-    - bloc : contient les classes d'état, d'évènements et de blocs/cubits faisant partie de l'architecture de gestion d'états BLoC
+    - bloc/cubit : contient les classes d'état, d'évènements et de blocs/cubits faisant partie de l'architecture de gestion d'états BLoC
 
     On retrouve ici plusieurs répertoires ne représentant pas des fonctionnalités mais dont les fonctionnalités dépendent :
     - api : contient les classes d'accès aux serveurs de Firebase et aux APIs externes telles que Plant .NET
@@ -24,19 +24,25 @@
 
     Voici les répertoires de fonctionnalités que vous pourrez retrouver :
     - app : représente le point de départ de l'application
+    - common : représente les widgets utilisables partout
     - home : l'écran d'accueil d'un utilisateur authentifié
     - inventory : affiche l'équipement acquis par l'utilisateur
     - login : page d'authentification pour accéder au reste de l'application
     - network : vérifie l'état de la connexion internet et affiche un message d'erreur quand la connexion aux services est perdue
     - plants : catalogue des plantes enregistrées par l'utilisateur
     - profile : page de profil de l'utilisateur où il peut consulter et modifier ses informations
+    - shop : magasin de l'application où il peut acheter différents artéfacts
     - sign-up : page d'inscription où l'utilisateur peut se créer un nouveau compte
     
 - packages / : code source d'utilité générale pouvant être aisément réutilisé dans d'autres applications que celle-ci, comme pour l'authentification ou la mise en cache 
 
 ## 🚀 Présentation de l'Application
 
-> Une présentation de votre application. Ce dernier répond à un besoin, présentez-le. Ne faites aucune hypothèse sur le niveau de connaissances de votre lecteur. Vous vous adressez ici à un internaute quelconque qui découvre votre dépôt. Évitez un jargon technique dans cette partie de votre présentation.
+Greenmon est une application mobile gamifiée dédiée à la gestion des plantes d'intérieur.
+
+Les plantes d'intérieur offrent de nombreux avantages, tels que l'amélioration de la qualité de l'air, une sensation de bien-être accru, la réduction du stress, et le développement d'une relation symbiotique avec leur propriétaire. Cependant, certaines de ces plantes nécessitent une attention régulière, notamment en ce qui concerne l'arrosage, la luminosité, le type de sol et le niveau d'humidité.
+
+La solution proposée par Greenmon est une application qui permet d'identifier ses plantes grâce à une simple photo, de recevoir des notifications pour leur entretien, et d'obtenir des conseils adaptés pour en prendre soin. Le tout est conçu avec un aspect ludique et gamifié, afin de rendre l'apprentissage et l'entretien des plantes agréable et motivant pour l'utilisateur.
 
 ## 🌐 Étude de l'Existant
 
@@ -44,17 +50,35 @@
 
 ## 🎯 Public Cible
 
-> Parlez de votre public cible. À qui s'adresse votre application et surtout comment prenez-vous en compte ce public-là ?
+Le public cible est par exemple : 
+
+- Les amateurs de plantes débutants à la recherche de conseils
+- Les passionnés de plantes voulant une expérience différentes via la gamification
+
+Plus généralement, Greenmon s’adresse surtout aux personnes qui veulent simplifier et enrichir leur gestion de plantes, que ce soit par curiosité ou par recherche d’une expérience agréable et engageante.
 
 ## 📋 Fonctionnalités
 
-> Une présentation des différentes fonctionnalités de votre application au travers de récits utilisateurs (user story). Soit une description courte et simple d’un besoin ou d’une attente exprimée par un utilisateur. Chacun de ces récits suit la syntaxe "En tant que **&lt;qui&gt;**, je veux **&lt;quoi&gt;** afin de **&lt;pourquoi&gt;**":
+> En tant que nouvel utilisateur, je veux pouvoir me créer un compte afin de faire partie de la communauté Greenmon.
+> En tant que nouvel utilisateur, je veux pouvoir me connecter à l'application via mon compte afin d'accéder à l'application.
 
-> Le **qui** indique le rôle/statut de l’utilisateur à ce moment-là. Par exemple "membre premium" ou "utilisateur non identifié". Pour mieux illustrer la diversité des besoins, on peut également utiliser le concept de persona, c'est-à-dire une personne fictive et représentative à laquelle on peut s'identifier pour mieux comprendre ses attentes. L'identification et la description des personas se fait alors avant de commencer l'écriture des récits utilisateurs. Par exemple, "Odile est une enseignante qui utilise pour la première fois le système".
+> En tant qu'utilisateur déjà authentifié une première fois, je ne veux pas avoir à encoder systématiquement mon login/password lorsque j'ouvre l'application. Ceci afin d'améliorer mon expérience utilisateur.
+> Ent tant qu'utilisateur authentifié, je veux pouvoir me déconnecter de l'application afin de changer de compte.
+> En tant qu'utilisateur authentifié, je veux pouvoir supprimer mon compte et ses données afin de supprimer mes liens avec Greenmon.
+> En tant qu'utilisateur authentifié, je veux pouvoir valider mon compte afin de pouvoir modifier les données les plus sensibles.
+> En tant qu'utilisateur authentifié, je veux pouvoir consulter mes données personnelles détenues par Greenmon afin de pouvoir les modifier.
 
-> Le **quoi** décrit succinctement la fonctionnalité ou le comportement attendu. Le but du récit n'est pas d'en fournir une explication exhaustive.
+> En tant qu'utilisateur authentifié, je veux avoir un dashboard comme page d'acceuil afin de voir l'état de mon application et naviguer entres les fonctionnalités.
 
-> Le **pourquoi** permet d'identifier l'intérêt de la fonctionnalité et d'en justifier le développement. Il permet également de mieux évaluer la priorité des fonctionnalités. Pour chacune de ces fonctionnalités, présentées par un récit utilisateur, vous présenterez les maquettes qui s'y rapportent.
+> En tant qu'utilisateur authentifié, je veux pouvoir accéder au magasin afin de voir et de pouvoir acheter des artéfacts.
+> En tant qu'utilisateur authentifié, je veux pouvoir m'équiper pour améliorer mes compétences.
+
+> En tant qu'utilisateur authentifié, je veux pouvoir m'occuper de mes plantes pour les maintenir en vie et acquérir de l'expérience.
+> En tant qu'utilisateur authentifié, je veux pouvoir prendre une photo d'une plante réelle et récupérer diverses informations pour en savoir plus sur ma plante.
+> En tant qu'utilisateur authentifié, je veux pouvoir voir tous mes greenmon afin de pouvoir les gérer.
+> En tant qu'utilisateur authentifié, je veux pouvoir consulter les détails d'une plante afin d'en apprendre plus sur cette plante.
+
+> En tant qu'utilisateur authentifié, je veux pouvoir recevoir des notificiations de l'application lorsqu'un évènement survient afin d'être alerté.
 
 ## 📈 État d'Avancement
 
