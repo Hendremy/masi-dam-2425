@@ -6,9 +6,8 @@ import 'package:masi_dam_2425/plant_id/plant_camera_view.dart';
 import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
-  final PlantsBloc plantsBloc;
 
-  const PlantsPage({Key? key, required this.plantsBloc}) : super(key: key);
+  const PlantsPage({Key? key}) : super(key: key);
 
   static MaterialPage page() {
     return MaterialPage(
@@ -21,7 +20,8 @@ class PlantsPage extends StatelessWidget {
   @override
   Widget build(BuildContext mainContext) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Plants')),
+      appBar: AppBar(
+        title: const Text('Greenmons')),
       floatingActionButton: FloatingActionButton(
           key: const Key('register_plant_button'),
           onPressed: () {
@@ -29,11 +29,11 @@ class PlantsPage extends StatelessWidget {
             Navigator.push(
                 mainContext,
                 MaterialPageRoute(
-                    builder: (context) => PlantCameraView(plantBloc: plantsBloc)));
+                    builder: (context) => PlantCameraView(plantBloc: mainContext.read<PlantsBloc>())));
           },
           child: const Icon(Icons.add)),
       body: BlocBuilder<PlantsBloc, PlantsState>(
-        bloc: plantsBloc,
+        // bloc: plantsBloc,
         builder: (context, state) {
           if (state.isLoading) {
             return const CircularProgressIndicator();
