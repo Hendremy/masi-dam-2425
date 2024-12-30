@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
             icon: const Icon(Icons.exit_to_app),
             onPressed: () async {
               context.read<AppBloc>().add(const AppLogoutPressed());
-              Navigator.of(context).pop();
+              // Navigator.of(context).pop(); // Removed the pop as profile is now on root widget (Nav change)
               // Test if notifications works in background
               Workmanager().registerOneOffTask(
               "local", "show_notification_task", initialDelay: Duration(seconds: 10), inputData: {
