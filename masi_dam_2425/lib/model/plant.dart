@@ -20,10 +20,12 @@ class Plant {
 
   PlantMood get mood {
     PlantMood plantMood;
-    if (hp >= 70) {
+    if (hp >= 90){
+      plantMood = PlantMood.veryHappy;
+    }else if (hp >= 70) {
       plantMood = PlantMood.happy;
     } else if (hp >= 30) {
-      plantMood = PlantMood.sad;
+      plantMood = PlantMood.angry;
     } else {
       plantMood = PlantMood.dead;
     }
@@ -63,4 +65,4 @@ class Plant {
 
 }
 
-enum PlantMood { happy, sad, dead }
+enum PlantMood { veryHappy, happy, angry, dead }
