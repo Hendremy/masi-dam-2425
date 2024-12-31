@@ -21,16 +21,78 @@ class PlantDetailPage extends StatelessWidget{
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Stack(
+          child: Column(
             children: [
-              plantImg,
+              Stack(
+                children: [
+                  AspectRatio(
+                  aspectRatio: 3/4,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      image: DecorationImage(image: plantImg.image, fit: BoxFit.fitWidth),
+                      // borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: const Offset(0, 1.5),
+                        ),
+                      ],
+                    )
+                    ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(height: 375),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(85, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(0, 1.5),
+                              ),
+                            ],
+                          ),
+                          child: mood
+                          ),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(0, 1.5),
+                              ),
+                            ],
+                          ),
+                          child: Text('Lv${plant.level} ${plant.species}'))
+                      ],
+                    ),
+                  ],
+                ),
+                ]
+              ),
               Column(
                 children: [
-                  SizedBox(height: 500),
+                  // SizedBox(height: 500),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                      // borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -42,8 +104,6 @@ class PlantDetailPage extends StatelessWidget{
                     ),
                     child: Column(
                       children: [
-                        Text('Level: ${plant.level}'),
-                        mood,
                         HPBar(currentHP: plant.hp.round(), maxHP: 100),
                         XPBar(currentXP: plant.xp.round(), maxXP: 100),
                         TextButton.icon(onPressed: 

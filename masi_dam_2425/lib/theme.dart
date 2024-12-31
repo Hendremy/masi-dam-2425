@@ -26,4 +26,5 @@ final theme = ThemeData(
       borderRadius: BorderRadius.circular(8), // Garde les bords arrondis modernes
     ),
   ),
+  canvasColor: Color(0xFF4CAF50)
 );

@@ -16,6 +16,7 @@ import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
 import 'package:masi_dam_2425/shop/views/shop_page.dart';
+import 'package:masi_dam_2425/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -43,7 +44,9 @@ class _HomePageState extends State<HomePage> {
       //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       // ),
       bottomNavigationBar: BottomNavigationBar(
-        useLegacyColorScheme: false,
+        // useLegacyColorScheme: false,
+        unselectedItemColor: theme.colorScheme.surface,
+        selectedItemColor: Colors.yellow,
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.grass),
