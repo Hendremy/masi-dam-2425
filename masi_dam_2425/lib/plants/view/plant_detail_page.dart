@@ -21,26 +21,45 @@ class PlantDetailPage extends StatelessWidget{
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
+          child: Stack(
             children: [
-              Stack(
+              plantImg,
+              Column(
                 children: [
-                  plantImg,
-                  mood,
+                  SizedBox(height: 500),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: const Offset(0, 1.5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Text('Level: ${plant.level}'),
+                        mood,
+                        HPBar(currentHP: plant.hp.round(), maxHP: 100),
+                        XPBar(currentXP: plant.xp.round(), maxXP: 100),
+                        TextButton.icon(onPressed: 
+                          () {}, 
+                          label: const Text('Water'),
+                          icon: const Icon(Icons.water_drop),
+                        ),
+                        TextButton.icon(onPressed:
+                          () {}, 
+                          label: const Text('Feed'),
+                          icon: const Icon(Icons.volunteer_activism),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-              Text('Level: ${plant.level}'),
-              HPBar(currentHP: plant.hp.round(), maxHP: 100),
-              XPBar(currentXP: plant.xp.round(), maxXP: 100),
-              TextButton.icon(onPressed: 
-                () {}, 
-                label: const Text('Water'),
-                icon: const Icon(Icons.water_drop),
-              ),
-              TextButton.icon(onPressed:
-                () {}, 
-                label: const Text('Feed'),
-                icon: const Icon(Icons.volunteer_activism),
               ),
             ],
           ),
