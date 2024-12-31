@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plants/view/plant_detail_page.dart';
-import 'dart:math';
+import 'package:masi_dam_2425/plants/widgets/hp_bar.dart';
+import 'package:masi_dam_2425/plants/widgets/xp_bar.dart';
 
 class NewPlantTile extends StatelessWidget {
   final Plant plant;
@@ -11,7 +12,6 @@ class NewPlantTile extends StatelessWidget {
   late int maxHP;
   late int currentXP;
   late int maxXP;
-  late String imgPath;
 
 
   NewPlantTile({
@@ -23,36 +23,7 @@ class NewPlantTile extends StatelessWidget {
       maxHP = 100;
       currentXP = plant.xp.round();
       maxXP = 100;
-
-      Random random = new Random();
-      int imgNum;
-      String imgMood;
-      imgPath = 'assets/faces/';
-
-      switch(plant.mood){
-        case PlantMood.veryHappy:
-          imgNum = 3;
-          imgMood = 'veryhappy';
-        case PlantMood.angry:
-          imgNum = 5;
-          imgMood = 'angry';
-        case PlantMood.dead:
-          imgNum = 2;
-          imgMood = 'dead';
-        default:
-          imgNum = 8;
-          imgMood = 'happy';
-      }
-      imgNum = random.nextInt(imgNum) + 1;
-      imgPath = imgPath + imgMood + '_' + imgNum.toString() + '.png';
     }
-
-  Color _getHPColor() {
-    final percentage = currentHP / maxHP;
-    if (percentage > 0.5) return Colors.green;
-    if (percentage > 0.2) return Colors.orange;
-    return Colors.red;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +68,7 @@ class NewPlantTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      imgPath,
+                      plant.moodImgPath,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -148,92 +119,9 @@ class NewPlantTile extends StatelessWidget {
                   // const SizedBox(height: 8),
                   
                   // HP Bar Container
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // HP Label and Bar
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                                  color: Colors.black87,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                          child: Row(
-                            children: [
-                              Container(
-                                // padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                                // decoration: BoxDecoration(
-                                //   color: Colors.grey[200],
-                                //   borderRadius: BorderRadius.circular(4),
-                                // ),
-                                child: const Text(
-                                  'HP',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: LinearProgressIndicator(
-                                    value: currentHP / maxHP,
-                                    backgroundColor: Colors.grey[300],
-                                    color: _getHPColor(),
-                                    minHeight: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // HP Numbers
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '$currentHP/$maxHP',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),const SizedBox(height: 8),
-                  
+                  HPBar(currentHP: currentHP, maxHP: maxHP),
                   // XP Bar
-                  Row(
-                    children: [
-                      // const Text(
-                      //   'EXP',
-                      //   style: TextStyle(
-                      //     fontSize: 14,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      // const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                value: currentXP / maxXP,
-                                backgroundColor: Colors.grey[300],
-                                color: Colors.blue,
-                                minHeight: 4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  XPBar(currentXP: currentXP, maxXP: maxXP),
                 ],
               ),
             ),

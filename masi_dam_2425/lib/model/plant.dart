@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:uuid/uuid.dart';
 
 class Plant {
@@ -9,6 +12,8 @@ class Plant {
   late int level;
   late double growth;
   late String species;
+  late String moodPath;
+  late String imgUrl;
 
   Plant({
     required this.uuid,
@@ -16,7 +21,8 @@ class Plant {
     required this.species,
     required this.level, 
     required this.xp,
-    required this.hp});
+    required this.hp,
+    required this.imgUrl});
 
   PlantMood get mood {
     PlantMood plantMood;
@@ -39,6 +45,7 @@ class Plant {
     xp = (map['xp'] as num).toDouble();
     hp = (map['hp'] as num).toDouble();
     species = map['species'];
+    imgUrl = map['imgUrl'];
   }
 
   Plant.empty(){
@@ -48,6 +55,7 @@ class Plant {
     xp = 0;
     hp = 100;
     species = 'unknown';
+    imgUrl = '';
   }
 
   Map<String, dynamic> toMap() {
@@ -57,11 +65,36 @@ class Plant {
       'xp': xp,
       'hp': hp,
       'species': species,
-      'uuid': uuid
+      'uuid': uuid,
+      'imgUrl': imgUrl,
     };
   }
 
-    bool isFullyGrown() => growth >= 100;
+  bool isFullyGrown() => growth >= 100;
+
+  String get moodImgPath{
+      Random random = new Random();
+      int imgNum;
+      String imgMood;
+      String imgPath = 'assets/faces/';
+
+      switch(mood){
+        case PlantMood.veryHappy:
+          imgNum = 3;
+          imgMood = 'veryhappy';
+        case PlantMood.angry:
+          imgNum = 5;
+          imgMood = 'angry';
+        case PlantMood.dead:
+          imgNum = 2;
+          imgMood = 'dead';
+        default:
+          imgNum = 8;
+          imgMood = 'happy';
+      }
+      imgNum = random.nextInt(imgNum) + 1;
+      return imgPath + imgMood + '_' + imgNum.toString() + '.png';
+    }
 
 }
 

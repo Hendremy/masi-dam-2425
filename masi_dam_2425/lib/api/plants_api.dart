@@ -25,13 +25,14 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
           dynamic plantMaps = data["plants"];
 
           for(var plantMap in plantMaps){
-            plants.add(Plant.fromMap(plantMap));
+            Plant plnt = Plant.fromMap(plantMap);
+            plants.add(plnt);
           }
       }
         return plants;
       }catch(e){
       print(e);
-      return List<Plant>.empty();
+      return List<Plant>.empty(growable: true);
     }}
 
     @override
@@ -45,13 +46,13 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
         newPlant.species = species;
         plants.add(newPlant);
 
-        print(img.path);
-
         String fileExtension = p.extension(img.path);
         final storageRef = storage.ref();
         final newPlantRef = storageRef.child("plants/${newPlant.uuid}${fileExtension}");
         UploadTask upload = newPlantRef.putFile(img);
-        await upload.whenComplete((){});
+        await upload;
+        newPlant.imgUrl = await newPlantRef.getDownloadURL();
+
         await document.set({'plants': plants.map((e) => e.toMap()).toList()});  
         //});
         return plants;
