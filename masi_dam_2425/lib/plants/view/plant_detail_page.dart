@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plants/widgets/hp_bar.dart';
 import 'package:masi_dam_2425/plants/widgets/xp_bar.dart';
+import 'package:masi_dam_2425/theme.dart';
 
 class PlantDetailPage extends StatelessWidget{
 
@@ -48,7 +49,7 @@ class PlantDetailPage extends StatelessWidget{
                   children: [
                     Column(
                       children: [
-                        SizedBox(height: 375),
+                        SizedBox(height: 300),
                         Container(
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(85, 255, 255, 255),
@@ -79,7 +80,17 @@ class PlantDetailPage extends StatelessWidget{
                               ),
                             ],
                           ),
-                          child: Text('Lv${plant.level} ${plant.species}'))
+                          child: Column(
+                            children: [
+                              Text('Lv${plant.level} ${plant.species}'),
+                              Container(
+                                width: 350,
+                                child: HPBar(currentHP: plant.hp.round(), maxHP: 100)),
+                              Container(
+                                width: 350,
+                                child: XPBar(currentXP: plant.xp.round(), maxXP: 100)),
+                            ],
+                          ))
                       ],
                     ),
                   ],
@@ -104,17 +115,56 @@ class PlantDetailPage extends StatelessWidget{
                     ),
                     child: Column(
                       children: [
-                        HPBar(currentHP: plant.hp.round(), maxHP: 100),
-                        XPBar(currentXP: plant.xp.round(), maxXP: 100),
-                        TextButton.icon(onPressed: 
-                          () {}, 
-                          label: const Text('Water'),
-                          icon: const Icon(Icons.water_drop),
-                        ),
-                        TextButton.icon(onPressed:
-                          () {}, 
-                          label: const Text('Feed'),
-                          icon: const Icon(Icons.volunteer_activism),
+                        Text("To Do on ${DateTime.now().toString().substring(0, 10)}"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                  onPressed:
+                                    () {
+                                      // TODO : Restore little HP (+ bonus if done on time)
+                                    },
+                                  label: const Text('Water'),
+                                  icon: const Icon(Icons.water_drop),
+                                ),
+                                Text(
+                                  'Last: 01/01/2024',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54
+                                  ),),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.green,
+                                  ),
+                                  onPressed:
+                                    () {
+                                      // TODO : Gain BIG XP (+ bonus if done on time)
+                                    },
+                                  label: const Text('Fertilize'),
+                                  icon: const Icon(Icons.volunteer_activism),
+                                ),
+                                Text(
+                                  'Last: 01/01/2024', 
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),

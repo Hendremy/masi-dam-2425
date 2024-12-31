@@ -27,6 +27,7 @@ class NewPlantTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Image plantImg = Image.network(plant.imgUrl);
     return InkWell(
       onTap: () {
           Navigator.push(
@@ -60,34 +61,75 @@ class NewPlantTile extends StatelessWidget {
               children: [
                 Container(
                   width: 80,
-                  height: 80,
+                  height: 105,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      plant.moodImgPath,
-                      fit: BoxFit.contain,
+                    child: Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 80/105,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              image: DecorationImage(image: plantImg.image, fit: BoxFit.cover),
+                              // borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  spreadRadius: 1,
+                                  blurRadius: 1,
+                                  offset: const Offset(0, 1.5),
+                                ),
+                              ],
+                            )
+                            ),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(height: 35),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(85, 255, 255, 255),
+                                borderRadius: BorderRadius.circular(50),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: const Offset(0, 1.5),
+                                  ),
+                                ],
+                              ),
+                              child: 
+                                Image.asset(
+                                  plant.moodImgPath,
+                                  fit: BoxFit.contain,
+                                ),
+                          )],
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    'Lv$level',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                //   decoration: BoxDecoration(
+                //     color: Colors.blue[100],
+                //     borderRadius: BorderRadius.circular(12),
+                //   ),
+                //   child: Text(
+                //     'Lv$level',
+                //     style: const TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             
@@ -121,7 +163,7 @@ class NewPlantTile extends StatelessWidget {
                   // HP Bar Container
                   HPBar(currentHP: currentHP, maxHP: maxHP),
                   // XP Bar
-                  XPBar(currentXP: currentXP, maxXP: maxXP),
+                  XPBar(currentXP: currentXP, maxXP: maxXP, level: level),
                 ],
               ),
             ),
