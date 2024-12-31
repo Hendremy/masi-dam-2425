@@ -98,29 +98,28 @@ class PlantDetailPage extends StatelessWidget{
                 ]
               ),
               Column(
-                children: [
-                  // SizedBox(height: 500),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      // borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: const Offset(0, 1.5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text("To Do on ${DateTime.now().toString().substring(0, 10)}"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(0, 1.5),
+                              ),
+                            ],
+                          ),
+                            child: Column(
                               children: [
+                                Text("To Do on ${DateTime.now().toString().substring(0, 10)}"),
                                 TextButton.icon(
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -141,8 +140,26 @@ class PlantDetailPage extends StatelessWidget{
                                   ),),
                               ],
                             ),
-                            Column(
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(0, 1.5),
+                              ),
+                            ],
+                          ),
+                            child: Column(
                               children: [
+                                Text("To Do on ${DateTime.now().toString().substring(0, 10)}"),
                                 TextButton.icon(
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -164,13 +181,12 @@ class PlantDetailPage extends StatelessWidget{
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),
