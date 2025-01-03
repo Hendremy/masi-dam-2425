@@ -80,9 +80,9 @@ class AppView extends StatelessWidget {
       home: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           if (state.status == AppStatus.authenticated) {
-            return HomePage(); // Replace with your home page widget
+            return HomePage();
           } else  {
-            return LoginPage(); // Replace with your login page widget
+            return LoginPage();
           }
         },
       ),

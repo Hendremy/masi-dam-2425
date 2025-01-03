@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:masi_dam_2425/sign_up/cubit/sign_up_cubit.dart';
 
+import '../../common/custom_input_field.dart';
+
 class SignUpForm extends StatelessWidget {
   const SignUpForm({super.key});
 
@@ -28,9 +30,11 @@ class SignUpForm extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12), // Rounded corners
             ),
-            margin: const EdgeInsets.symmetric(horizontal: 16), // Space between card and screen edges
+            margin: const EdgeInsets.symmetric(
+                horizontal: 16), // Space between card and screen edges
             child: Padding(
-              padding: const EdgeInsets.all(16), // Internal padding for the card
+              padding:
+                  const EdgeInsets.all(16), // Internal padding for the card
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -61,30 +65,14 @@ class SignUpForm extends StatelessWidget {
 class _NameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return CustomInputField(
       key: const Key('signUpForm_nameInput_textField'),
-      onChanged: (name) => context.read<SignUpCubit>().nameChanged(name),
-      keyboardType: TextInputType.name,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.person),
-        labelText: 'Full Name',
-        hintText: 'Enter your full name',
-        hintStyle: const TextStyle(color: Colors.grey), // Grey color for hint text
-        filled: true,
-        fillColor: Colors.grey.shade100, // Subtle background color
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-      ),
+      labelText: 'Full Name',
+      hintText: 'Enter your full name',
+      icon: Icons.person,
+      obscureText: false,
+      type: TextInputType.text,
+      action: (name) => context.read<SignUpCubit>().nameChanged(name),
     );
   }
 }
@@ -96,31 +84,15 @@ class _EmailInput extends StatelessWidget {
       (SignUpCubit cubit) => cubit.state.email.displayError,
     );
 
-    return TextField(
+    return CustomInputField(
       key: const Key('signUpForm_emailInput_textField'),
-      onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.email),
-        labelText: 'Email Address',
-        hintText: 'Enter your email',
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        errorText: displayError != null ? 'invalid email' : null,
-      ),
+      labelText: 'Email Address',
+      hintText: 'Enter your email',
+      icon: Icons.email,
+      obscureText: false,
+      type: TextInputType.emailAddress,
+      action: (email) => context.read<SignUpCubit>().emailChanged(email),
+      errorText: displayError != null ? 'invalid email' : null,
     );
   }
 }
@@ -132,33 +104,18 @@ class _PasswordInput extends StatelessWidget {
       (SignUpCubit cubit) => cubit.state.password.displayError,
     );
 
-    return TextField(
+    return CustomInputField(
       key: const Key('signUpForm_passwordInput_textField'),
-      onChanged: (password) =>
-          context.read<SignUpCubit>().passwordChanged(password),
+      labelText: 'Password',
+      hintText: 'Enter your password',
+      icon: Icons.lock,
       obscureText: true,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.lock),
-        labelText: 'Password',
-        hintText: 'Enter your password',
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        errorText: displayError != null ? 'invalid password' : null,
-      ),
+      type: TextInputType.text,
+      action: (password) =>
+          context.read<SignUpCubit>().passwordChanged(password),
+      errorText: displayError != null ? 'Password contain at least 5 characters, including letters \nand numbers' : null,
     );
+
   }
 }
 

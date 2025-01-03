@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/common/custom_input_field.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/goodbye_page.dart';
-import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
+import 'package:masi_dam_2425/profile/widgets/profile_summary_widget.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../../app/bloc/app_bloc.dart';
@@ -103,56 +104,7 @@ class ProfilePage extends StatelessWidget {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Delete your Account?'),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('If you select Delete we will delete your account on our server.'),
-                                      const SizedBox(height: 16),
-                                      ProfileInputField(
-                                        controller: passwordController,
-                                        labelText: 'Password',
-                                        hintText: 'Enter your password',
-                                        obscureText: true,
-                                        icon: Icons.lock,
-                                      ),
-                                    ],
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('Cancel'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text(
-                                        'Delete',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      onPressed: () async {
-                                        final password = passwordController.text;
-                                        final profileBloc = context.read<ProfileBloc>();
-                                        final isDeleted = await profileBloc.deleteAccount(password);
-                                        if (isDeleted) {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(builder: (context) => GoodbyePage()),
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Account deletion failed. Please try again.')),
-                                          );
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
+                          showDeletionDoubleCheckDiag(context, passwordController);
                         },
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -172,6 +124,64 @@ class ProfilePage extends StatelessWidget {
 
             }
             ))));
+  }
+
+  void showDeletionDoubleCheckDiag(BuildContext context, TextEditingController passwordController) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Delete your Account?'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('If you select Delete we will delete your account on our server.'),
+                const SizedBox(height: 16),
+                CustomInputField(
+                  controller: passwordController,
+                  labelText: 'Password',
+                  hintText: 'Enter your password',
+                  obscureText: true,
+                  icon: Icons.lock,
+                  type: TextInputType.text,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () async {
+                  await deleteAccount(passwordController, context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> deleteAccount(TextEditingController passwordController, BuildContext context) async {
+    final password = passwordController.text;
+    final profileBloc = context.read<ProfileBloc>();
+    final isDeleted = await profileBloc.deleteAccount(password);
+    if (isDeleted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => GoodbyePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Account deletion failed. Please try again.')),
+      );
+      Navigator.of(context).pop();
+    }
   }
 }
 
@@ -261,72 +271,29 @@ class UserWidget extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 30),
-                  ProfileInputField(
+                  CustomInputField(
                     controller: nameController,
                     labelText: 'Name',
                     hintText: 'Enter your name',
                     active: true,
-                    icon: Icons.person,
+                    icon: Icons.person, 
+                    type: TextInputType.text,
+                    
                   ),
                   const SizedBox(height: 16),
-                  ProfileInputField(
+                  CustomInputField(
                       controller: emailController,
                       labelText: 'Email',
                       hintText: 'Enter your email',
                       active: false,
-                      icon: Icons.email),
+                      icon: Icons.email,
+                      type: TextInputType.emailAddress,),
                   SizedBox(height: 16),
                 ],
               ),
             )),
         const SizedBox(height: 16),
       ],
-    );
-  }
-}
-
-class ProfileInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String hintText;
-  final bool active;
-  final IconData? icon;
-  final bool obscureText;
-
-  const ProfileInputField({
-    required this.controller,
-    required this.labelText,
-    required this.hintText,
-    this.active = true,
-    required this.icon,
-    this.obscureText = false,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        prefixIcon: Icon(this.icon, color: Colors.blue),
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Colors.blue,
-            width: 2,
-          ),
-        ),
-      ),
-      enabled: active,
     );
   }
 }

@@ -4,16 +4,13 @@ import 'package:masi_dam_2425/api/api_services.dart';
 import 'package:masi_dam_2425/api/shop_api.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
-import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/plant_id/plant_camera_view.dart';
+import 'package:masi_dam_2425/network/bloc/network_bloc.dart';
+import 'package:masi_dam_2425/network/no_network_dialog.dart';
 import 'package:masi_dam_2425/plants/view/plants_page.dart';
-import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
-import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';
 import 'package:masi_dam_2425/permission_service.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
-import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
 import 'package:masi_dam_2425/shop/shop_cubit.dart';
 import 'package:masi_dam_2425/shop/views/shop_page.dart';
 
@@ -34,6 +31,25 @@ class _HomePageState extends State<HomePage> {
     context.read<InventoryCubit>().loadInventory();
     PermissionService.requestNotificationPermission();
 
+    return BlocListener<NetworkBloc, NetworkState>(
+      listener: (context, state) {
+        if (state is NetworkFailure) {
+          Network.showNoNetworkDialog(context);
+        } else if (state is NetworkSuccess) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Connected to the internet'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      child: _buildScaffold(context),
+    );
+  }
+
+  _buildScaffold(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
       //   leading: Padding(
@@ -58,8 +74,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Inventory',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.person), 
-            label: 'Profile'),
+              icon: const Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -74,46 +89,45 @@ class _HomePageState extends State<HomePage> {
         _inventoryPage(context),
         _profilePage(context),
       ][_selectedIndex],
-      );
+    );
   }
-  _homePage(BuildContext context){
+
+  _homePage(BuildContext context) {
     return BlocProvider<PlantsBloc>(
-          create: (context) => PlantsBloc(
-            api: context.read<UserApiServices>().plantsApi,
-          ),
-          child: PlantsPage(),
-          );
+      create: (context) => PlantsBloc(
+        api: context.read<UserApiServices>().plantsApi,
+      ),
+      child: PlantsPage(),
+    );
   }
 
   _shopPage(BuildContext context) {
-    return
-      MultiBlocProvider(
-          providers: [
-            BlocProvider<ProfileBloc>.value(
-              value: context.read<ProfileBloc>(),
-            ),
-            BlocProvider<InventoryCubit>.value(
-              value: context.read<InventoryCubit>(),
-            ),
-            BlocProvider<ShopCubit>(
-              create: (context) => ShopCubit(
-                  context.read<UserApiServices>().shopApi as ShopFirestoreApi
-              ),
-            )
-          ],
-          child: ShopPage(),
-        );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProfileBloc>.value(
+          value: context.read<ProfileBloc>(),
+        ),
+        BlocProvider<InventoryCubit>.value(
+          value: context.read<InventoryCubit>(),
+        ),
+        BlocProvider<ShopCubit>(
+          create: (context) => ShopCubit(
+              context.read<UserApiServices>().shopApi as ShopFirestoreApi),
+        )
+      ],
+      child: ShopPage(),
+    );
   }
 
   _inventoryPage(BuildContext context) {
     return MultiBlocProvider(
-          providers: [
-            BlocProvider<InventoryCubit>.value(
-              value: context.read<InventoryCubit>(),
-            ),
-          ],
-          child: InventoryPage(),
-        );
+      providers: [
+        BlocProvider<InventoryCubit>.value(
+          value: context.read<InventoryCubit>(),
+        ),
+      ],
+      child: InventoryPage(),
+    );
   }
 
   _profilePage(BuildContext context) {
@@ -121,11 +135,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
 class AvatarSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context,state){
+    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
       if (state is ProfileLoading) {
         return const CircularProgressIndicator();
       }
@@ -142,7 +155,6 @@ class AvatarSection extends StatelessWidget {
       return const Text('Failed to load profile.');
     });
   }
-
 }
 // class AvatarSection extends StatelessWidget {
 //   const AvatarSection({Key? key}) : super(key: key);
