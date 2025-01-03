@@ -7,7 +7,7 @@ import 'package:masi_dam_2425/inventory/view/inventory_page.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plant_id/plant_camera_view.dart';
 import 'package:masi_dam_2425/plants/view/plants_page.dart';
-import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
+import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
 import 'package:masi_dam_2425/profile/view/profile_page.dart';
 import 'package:masi_dam_2425/home/view/inventory_summary_widget.dart';
 import 'package:masi_dam_2425/inventory/cubit/inventory_cubit.dart';

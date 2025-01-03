@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/api/api_services.dart';
@@ -7,7 +5,6 @@ import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plants/plant_cubit.dart';
 import 'package:masi_dam_2425/plants/widgets/hp_bar.dart';
 import 'package:masi_dam_2425/plants/widgets/xp_bar.dart';
-import 'package:masi_dam_2425/theme.dart';
 
 class PlantDetailPage extends StatelessWidget {
   final Plant plant;

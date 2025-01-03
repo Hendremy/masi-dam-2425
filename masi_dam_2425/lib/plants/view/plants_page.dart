@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masi_dam_2425/home/bloc/plants_bloc.dart';
 import 'package:masi_dam_2425/model/plant.dart';
 import 'package:masi_dam_2425/plant_id/plant_camera_view.dart';
-import 'package:masi_dam_2425/plants/widgets/new_plant_tile.dart';
+import 'package:masi_dam_2425/plants/widgets/plant_tile.dart';
 
 class PlantsPage extends StatelessWidget {
 
@@ -49,7 +49,7 @@ class PlantsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ...state.plants
-                        .map((Plant plant) => NewPlantTile(
+                        .map((Plant plant) => PlantTile(
                               plant: plant,
                             ))
                         .toList(),

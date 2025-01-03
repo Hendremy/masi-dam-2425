@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:masi_dam_2425/model/plant.dart';
-import 'package:masi_dam_2425/plants/view/plant_detail_page.dart';
+import 'package:masi_dam_2425/plants/view/plant_page.dart';
 import 'package:masi_dam_2425/plants/widgets/hp_bar.dart';
 import 'package:masi_dam_2425/plants/widgets/xp_bar.dart';
 
-class NewPlantTile extends StatelessWidget {
+class PlantTile extends StatelessWidget {
   final Plant plant;
   late String name;
   late int level;
@@ -14,7 +14,7 @@ class NewPlantTile extends StatelessWidget {
   late int maxXP;
 
 
-  NewPlantTile({
+  PlantTile({
     Key? key,
     required Plant this.plant}) : super(key: key){
       name = plant.name;
