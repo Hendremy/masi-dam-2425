@@ -38,6 +38,7 @@ abstract class InventoryApi {
 abstract class PlantsApi {
   Future<List<Plant>> getPlants();
   Future<List<Plant>> addPlant(String name, File img, String species);
+  Future<List<Plant>> updatePlant(Plant plant);
 }
 
 abstract class ShopApi {

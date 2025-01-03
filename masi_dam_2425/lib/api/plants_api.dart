@@ -57,4 +57,14 @@ class PlantsFirestoreApi extends FirestoreApi implements PlantsApi{
         //});
         return plants;
     }
+
+    @override
+    Future<List<Plant>> updatePlant(Plant plant) async{
+      final document = db.collection('plants').doc(user.uid);
+      List<Plant> plants = await getPlants();
+      int index = plants.indexWhere((element) => element.uuid == plant.uuid);
+      plants[index] = plant;
+      await document.set({'plants': plants.map((e) => e.toMap()).toList()});
+      return plants;
+    }
 }

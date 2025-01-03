@@ -7,22 +7,28 @@ class Plant {
   late String uuid;
   late String name;
   late double xp;
-  late double hp;
   late double maxHp;
-  late int level;
   late double growth;
   late String species;
-  late String moodPath;
   late String imgUrl;
+  late DateTime lastWatered;
+  // late DateTime lastFertilized;
+  late DateTime dateAdded;
+  late int waterInterval;
+
+  late String moodPath;
+  // late int fertilizerInterval;
 
   Plant({
     required this.uuid,
     required this.name,
     required this.species,
-    required this.level, 
     required this.xp,
-    required this.hp,
-    required this.imgUrl});
+    required this.imgUrl,
+    this.waterInterval = 7,
+    required this.lastWatered
+    // required this.fertilizerInterval
+    });
 
   PlantMood get mood {
     PlantMood plantMood;
@@ -41,32 +47,37 @@ class Plant {
   Plant.fromMap(Map<String, dynamic> map){
     uuid = map['uuid'];
     name = map['name'];
-    level = map['level'];
     xp = (map['xp'] as num).toDouble();
-    hp = (map['hp'] as num).toDouble();
     species = map['species'];
     imgUrl = map['imgUrl'];
+    lastWatered = DateTime.parse(map['lastWatered']);
+    waterInterval = map['waterInterval'];
+    dateAdded = DateTime.parse(map['dateAdded']);
   }
 
   Plant.empty(){
     uuid = Uuid().v4();
     name = 'New Plant';
-    level = 1;
     xp = 0;
-    hp = 100;
     species = 'unknown';
     imgUrl = '';
+    lastWatered = DateTime.now();
+    waterInterval = 7;
+    dateAdded = DateTime.now();
+    // lastFertilized = DateTime.now();
+    // fertilizerInterval = 30;
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'level': level,
       'xp': xp,
-      'hp': hp,
       'species': species,
       'uuid': uuid,
       'imgUrl': imgUrl,
+      'lastWatered': lastWatered.toIso8601String(),
+      'waterInterval': waterInterval,
+      'dateAdded': dateAdded.toIso8601String(),
     };
   }
 
@@ -95,6 +106,41 @@ class Plant {
       imgNum = random.nextInt(imgNum) + 1;
       return imgPath + imgMood + '_' + imgNum.toString() + '.png';
     }
+
+  double giveWater(){
+    DateTime now = DateTime.now();
+    int daysSinceLastWatered = now.difference(lastWatered).inDays;
+    double xp_multiplier = daysSinceLastWatered.toDouble() / waterInterval;
+    double xp_gain = 50 * xp_multiplier;
+    xp += xp_gain;
+    lastWatered = now;
+    return xp_gain;
+  }
+
+  double get hp{
+    DateTime now = DateTime.now();
+    int daysSinceLastWatered = now.difference(lastWatered).inDays;
+    if (daysSinceLastWatered < waterInterval){
+      return 100.0;
+    }else{
+      // TODO: Adjust formula to real plant surivavility
+      // Lose 3^x HP for each x day past the water interval
+      double updatedHp = 100.0 - (3 ^ (daysSinceLastWatered - waterInterval));
+      return updatedHp > 0 ? updatedHp : 0;
+    }
+  }
+
+  int get level{//TODO : Maybe do scaling level caps, not always 100
+    return (xp / 100).round();
+  }
+
+  double get remainingXP{
+    return xp % 100;
+  }
+
+  DateTime get nextWatering{
+    return lastWatered.add(Duration(days: waterInterval));
+  }
 
 }
 

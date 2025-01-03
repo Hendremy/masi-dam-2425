@@ -163,7 +163,7 @@ class NewPlantTile extends StatelessWidget {
                   // HP Bar Container
                   HPBar(currentHP: currentHP, maxHP: maxHP),
                   // XP Bar
-                  XPBar(currentXP: currentXP, maxXP: maxXP, level: level),
+                  XPBar(currentXP: plant.remainingXP.round(), maxXP: maxXP, level: level),
                 ],
               ),
             ),
