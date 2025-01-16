@@ -15,7 +15,7 @@ class ItemsGird extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of columns
+        crossAxisCount: 2, 
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),

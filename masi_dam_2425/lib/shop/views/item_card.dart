@@ -69,7 +69,7 @@ class ItemCard extends StatelessWidget {
           onPressed: wallet >= product.cost
               ? () {
             context.read<InventoryCubit>().add(product);
-            Navigator.pop(context); // Close the popup
+            Navigator.pop(context); 
           }
               : null,
           child: Text(wallet >= product.cost

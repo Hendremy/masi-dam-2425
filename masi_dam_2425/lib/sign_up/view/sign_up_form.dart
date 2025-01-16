@@ -13,6 +13,11 @@ class SignUpForm extends StatelessWidget {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text('Sign Up Success ! Please login')),
+            );
           Navigator.of(context).pop();
         } else if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
@@ -26,15 +31,15 @@ class SignUpForm extends StatelessWidget {
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
           child: Card(
-            elevation: 5, // Add shadow effect for the card
+            elevation: 5, 
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Rounded corners
+              borderRadius: BorderRadius.circular(12),
             ),
             margin: const EdgeInsets.symmetric(
-                horizontal: 16), // Space between card and screen edges
+                horizontal: 16), 
             child: Padding(
               padding:
-                  const EdgeInsets.all(16), // Internal padding for the card
+                  const EdgeInsets.all(16), 
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     context.read<ProfileBloc>().add(LoadProfile());
-    context.read<InventoryCubit>().loadInventory();
     PermissionService.requestNotificationPermission();
 
     return BlocListener<NetworkBloc, NetworkState>(
