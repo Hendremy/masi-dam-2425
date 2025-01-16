@@ -23,9 +23,9 @@ class ProfilePage extends StatelessWidget {
             onPressed: () async {
               context.read<AppBloc>().add(const AppLogoutPressed());
               Workmanager().registerOneOffTask(
-              "local", "show_notification_task", initialDelay: Duration(seconds: 10), inputData: {
-                "title": "Hello",
-                "message": "World"
+              "local", "show_notification_task", initialDelay: Duration(seconds: 3), inputData: {
+                "title": "Greenom Message",
+                "message": "You have been logged out"
               });
             },
           ),
