@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:masi_dam_2425/common/custom_input_field.dart';
 import 'package:masi_dam_2425/model/avatar.dart';
-import 'package:masi_dam_2425/profile/view/profile_page.dart';
 
 class UserWidget extends StatelessWidget {
   final Avatar user;
@@ -77,20 +77,23 @@ class UserWidget extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 30),
-                  ProfileInputField(
+                  CustomInputField(
                     controller: nameController,
                     labelText: 'Name',
                     hintText: 'Enter your name',
                     active: true,
-                    icon: Icons.person,
+                    icon: Icons.person, 
+                    type: TextInputType.text,
+                    
                   ),
                   const SizedBox(height: 16),
-                  ProfileInputField(
+                  CustomInputField(
                       controller: emailController,
                       labelText: 'Email',
                       hintText: 'Enter your email',
                       active: false,
-                      icon: Icons.email),
+                      icon: Icons.email,
+                      type: TextInputType.emailAddress,),
                   SizedBox(height: 16),
                 ],
               ),

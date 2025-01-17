@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:masi_dam_2425/common/custom_input_field.dart';
 import 'package:masi_dam_2425/profile/bloc/profile_bloc.dart';
 import 'package:masi_dam_2425/profile/view/goodbye_page.dart';
 import 'package:masi_dam_2425/profile/view/profile_summary_widget.dart';
@@ -138,12 +139,13 @@ class ProfilePage extends StatelessWidget {
               children: [
                 const Text('If you select Delete we will delete your account on our server.'),
                 const SizedBox(height: 16),
-                ProfileInputField(
+                CustomInputField(
                   controller: passwordController,
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   obscureText: true,
                   icon: Icons.lock,
+                  type: TextInputType.text,
                 ),
               ],
             ),
@@ -178,52 +180,5 @@ class ProfilePage extends StatelessWidget {
             ],
           );
         });
-  }
-}
-
-
-class ProfileInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String hintText;
-  final bool active;
-  final IconData? icon;
-  final bool obscureText;
-
-  const ProfileInputField({
-    required this.controller,
-    required this.labelText,
-    required this.hintText,
-    this.active = true,
-    required this.icon,
-    this.obscureText = false,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        prefixIcon: Icon(this.icon, color: Colors.blue),
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Colors.blue,
-            width: 2,
-          ),
-        ),
-      ),
-      enabled: active,
-    );
   }
 }

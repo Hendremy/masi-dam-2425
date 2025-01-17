@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 /**
  * 
- *  Ce fichier contient un widget qui permet de créer un champ de texte personnalisé. 
- *  Il n'a pas été utilisé car pour une obscure raison, il ne fonctionne pas de la même manière
- *  sur différents appareils. (voir branche main)
+ *  Ce fichier contient un widget qui permet de créer un champ de texte personnalisé commun à l'application. 
+ *  Il est utilisé dans la page de profil pour afficher les informations de l'utilisateur.
  * 
  */
 class CustomInputField extends StatelessWidget {
