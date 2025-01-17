@@ -48,7 +48,7 @@ class PlantDetailPage extends StatelessWidget {
                             decoration: BoxDecoration(
                           color: Colors.green,
                           image: DecorationImage(
-                              image: plantImg.image, fit: BoxFit.fitWidth),
+                              image: plantImg.image, fit: BoxFit.fill),
                           // borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
@@ -100,12 +100,12 @@ class PlantDetailPage extends StatelessWidget {
                                     children: [
                                       Text('Lv${plant.level} ${plant.species}'),
                                       Container(
-                                          width: 350,
+                                          width: 250,
                                           child: HPBar(
                                               currentHP: plant.hp.round(),
                                               maxHP: 100)),
                                       Container(
-                                          width: 350,
+                                          width: 250,
                                           child: XPBar(
                                               currentXP: plant.remainingXP.round(),
                                               maxXP: 100)),
