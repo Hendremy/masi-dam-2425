@@ -8,6 +8,7 @@ class InventoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<InventoryCubit>().loadInventory();
     return BlocListener<InventoryCubit, InventoryState>(
       listener: (context, state) {
         if (state is InventoryUpdated) {

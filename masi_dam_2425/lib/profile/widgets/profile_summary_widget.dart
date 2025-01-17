@@ -4,7 +4,7 @@ import 'package:masi_dam_2425/model/avatar.dart';
 
 import '../../inventory/cubit/inventory_cubit.dart';
 import '../../plants/widgets/experience_bar.dart';
-import '../widgets/avatar_icon.dart';
+import 'avatar_icon.dart';
 
 class ProfileSummaryWidget extends StatelessWidget {
   final Avatar profile;

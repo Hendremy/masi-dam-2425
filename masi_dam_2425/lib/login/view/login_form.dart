@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:masi_dam_2425/common/custom_input_field.dart';
 import 'package:masi_dam_2425/login/cubit/login_cubit.dart';
 import 'package:masi_dam_2425/sign_up/view/sign_up_page.dart';
 
@@ -30,17 +31,18 @@ class LoginForm extends StatelessWidget {
               borderRadius: BorderRadius.circular(12), // Rounded corners
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16), // Internal padding for the card
+              padding:
+                  const EdgeInsets.all(16), // Internal padding for the card
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                Image.asset(
-                'assets/greenmon-logo.png',
-                height: 120,
-              ),
+                  Image.asset(
+                    'assets/greenmon-logo.png',
+                    height: 120,
+                  ),
                   const SizedBox(height: 16),
                   _EmailInput(),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   _PasswordInput(),
                   const SizedBox(height: 8),
                   _LoginButton(),
@@ -63,32 +65,15 @@ class _EmailInput extends StatelessWidget {
       (LoginCubit cubit) => cubit.state.email.displayError,
     );
 
-    return TextField(
+    return CustomInputField(
       key: const Key('loginForm_emailInput_textField'),
-      onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.email),
-        labelText: 'Email Address',
-        hintText: 'Enter your email',
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        helperText: '',
-        errorText: displayError != null ? 'invalid email' : null,
-      ),
+      labelText: 'Email Address',
+      hintText: 'Enter your email',
+      icon: Icons.email,
+      obscureText: false,
+      type: TextInputType.emailAddress,
+      action: (email) => context.read<LoginCubit>().emailChanged(email),
+      errorText: displayError != null ? 'invalid email' : null,
     );
   }
 }
@@ -100,34 +85,17 @@ class _PasswordInput extends StatelessWidget {
       (LoginCubit cubit) => cubit.state.password.displayError,
     );
 
-    return TextField(
+    return CustomInputField(
       key: const Key('loginForm_passwordInput_textField'),
-      onChanged: (password) =>
-          context.read<LoginCubit>().passwordChanged(password),
+      labelText: 'Password',
+      hintText: 'Enter your password',
+      icon: Icons.lock,
       obscureText: true,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.lock),
-        labelText: 'Password',
-        hintText: 'Enter your password',
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        helperText: '',
-        errorText: displayError != null ? 'invalid password' : null,
-      ),
+      type: TextInputType.visiblePassword,
+      action: (password) => context.read<LoginCubit>().passwordChanged(password),
+      errorText: displayError != null ? '' : null,
     );
+
   }
 }
 
@@ -159,7 +127,6 @@ class _LoginButton extends StatelessWidget {
     );
   }
 }
-
 
 class _SignUpButton extends StatelessWidget {
   @override

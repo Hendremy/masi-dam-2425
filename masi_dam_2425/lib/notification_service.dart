@@ -35,8 +35,8 @@ class NotificationService {
 
       await _flutterLocalNotificationsPlugin.show(
         0,    // Notification ID
-        title, // Notification title
-        body,  // Notification body
+        title, 
+        body,  
         notificationDetails,
       );
     }
