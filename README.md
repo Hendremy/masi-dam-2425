@@ -160,8 +160,7 @@ dart run build_runner build
 
 le fichier env.g.dart est alors généré et reprend les jetons d'accès obfuscés et utilisables par l'application.
 
-![image](https://github.com/user-attachments/assets/be7727d7-57f3-4230-9ad8-a5f013425b3f)
-
+![image](https://github.com/user-attachments/assets/5f6300f8-e8ef-4a49-b422-d55630e4e7c7)
 
 5. Lancer l'application
 
