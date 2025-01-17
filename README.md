@@ -46,8 +46,13 @@ La solution proposée par Greenmon est une application qui permet d'identifier s
 
 ## 🌐 Étude de l'Existant
 
-> Une brève étude de l'existant. L'idée étant de savoir si d'autres ont déjà couvert le besoin auquel vous essayez de répondre. Ce qui est demandé ici, au-delà d'une brève description, ce sont les points forts et les points faibles de ces différentes applications. Il peut être intéressant de faire un tableau pour mettre en regard les avantages et les inconvénients. Enfin, mettez des captures d'écran des applications afin que l'on comprenne mieux de quoi on parle.
+1. PlantNet - Permet d'identifier des plantes en prenant un photo
+2. Planta - Application dont le but est de garder les plantes des utilisateurs en vie
 
+Ces deux applications regroupent les idées de notre application. Le point qui distingue notre application du reste de l'existant est la gamification.
+
+Une application qui nous a aidé dans la gamification est "Habitica: Gamify your Tasks". Dont le but est de traiter notre vie comme un jeux pour gagner en motivation et organisation. L'idée de la gamification provient principalement de l'utilisation de 
+cette application par l'un de nos développeurs. 
 ## 🎯 Public Cible
 
 Le public cible est par exemple : 
@@ -83,22 +88,42 @@ Plus généralement, Greenmon s’adresse surtout aux personnes qui veulent simp
 ## 📈 État d'Avancement
 
 ### Création de compte
+#### V1
 https://github.com/user-attachments/assets/ba2b2547-1c32-4a2a-ac14-fd6975e0b066
 
+#### V2 - UI améliorée
+
+https://github.com/user-attachments/assets/70f37e38-6b14-4f81-b552-5a667968e8b7
+
 ### Se connecter
+
+#### V1 
 https://github.com/user-attachments/assets/72b902ef-ff76-495a-a98f-dfa99aa84283
 
-### Le shop
-https://github.com/user-attachments/assets/89b48983-34dd-479e-9a4b-b71838c273df
+#### V2 - UI améliorée 
 
-### Acheter des artéfacts
-https://github.com/user-attachments/assets/6417e0e9-1571-4814-bad2-e7a4a745be8a
+https://github.com/user-attachments/assets/70f37e38-6b14-4f81-b552-5a667968e8b7
+
+### Modification du nom 
+
+https://github.com/user-attachments/assets/2d3ba135-fa3b-4537-95c2-4c963e9af0e7
+
+### Suppression du compte
+
+https://github.com/user-attachments/assets/477f3494-d390-49a4-8fa3-51a1f50103a2
+
+### Déconnexion avec notification
+
+https://github.com/user-attachments/assets/d8984104-c21f-47f0-ade7-9a2e68853dd8
+
+### Le shop
+
+https://github.com/user-attachments/assets/5c939531-49c0-4a0f-b2e1-65686d099fe2
 
 ### Gérer son inventaire
-https://github.com/user-attachments/assets/af399a79-0c9f-40a1-b27d-0f6667dfbe56
 
+https://github.com/user-attachments/assets/972e9351-4c7e-4900-864d-ce9d90feddb5
 
->  Un état d'avancement pour chaque fonctionnalité de votre application. Ceci doit évidemment être mis à jour régulièrement. Dès lors que vous aurez terminé de programmer une fonctionnalité, ajoutez dans le document `README.md` un `.gif` qui l'illustre. Vous pouvez vous servir de [GIF Brewery](https://apps.apple.com/us/app/gif-brewery-3-by-gfycat/id1081413713?mt=12) (Si vous êtes sous macOS) ou de [Gyazo](https://gyazo.com) (Si vous êtes sous Windows).
 
 ## ⚙️ Compilation de l'Application
 
