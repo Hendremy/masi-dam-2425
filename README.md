@@ -124,6 +124,13 @@ https://github.com/user-attachments/assets/5c939531-49c0-4a0f-b2e1-65686d099fe2
 
 https://github.com/user-attachments/assets/972e9351-4c7e-4900-864d-ce9d90feddb5
 
+### Ajouter une plante à sa collection
+
+https://github.com/user-attachments/assets/78551134-9f3a-4223-bec0-5822d948b956
+
+### Enregistrer l'arrosage d'une plante
+
+https://github.com/user-attachments/assets/62042553-7ccd-4966-aee4-1aa719a221ef
 
 ## ⚙️ Compilation de l'Application
 
