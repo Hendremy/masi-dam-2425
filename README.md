@@ -142,7 +142,7 @@ https://github.com/user-attachments/assets/62042553-7ccd-4966-aee4-1aa719a221ef
 cd masi_dam_2425
 ```
 
-2. Installer les dépendences
+2. Installer les dépendances
 
 ```bash
 flutter pub get
