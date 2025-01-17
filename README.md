@@ -136,4 +136,36 @@ https://github.com/user-attachments/assets/62042553-7ccd-4966-aee4-1aa719a221ef
 
 > Enfin, nous vous demandons d'ajouter une section pour les développeurs où vous expliquez ce qu'il faut faire pour pouvoir compiler l'application. Cette documentation doit être simple et surtout efficace.
 
+0. Se déplacer dans le dossier du projet Flutter
+
+```bash
+cd masi_dam_2425
+```
+
+2. Installer les dépendences
+
+```bash
+flutter pub get
+```
+
+2. Placer le fichier .env fourni dans le dossier courant (masi_dam_2425)
+
+![image](https://github.com/user-attachments/assets/e968a5d7-b73e-4587-aefd-6366a0936481)
+
+4. Exécuter la commande ci-dessous pour générer le fichier env.g.dart
+
+```bash
+dart run build_runner build
+```
+
+le fichier env.g.dart est alors généré et reprend les jetons d'accès obfuscés et utilisables par l'application.
+
+![image](https://github.com/user-attachments/assets/be7727d7-57f3-4230-9ad8-a5f013425b3f)
+
+
+5. Lancer l'application
+
+```bash
+flutter run
+```
 <!-- vim: set spelllang=fr :-->
