@@ -4,7 +4,6 @@ part of 'shop_cubit.dart';
 sealed class ShopState {
   const ShopState();
 
-  @override
   List<Object> get props => [];
 }
 

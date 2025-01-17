@@ -109,19 +109,17 @@ class _ShopPageState extends State<ShopPage> {
       padding: const EdgeInsets.all(8.0),
       child: Row( // Row to place the text beside the ListView
         children: [
-          // Text in front of the ListView
           Text(
-            'Filters:', // Your custom title text
+            'Filters:',
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: 16), // Space between text and list
-          // ListView next to the text
+          const SizedBox(width: 16),
           Expanded(
             child: SizedBox(
-              height: 100, // Adjusted height to accommodate the title and image
+              height: 100, 
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: _itemTypes.length,
@@ -137,10 +135,9 @@ class _ShopPageState extends State<ShopPage> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column( // Use Column to stack title and avatar
+                      child: Column( 
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Avatar with selected border
                           Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -161,10 +158,9 @@ class _ShopPageState extends State<ShopPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 8), // Space between image and title
-                          // Title below the image
+                          const SizedBox(height: 8), 
                           Text(
-                            type.name, // Replace with your actual title property
+                            type.name, 
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
